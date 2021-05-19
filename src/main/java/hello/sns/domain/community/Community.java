@@ -31,6 +31,7 @@ import lombok.NoArgsConstructor;
 )
 @Entity
 public class Community extends BaseTimeEntity {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "community_id")
