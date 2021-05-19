@@ -12,19 +12,24 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import hello.sns.domain.BaseTimeEntity;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
 @Table(
 	uniqueConstraints = {
 		@UniqueConstraint(
-			columnNames = {"email", "nick_name"}
+			name = "member_email_name_unique",
+			columnNames = {"email", "name"}
 		)
 	}
 )
-
-public class Member {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+public class Member extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "member_id")
@@ -34,7 +39,7 @@ public class Member {
 
 	private String password;
 
-	private String nickName;
+	private String name;
 
 	private String phoneNumber;
 
@@ -49,4 +54,18 @@ public class Member {
 
 	@Enumerated(EnumType.STRING)
 	private Role role; // Spring Security 에 적용
+
+	@Builder
+	public Member(String email, String password, String name, String phoneNumber, LocalDate birthDate,
+		Sex sex, String profileImagePath, String profileMessage, Role role) {
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.phoneNumber = phoneNumber;
+		this.birthDate = birthDate;
+		this.sex = sex;
+		this.profileImagePath = profileImagePath;
+		this.profileMessage = profileMessage;
+		this.role = role;
+	}
 }
