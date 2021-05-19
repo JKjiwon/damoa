@@ -1,4 +1,4 @@
-package hello.sns.domain.common;
+package hello.sns.domain.category;
 
 import static javax.persistence.FetchType.*;
 
@@ -9,28 +9,37 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-import hello.sns.domain.community.Community;
-import hello.sns.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(
+	uniqueConstraints = {
+		@UniqueConstraint(
+			name = "category_name_unique",
+			columnNames = {"name"}
+		)
+	}
+)
 @Entity
-public class CategoryMember {
+public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "category_member_id")
+	@Column(name = "category_id")
 	private Long id;
 
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "category_id")
-	private Category category;
+	private String name;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "member_id")
-	private Member member;
+	@JoinColumn(name = "parent_id")
+	private Category parent;
+
+	// 일단은 단방향 맵핑을 위해 주석 처리
+	// @OneToMany(mappedBy = "parent")
+	// private List<Category> child = new ArrayList<>();
 }

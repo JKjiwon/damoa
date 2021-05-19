@@ -48,23 +48,25 @@ public class Member extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private Sex sex;
 
-	private String profileImagePath;
+	private String profileImageName;
+
+	private String profileImageUrl;
 
 	private String profileMessage;
 
 	@Enumerated(EnumType.STRING)
 	private Role role; // Spring Security 에 적용
 
-	@Builder
 	public Member(String email, String password, String name, String phoneNumber, LocalDate birthDate,
-		Sex sex, String profileImagePath, String profileMessage, Role role) {
+		Sex sex, String profileImageName, String profileImageUrl, String profileMessage, Role role) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
 		this.phoneNumber = phoneNumber;
 		this.birthDate = birthDate;
 		this.sex = sex;
-		this.profileImagePath = profileImagePath;
+		this.profileImageName = profileImageName;
+		this.profileImageUrl = profileImageUrl;
 		this.profileMessage = profileMessage;
 		this.role = role;
 	}

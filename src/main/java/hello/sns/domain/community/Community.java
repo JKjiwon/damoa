@@ -38,9 +38,13 @@ public class Community extends BaseTimeEntity {
 
 	private String name;
 
+	private String thumbNailImageName;
+
 	private String thumbNailImagePath;
 
-	private String mainImagePath;
+	private String mainImageName;
+
+	private String mainImageUrl;
 
 	private String introduction;
 
@@ -49,11 +53,13 @@ public class Community extends BaseTimeEntity {
 	private Member admin;
 
 	@Builder
-	public Community(String name, String thumbNailImagePath, String mainImagePath, String introduction,
-		Member admin) {
+	public Community(String name, String thumbNailImageName, String thumbNailImagePath, String mainImageName,
+		String mainImageUrl, String introduction, Member admin) {
 		this.name = name;
+		this.thumbNailImageName = thumbNailImageName;
 		this.thumbNailImagePath = thumbNailImagePath;
-		this.mainImagePath = mainImagePath;
+		this.mainImageName = mainImageName;
+		this.mainImageUrl = mainImageUrl;
 		this.introduction = introduction;
 		this.admin = admin;
 	}
