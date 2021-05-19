@@ -19,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
 	uniqueConstraints = {
 		@UniqueConstraint(
@@ -27,7 +28,6 @@ import lombok.NoArgsConstructor;
 		)
 	}
 )
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Member extends BaseTimeEntity {
 	@Id
