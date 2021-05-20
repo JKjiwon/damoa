@@ -50,7 +50,7 @@ public class Community extends BaseTimeEntity {
 	private String introduction;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "admin_id")
+	@JoinColumn(name = "member_id")
 	private Member admin;
 
 	@Builder

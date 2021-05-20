@@ -1,49 +1,47 @@
-package hello.sns.domain.category;
-
-import static javax.persistence.FetchType.*;
+package hello.sns.domain.post;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
+import hello.sns.domain.BaseTimeEntity;
+import hello.sns.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(
-	uniqueConstraints = {
-		@UniqueConstraint(
-			name = "category_name_unique",
-			columnNames = {"name"}
-		)
-	}
-)
 @Entity
-public class Category {
-
+public class Comment extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "category_id")
+	@Column(name = "comment_id")
 	private Long id;
 
-	private String name;
+	private String content;
 
-	@ManyToOne(fetch = LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "member_id")
+	private Member writer;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "post_id")
+	private Post post;
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parent_id")
-	private Category parent;
+	private Comment parent;
 
-	@OneToMany(mappedBy = "parent")
-	private List<Category> child = new ArrayList<>();
+	@OneToMany(mappedBy = "parent", orphanRemoval = true)
+	private List<Comment> child = new ArrayList<>();
 }

@@ -33,18 +33,18 @@ public class Post extends BaseTimeEntity {
 	private String content;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "author_id")
-	private Member author;
+	@JoinColumn(name = "member_id")
+	private Member writer;
 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "community_id")
 	private Community community;
 
 	@Builder
-	public Post(String title, String content, Member author, Community community) {
+	public Post(String title, String content, Member writer, Community community) {
 		this.title = title;
 		this.content = content;
-		this.author = author;
+		this.writer = writer;
 		this.community = community;
 	}
 }
