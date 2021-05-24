@@ -1,23 +1,14 @@
 package hello.sns.domain.member;
 
-import java.time.LocalDate;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
 import hello.sns.domain.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.List;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
 	uniqueConstraints = {
@@ -54,11 +45,14 @@ public class Member extends BaseTimeEntity {
 
 	private String profileMessage;
 
-	@Enumerated(EnumType.STRING)
-	private Role role; // Spring Security 에 적용
+	@OneToMany(mappedBy = "member")
+	private List<MemberRole> memberRoles;
 
+
+	@Builder
 	public Member(String email, String password, String name, String phoneNumber, LocalDate birthDate,
-		Sex sex, String profileImageName, String profileImageUrl, String profileMessage, Role role) {
+				  Sex sex, String profileImageName, String profileImageUrl, String profileMessage,
+				  List<MemberRole> memberRoles) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
@@ -68,6 +62,6 @@ public class Member extends BaseTimeEntity {
 		this.profileImageName = profileImageName;
 		this.profileImageUrl = profileImageUrl;
 		this.profileMessage = profileMessage;
-		this.role = role;
+		this.memberRoles = memberRoles;
 	}
 }
