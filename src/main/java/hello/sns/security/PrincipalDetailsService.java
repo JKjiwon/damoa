@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailsService implements UserDetailsService {
+public class PrincipalDetailsService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
 
@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                         new UsernameNotFoundException("User not found with username or email : " + usernameOrEmail)
                 );
 
-        return UserPrincipal.create(member);
+        return new PrincipalDetails(member);
     }
 
     // This method is used by JWTAuthenticationFilter
@@ -36,6 +36,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 () -> new UsernameNotFoundException("User not found with id : " + id)
         );
 
-        return UserPrincipal.create(member);
+        return new PrincipalDetails(member);
     }
 }

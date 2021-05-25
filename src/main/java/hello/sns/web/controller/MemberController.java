@@ -1,9 +1,10 @@
 package hello.sns.web.controller;
 
 import hello.sns.annotation.CurrentUser;
+import hello.sns.entity.member.Member;
 import hello.sns.repository.MemberRepository;
-import hello.sns.security.UserPrincipal;
-import hello.sns.web.dto.response.UserSummary;
+import hello.sns.security.PrincipalDetails;
+import hello.sns.web.dto.response.MemberSummary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,8 @@ public class MemberController {
 
     @GetMapping("/me")
     @Secured("ROLE_USER")
-    public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-        return new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getName());
+    public MemberSummary getCurrentUser(@CurrentUser PrincipalDetails principalDetails) {
+        Member currentMember = principalDetails.getMember();
+        return new MemberSummary(currentMember.getId(), currentMember.getUsername(), currentMember.getName());
     }
 }

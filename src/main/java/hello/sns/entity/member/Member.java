@@ -40,41 +40,27 @@ public class Member extends BaseTimeEntity {
 
 	private String name;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "member_roles",
-			joinColumns = @JoinColumn(name = "member_id"),
-			inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<>();
+	@Enumerated(EnumType.STRING)
+	private Role role;
 
 //	private String profileImageName;
 //	private String profileImageUrl;
 //	private String profileMessage;
 
 	@Builder
-	public Member(String username, String password, String email, String name, Set<Role> roles) {
+	public Member(String username, String password, String email, String name) {
 		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.name = name;
-		this.roles = roles;
+	}
+
+	public void changeRole(Role role) {
+		this.role = role;
 	}
 
 	public void passwordEncoding(String password) {
 		this.password = password;
 	}
 
-	public void addRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
-	@Override
-	public String toString() {
-		return "Member{" +
-				"id=" + id +
-				", username='" + username + '\'' +
-				", password='" + password + '\'' +
-				", email='" + email + '\'' +
-				", name='" + name + '\'' +
-				'}';
-	}
 }

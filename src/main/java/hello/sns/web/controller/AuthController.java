@@ -2,9 +2,6 @@ package hello.sns.web.controller;
 
 import hello.sns.security.JwtTokenProvider;
 import hello.sns.entity.member.Member;
-import hello.sns.entity.member.Role;
-import hello.sns.entity.member.RoleName;
-import hello.sns.repository.RoleRepository;
 import hello.sns.service.AuthService;
 import hello.sns.web.dto.request.LoginRequest;
 import hello.sns.web.dto.request.SignUpRequest;
@@ -32,7 +29,6 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final AuthService authService;
-    private final RoleRepository roleRepository;
     private final JwtTokenProvider tokenProvider;
 
     @PostMapping("/signin")
@@ -61,13 +57,5 @@ public class AuthController {
                 .buildAndExpand(result.getUsername()).toUri();
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
-    }
-
-    @PostMapping("/role")
-    private String createRole() {
-        Role role = new Role();
-        role.setName(RoleName.ROLE_USER);
-        roleRepository.save(role);
-        return "ok";
     }
 }
