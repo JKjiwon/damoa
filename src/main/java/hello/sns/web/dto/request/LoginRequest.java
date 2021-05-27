@@ -3,14 +3,14 @@ package hello.sns.web.dto.request;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
 public class LoginRequest {
-    @NotBlank
-    private String usernameOrEmail;
+    @NotEmpty(message = "이메일을 입력하세요.")
+    private String email;
 
-    @NotBlank
+    @NotEmpty(message = "비밀번호를 입력하세요.")
     private String password;
 }

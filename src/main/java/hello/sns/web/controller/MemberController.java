@@ -22,6 +22,6 @@ public class MemberController {
     @Secured("ROLE_USER")
     public MemberSummary getCurrentUser(@CurrentUser PrincipalDetails principalDetails) {
         Member currentMember = principalDetails.getMember();
-        return new MemberSummary(currentMember.getId(), currentMember.getUsername(), currentMember.getName());
+        return new MemberSummary(currentMember.getId(), currentMember.getEmail(), currentMember.getName());
     }
 }

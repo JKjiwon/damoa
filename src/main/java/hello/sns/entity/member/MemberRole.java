@@ -1,6 +1,6 @@
 package hello.sns.entity.member;
 
 
-public enum Role {
+public enum MemberRole {
     USER, ADMIN
 }

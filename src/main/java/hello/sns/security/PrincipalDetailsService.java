@@ -18,22 +18,21 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String usernameOrEmail)
+    public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
-        // Let people login with either username or email
-        Member member = memberRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+        //  이메일 또는 아이디로 로그인
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with username or email : " + usernameOrEmail)
+                        new UsernameNotFoundException(email)
                 );
-
         return new PrincipalDetails(member);
     }
 
-    // This method is used by JWTAuthenticationFilter
+    // JWTAuthenticationFilter 에서 사용
     @Transactional
     public UserDetails loadUserById(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(
-                () -> new UsernameNotFoundException("User not found with id : " + id)
+                () -> new UsernameNotFoundException(String.valueOf(id))
         );
 
         return new PrincipalDetails(member);

@@ -12,11 +12,10 @@ import java.io.IOException;
 @Component
 @Slf4j
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
-
+    //필요한 권한이 없이 접근하려 할때 403
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException {
-        //필요한 권한이 없이 접근하려 할때 403
-        log.error("Responding with unauthenticated error. Message - {}", e.getMessage());
+        log.error("Responding with unauthorized error. Message - {}", e.getMessage());
         response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
     }
 }

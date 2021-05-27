@@ -1,41 +1,35 @@
 package hello.sns.service;
 
 import hello.sns.entity.member.Member;
-import hello.sns.entity.member.Role;
-import hello.sns.web.dto.request.SignUpRequest;
+import hello.sns.entity.member.MemberRole;
 import hello.sns.repository.MemberRepository;
+import hello.sns.web.dto.request.JoinRequest;
+import hello.sns.web.exception.EmailDuplicatedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AuthService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Member join(SignUpRequest signUpRequest) {
-
-        validateDuplicateUsername(signUpRequest); // 중복 회원 검증
-        validateDuplicateEmail(signUpRequest); // 중복 이메일 검증
-
-        Member member = signUpRequest.toEntity();
+    @Transactional
+    public Member join(JoinRequest joinRequest) {
+        validateDuplicateEmail(joinRequest); // 중복 이메일 검증
+        Member member = joinRequest.toEntity();
         member.passwordEncoding(passwordEncoder.encode(member.getPassword()));
-        member.changeRole(Role.USER);
+        member.addRole(MemberRole.USER);
         return memberRepository.save(member);
     }
 
-    private void validateDuplicateEmail(SignUpRequest signUpRequest) {
-        if (memberRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new IllegalStateException("이미 존재하는 이메일 입니다.");
-        }
-    }
-
-    private void validateDuplicateUsername(SignUpRequest signUpRequest) {
-        if (memberRepository.existsByUsername(signUpRequest.getUsername())) {
-            throw new IllegalStateException("이미 존재하는 아이디 입니다.");
+    private void validateDuplicateEmail(JoinRequest joinRequest) {
+        if (memberRepository.existsByEmail(joinRequest.getEmail())) {
+            throw new EmailDuplicatedException("이미 존재하는 이메일 입니다.");
         }
     }
 }
