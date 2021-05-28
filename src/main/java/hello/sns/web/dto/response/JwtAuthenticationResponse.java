@@ -8,18 +8,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class JwtAuthenticationResponse {
 
     private String tokenType = "Bearer";
     private String accessToken;
 
-
     public JwtAuthenticationResponse(String accessToken) {
         this.accessToken = accessToken;
     }
 
-    public JwtAuthenticationResponse(String tokenType, String accessToken) {
-        this.tokenType = tokenType;
-        this.accessToken = accessToken;
-    }
 }
