@@ -20,8 +20,7 @@ public class MemberController {
 
     @GetMapping("/me")
     @Secured("ROLE_USER")
-    public MemberSummary getCurrentUser(@CurrentUser PrincipalDetails principalDetails) {
-        Member currentMember = principalDetails.getMember();
+    public MemberSummary getCurrentUser(@CurrentUser Member currentMember) {
         return new MemberSummary(currentMember.getId(), currentMember.getEmail(), currentMember.getName());
     }
 }

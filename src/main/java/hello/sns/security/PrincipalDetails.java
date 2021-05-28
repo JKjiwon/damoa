@@ -2,16 +2,13 @@ package hello.sns.security;
 
 import hello.sns.entity.member.Member;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Spring Security 는 PrincipalDetails 객체에 저장된 정보를 사용하여 인증 및 권한 부여를 수행합니다.

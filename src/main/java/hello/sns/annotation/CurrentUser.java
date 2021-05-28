@@ -6,10 +6,9 @@ import java.lang.annotation.*;
 /**
  * This reduces the dependency on Spring Security.
  */
-@Target({ElementType.PARAMETER, ElementType.TYPE})
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-@Documented
-@AuthenticationPrincipal
+@AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? null : member")
 public @interface CurrentUser {
 
 }
