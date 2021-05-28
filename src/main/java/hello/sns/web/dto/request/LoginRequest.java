@@ -1,12 +1,14 @@
 package hello.sns.web.dto.request;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 public class LoginRequest {
     @NotEmpty(message = "이메일을 입력하세요.")
     private String email;
