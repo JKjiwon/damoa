@@ -1,21 +1,14 @@
 package hello.sns.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import hello.sns.repository.MemberRepository;
-import hello.sns.service.AuthService;
+import hello.sns.common.BaseControllerTest;
 import hello.sns.web.dto.request.JoinRequest;
 import hello.sns.web.dto.request.LoginRequest;
 import hello.sns.web.dto.response.JwtAuthenticationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,22 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-class MemberControllerTest {
 
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    AuthService authService;
-
-    @Autowired
-    MemberRepository memberRepository;
-
-    @Autowired
-    ObjectMapper objectMapper;
+class MemberControllerTest extends BaseControllerTest {
 
     @BeforeEach
     public void setUp() {
