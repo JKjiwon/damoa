@@ -1,4 +1,4 @@
-package hello.sns.web.dto.response;
+package hello.sns.web.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

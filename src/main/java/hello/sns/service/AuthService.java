@@ -3,7 +3,7 @@ package hello.sns.service;
 import hello.sns.entity.member.Member;
 import hello.sns.entity.member.MemberRole;
 import hello.sns.repository.MemberRepository;
-import hello.sns.web.dto.request.JoinRequest;
+import hello.sns.web.dto.auth.JoinRequest;
 import hello.sns.web.exception.EmailDuplicatedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

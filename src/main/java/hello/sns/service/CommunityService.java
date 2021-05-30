@@ -2,8 +2,9 @@ package hello.sns.service;
 
 import hello.sns.entity.community.Community;
 import hello.sns.repository.CommunityRepository;
-import hello.sns.web.dto.request.CommunitySaveDto;
-import hello.sns.web.dto.response.CommunityResponseDto;
+import hello.sns.web.dto.community.CommunitySaveDto;
+import hello.sns.web.dto.community.CommunityResponseDto;
+import hello.sns.web.dto.community.CommunityUpdateDto;
 import hello.sns.web.exception.NameDuplicatedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

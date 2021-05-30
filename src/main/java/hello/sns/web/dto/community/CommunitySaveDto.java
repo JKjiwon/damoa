@@ -1,4 +1,4 @@
-package hello.sns.web.dto.request;
+package hello.sns.web.dto.community;
 
 import hello.sns.entity.community.Community;
 import hello.sns.entity.member.Member;

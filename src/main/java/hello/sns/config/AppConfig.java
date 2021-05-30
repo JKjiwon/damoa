@@ -1,7 +1,7 @@
 package hello.sns.config;
 
 import hello.sns.service.AuthService;
-import hello.sns.web.dto.request.JoinRequest;
+import hello.sns.web.dto.auth.JoinRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

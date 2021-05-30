@@ -14,7 +14,7 @@ import javax.persistence.UniqueConstraint;
 
 import hello.sns.entity.BaseTimeEntity;
 import hello.sns.entity.member.Member;
-import hello.sns.service.CommunityUpdateDto;
+import hello.sns.web.dto.community.CommunityUpdateDto;
 import lombok.*;
 
 @Getter

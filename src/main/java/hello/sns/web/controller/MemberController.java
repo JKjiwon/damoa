@@ -1,10 +1,9 @@
 package hello.sns.web.controller;
 
-import hello.sns.annotation.CurrentUser;
+import hello.sns.web.CurrentUser;
 import hello.sns.entity.member.Member;
 import hello.sns.repository.MemberRepository;
-import hello.sns.security.PrincipalDetails;
-import hello.sns.web.dto.response.MemberSummary;
+import hello.sns.web.dto.member.MemberSummary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package hello.sns.service;
+package hello.sns.web.dto.community;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,9 +1,9 @@
 package hello.sns.web.controller;
 
 import hello.sns.common.BaseControllerTest;
-import hello.sns.web.dto.request.JoinRequest;
-import hello.sns.web.dto.request.LoginRequest;
-import hello.sns.web.dto.response.JwtAuthenticationResponse;
+import hello.sns.web.dto.auth.JoinRequest;
+import hello.sns.web.dto.auth.LoginRequest;
+import hello.sns.web.dto.auth.JwtAuthenticationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

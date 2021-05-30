@@ -1,8 +1,7 @@
-package hello.sns.web.dto.response;
+package hello.sns.web.dto.common;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import org.springframework.http.HttpStatus;
 

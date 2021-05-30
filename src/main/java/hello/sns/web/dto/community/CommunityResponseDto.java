@@ -1,4 +1,4 @@
-package hello.sns.web.dto.response;
+package hello.sns.web.dto.community;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import hello.sns.entity.community.Community;

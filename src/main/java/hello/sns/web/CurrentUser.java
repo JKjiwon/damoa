@@ -1,4 +1,4 @@
-package hello.sns.annotation;
+package hello.sns.web;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import java.lang.annotation.*;

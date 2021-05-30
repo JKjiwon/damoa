@@ -1,4 +1,4 @@
-package hello.sns.web.dto.request;
+package hello.sns.web.dto.auth;
 
 import lombok.*;
 
