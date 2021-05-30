@@ -2,8 +2,8 @@ package hello.sns.web.controller;
 
 import hello.sns.common.BaseControllerTest;
 import hello.sns.web.dto.auth.JoinRequest;
-import hello.sns.web.dto.auth.LoginRequest;
 import hello.sns.web.dto.auth.JwtAuthenticationResponse;
+import hello.sns.web.dto.auth.LoginRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,26 +29,33 @@ class MemberControllerTest extends BaseControllerTest {
     @DisplayName("현재 사용자 정보 조회")
     void getCurrentUser() throws Exception {
         // Given
-        JoinRequest joinRequest = JoinRequest.builder()
-                .name("user")
-                .email("user@email.com")
-                .password("user1234")
-                .build();
+        String name = "user";
+        String email = "user@gmail.com";
+        String password = "user1234";
+
+        joinMember(name, email, password);
 
         // When & Then
         this.mockMvc.perform(get("/api/members/me")
-                .header(HttpHeaders.AUTHORIZATION, getAccessToken(joinRequest)))
+                .header(HttpHeaders.AUTHORIZATION, getAccessToken(email, password)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").exists())
-                .andExpect(jsonPath("email").value(joinRequest.getEmail()))
-                .andExpect(jsonPath("name").value(joinRequest.getName()));
+                .andExpect(jsonPath("email").value(email))
+                .andExpect(jsonPath("name").value(name));
     }
 
-    private String getAccessToken(JoinRequest joinRequest) throws Exception {
-
+    private void joinMember(String name, String email, String password) {
+        JoinRequest joinRequest = JoinRequest.builder()
+                .name(name)
+                .email(email)
+                .password(password)
+                .build();
         authService.join(joinRequest);
-        LoginRequest loginRequest = new LoginRequest(joinRequest.getEmail(), joinRequest.getPassword());
+    }
+
+    private String getAccessToken(String email, String password) throws Exception {
+        LoginRequest loginRequest = new LoginRequest(email, password);
 
         ResultActions perform = this.mockMvc.perform(post("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
