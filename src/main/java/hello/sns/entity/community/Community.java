@@ -14,10 +14,8 @@ import javax.persistence.UniqueConstraint;
 
 import hello.sns.entity.BaseTimeEntity;
 import hello.sns.entity.member.Member;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import hello.sns.service.CommunityUpdateDto;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,6 +28,7 @@ import lombok.NoArgsConstructor;
 	}
 )
 @Entity
+@EqualsAndHashCode(of = "id")
 public class Community extends BaseTimeEntity {
 
 	@Id
@@ -41,7 +40,7 @@ public class Community extends BaseTimeEntity {
 
 	private String thumbNailImageName;
 
-	private String thumbNailImagePath;
+	private String thumbNailImageUrl;
 
 	private String mainImageName;
 
@@ -54,14 +53,21 @@ public class Community extends BaseTimeEntity {
 	private Member admin;
 
 	@Builder
-	public Community(String name, String thumbNailImageName, String thumbNailImagePath, String mainImageName,
-		String mainImageUrl, String introduction, Member admin) {
+	public Community(String name, String thumbNailImageName, String thumbNailImageUrl, String mainImageName, String mainImageUrl, String introduction, Member admin) {
 		this.name = name;
 		this.thumbNailImageName = thumbNailImageName;
-		this.thumbNailImagePath = thumbNailImagePath;
+		this.thumbNailImageUrl = thumbNailImageUrl;
 		this.mainImageName = mainImageName;
 		this.mainImageUrl = mainImageUrl;
 		this.introduction = introduction;
 		this.admin = admin;
+	}
+
+	public void update(CommunityUpdateDto communityUpdateDto) {
+		introduction = communityUpdateDto.getIntroduction();
+		mainImageName = communityUpdateDto.getMainImageName();
+		mainImageUrl = communityUpdateDto.getMainImageUrl();
+		thumbNailImageName = communityUpdateDto.getThumbNailImageName();
+		thumbNailImageUrl = communityUpdateDto.getThumbNailImageUrl();
 	}
 }
