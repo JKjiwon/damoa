@@ -1,17 +1,12 @@
 package hello.sns.web.controller;
 
 import hello.sns.entity.member.Member;
-import hello.sns.security.JwtTokenProvider;
 import hello.sns.service.AuthService;
-import hello.sns.web.dto.auth.JoinRequest;
-import hello.sns.web.dto.auth.LoginRequest;
+import hello.sns.web.dto.auth.JoinRequestDto;
 import hello.sns.web.dto.auth.JwtAuthenticationResponse;
+import hello.sns.web.dto.auth.LoginRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,31 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
     private final AuthService authService;
-    private final JwtTokenProvider tokenProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Validated LoginRequest loginRequest) {
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.generateToken(authentication);
-
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+    public ResponseEntity<?> login(@RequestBody @Validated LoginRequestDto loginRequestDto) {
+        String jwtToken = authService.login(loginRequestDto);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken));
     }
 
     @PostMapping("/join")
-    public ResponseEntity<?> join(@RequestBody @Validated JoinRequest joinRequest) {
-
-        Member result = authService.join(joinRequest);
-
+    public ResponseEntity<?> join(@RequestBody @Validated JoinRequestDto joinRequestDto) {
+        Member result = authService.join(joinRequestDto);
         return ResponseEntity.ok(result);
     }
 }

@@ -1,6 +1,7 @@
 package hello.sns.service;
 
 import hello.sns.entity.community.Community;
+import hello.sns.entity.member.Member;
 import hello.sns.repository.CommunityRepository;
 import hello.sns.web.dto.community.CommunitySaveDto;
 import hello.sns.web.dto.community.CommunityResponseDto;
@@ -17,24 +18,28 @@ public class CommunityService {
 
     private final CommunityRepository communityRepository;
 
-    @Transactional
-    public CommunityResponseDto creatCommunity(CommunitySaveDto communitySaveDto) {
-        validateDuplicateEmail(communitySaveDto);
-        Community community = communitySaveDto.toEntity();
-        return new CommunityResponseDto(communityRepository.save(community));
-    }
+//    @Transactional
+//    public CommunityResponseDto creatCommunity(CommunitySaveDto communitySaveDto) {
+//        // 이름 중복 확인
+//        validateDuplicateName(communitySaveDto.getName());
+//
+//        Community community = communitySaveDto.toEntity();
+//
+//
+//        return new CommunityResponseDto(communityRepository.save(community));
+//    }
 
-    @Transactional
-    public CommunityResponseDto updateCommunity(Long id, CommunityUpdateDto communityUpdateDto) {
-        Community community = communityRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 커뮤니티가 없습니다. id=" + id));
+//    @Transactional
+//    public CommunityResponseDto updateCommunity(Long id, CommunityUpdateDto communityUpdateDto) {
+//        Community community = communityRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 커뮤니티가 없습니다. id=" + id));
+//
+//        community.update(communityUpdateDto);
+//        return new CommunityResponseDto(community);
+//    }
 
-        community.update(communityUpdateDto);
-        return new CommunityResponseDto(community);
-    }
-
-    private void validateDuplicateEmail(CommunitySaveDto communitySaveDto) {
-        if (communityRepository.existsByName(communitySaveDto.getName())) {
+    private void validateDuplicateName(String name) {
+        if (communityRepository.existsByName(name)) {
             throw new NameDuplicatedException("이미 존재하는 커뮤니티 이름 입니다.");
         }
     }

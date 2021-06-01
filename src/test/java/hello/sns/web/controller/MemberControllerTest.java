@@ -1,9 +1,9 @@
 package hello.sns.web.controller;
 
 import hello.sns.common.BaseControllerTest;
-import hello.sns.web.dto.auth.JoinRequest;
+import hello.sns.web.dto.auth.JoinRequestDto;
 import hello.sns.web.dto.auth.JwtAuthenticationResponse;
-import hello.sns.web.dto.auth.LoginRequest;
+import hello.sns.web.dto.auth.LoginRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,20 +46,20 @@ class MemberControllerTest extends BaseControllerTest {
     }
 
     private void joinMember(String name, String email, String password) {
-        JoinRequest joinRequest = JoinRequest.builder()
+        JoinRequestDto joinRequestDto = JoinRequestDto.builder()
                 .name(name)
                 .email(email)
                 .password(password)
                 .build();
-        authService.join(joinRequest);
+        authService.join(joinRequestDto);
     }
 
     private String getAccessToken(String email, String password) throws Exception {
-        LoginRequest loginRequest = new LoginRequest(email, password);
+        LoginRequestDto loginRequestDto = new LoginRequestDto(email, password);
 
         ResultActions perform = this.mockMvc.perform(post("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(loginRequest)));
+                .content(objectMapper.writeValueAsString(loginRequestDto)));
 
         String responseBody = perform.andReturn().getResponse().getContentAsString();
 

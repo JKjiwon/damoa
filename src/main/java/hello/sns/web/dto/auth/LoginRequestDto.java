@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class LoginRequest {
+public class LoginRequestDto {
     @NotEmpty(message = "이메일을 입력하세요.")
     private String email;
 

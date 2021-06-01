@@ -29,15 +29,4 @@ public class CommunityResponseDto {
 
     @JsonSerialize(using = MemberSerializer.class)
     private Member admin;
-
-    public CommunityResponseDto(Community community) {
-        this.id = community.getId();
-        this.name = community.getName();
-        this.thumbNailImageName = community.getMainImageName();
-        this.thumbNailImageUrl = community.getThumbNailImageUrl();
-        this.mainImageName = community.getMainImageName();
-        this.mainImageUrl = community.getMainImageUrl();
-        this.introduction = community.getIntroduction();
-        this.admin = community.getAdmin();
-    }
 }

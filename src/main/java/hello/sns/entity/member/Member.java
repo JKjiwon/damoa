@@ -1,6 +1,7 @@
 package hello.sns.entity.member;
 
 import hello.sns.entity.BaseTimeEntity;
+import hello.sns.entity.community.Community;
 import lombok.*;
 
 import javax.persistence.*;
@@ -43,8 +44,9 @@ public class Member extends BaseTimeEntity {
 	public void passwordEncoding(String password) {
 		this.password = password;
 	}
+}
 
-	//	private String profileImageName;
+
+//	private String profileImageName;
 //	private String profileImageUrl;
 //	private String profileMessage;
-}
