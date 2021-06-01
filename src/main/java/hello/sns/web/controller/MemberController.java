@@ -14,8 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URI;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -37,6 +35,7 @@ public class MemberController {
                 selfLinkBuilder.withSelfRel(),
                 linkTo(methodOn(MemberController.class).login(null)).withRel("login")
         );
+
         return ResponseEntity.created(selfLinkBuilder.slash("me").toUri()).body(entityModel); // 나중에 created 로 변경
     }
 
@@ -48,6 +47,7 @@ public class MemberController {
                 new JwtTokenDto(jwtToken),
                 linkTo(methodOn(MemberController.class).login(null)).withSelfRel()
         );
+
         return ResponseEntity.ok(entityModel);
     }
 
@@ -60,6 +60,7 @@ public class MemberController {
                 linkTo(MemberController.class).withRel("update"),
                 linkTo(methodOn(MemberController.class).updateProfileImage(null, null)).withRel("updateProfile")
         );
+
         return ResponseEntity.ok(entityModel);
     }
 
@@ -74,6 +75,7 @@ public class MemberController {
                 linkTo(methodOn(MemberController.class).getCurrentUser(null)).withRel("query"),
                 linkTo(MemberController.class).withRel("update")
         );
+
         return ResponseEntity.ok(entityModel);
     }
 
