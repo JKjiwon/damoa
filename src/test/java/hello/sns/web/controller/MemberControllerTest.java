@@ -1,9 +1,9 @@
 package hello.sns.web.controller;
 
 import hello.sns.common.BaseControllerTest;
-import hello.sns.web.dto.auth.JoinRequestDto;
-import hello.sns.web.dto.auth.JwtAuthenticationResponse;
-import hello.sns.web.dto.auth.LoginRequestDto;
+import hello.sns.web.dto.member.JoinMemberDto;
+import hello.sns.web.dto.member.JwtTokenDto;
+import hello.sns.web.dto.member.LoginMemberDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,24 +46,24 @@ class MemberControllerTest extends BaseControllerTest {
     }
 
     private void joinMember(String name, String email, String password) {
-        JoinRequestDto joinRequestDto = JoinRequestDto.builder()
+        JoinMemberDto joinMemberDto = JoinMemberDto.builder()
                 .name(name)
                 .email(email)
                 .password(password)
                 .build();
-        authService.join(joinRequestDto);
+        memberService.join(joinMemberDto);
     }
 
     private String getAccessToken(String email, String password) throws Exception {
-        LoginRequestDto loginRequestDto = new LoginRequestDto(email, password);
+        LoginMemberDto loginMemberDto = new LoginMemberDto(email, password);
 
-        ResultActions perform = this.mockMvc.perform(post("/api/auth/login")
+        ResultActions perform = this.mockMvc.perform(post("/api/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(loginRequestDto)));
+                .content(objectMapper.writeValueAsString(loginMemberDto)));
 
         String responseBody = perform.andReturn().getResponse().getContentAsString();
 
-        JwtAuthenticationResponse response = objectMapper.readValue(responseBody, JwtAuthenticationResponse.class);
+        JwtTokenDto response = objectMapper.readValue(responseBody, JwtTokenDto.class);
         return response.getTokenType() + " " + response.getAccessToken();
     }
 }

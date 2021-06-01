@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
-public class CommunitySaveDto {
+public class SaveCommunityDto {
 
     @Length(min = 2, max = 40, message = "최소 {min}자 이상 최대 {max}자 이하로 입력해주시기 바랍니다.")
     @NotBlank(message = "커뮤니티 이름을 입력해주시기 바랍니다.")

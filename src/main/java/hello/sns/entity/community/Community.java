@@ -2,7 +2,7 @@ package hello.sns.entity.community;
 
 import hello.sns.entity.BaseTimeEntity;
 import hello.sns.entity.member.Member;
-import hello.sns.web.dto.community.CommunityUpdateDto;
+import hello.sns.web.dto.community.UpdateCommunityDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -35,8 +35,8 @@ public class Community extends BaseTimeEntity {
 	 */
 
 
-	public void update(CommunityUpdateDto communityUpdateDto) {
-		introduction = communityUpdateDto.getIntroduction();
+	public void update(UpdateCommunityDto updateCommunityDto) {
+		introduction = updateCommunityDto.getIntroduction();
 	}
 }
 

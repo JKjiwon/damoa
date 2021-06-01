@@ -6,6 +6,7 @@ import hello.sns.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -72,7 +73,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-                .antMatchers("/api/auth/**")
+                .antMatchers(HttpMethod.POST, "/api/members")
+                .permitAll()
+                .antMatchers(HttpMethod.POST,"/api/members/login")
                 .permitAll()
                 .antMatchers("/api/member/checkUsernameAvailability", "/api/member/checkEmailAvailability")
                 .permitAll()

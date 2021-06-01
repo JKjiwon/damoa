@@ -13,6 +13,12 @@ spring:
         show_sql: true
         format_sql: true
 
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 30MB
+      max-file-size: 10MB
+
 logging.level:
   org.hibernate.SQL: debug
 #  org.hibernate.type: trace
@@ -20,3 +26,7 @@ logging.level:
 app:
   jwtSecret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2ImlsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
   jwtExpirationInMs: 604800000
+
+sns:
+  upload:
+    path: /Users/kimjiwon/studyProject/sns/uploads

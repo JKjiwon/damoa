@@ -1,7 +1,7 @@
 package hello.sns.config;
 
-import hello.sns.service.AuthService;
-import hello.sns.web.dto.auth.JoinRequestDto;
+import hello.sns.service.MemberService;
+import hello.sns.web.dto.member.JoinMemberDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -15,16 +15,16 @@ public class AppConfig {
     public ApplicationRunner applicationRunner() {
         return new ApplicationRunner() {
             @Autowired
-            AuthService authService;
+            MemberService memberService;
 
             @Override
             public void run(ApplicationArguments args) throws Exception {
-                JoinRequestDto joinRequestDto = JoinRequestDto.builder()
+                JoinMemberDto joinMemberDto = JoinMemberDto.builder()
                         .name("user")
                         .email("user@email.com")
                         .password("user1234")
                         .build();
-                authService.join(joinRequestDto);
+                memberService.join(joinMemberDto);
             }
         };
     }

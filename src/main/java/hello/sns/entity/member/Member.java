@@ -1,26 +1,16 @@
 package hello.sns.entity.member;
 
 import hello.sns.entity.BaseTimeEntity;
-import hello.sns.entity.community.Community;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
-import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(
-		uniqueConstraints = {
-				@UniqueConstraint(
-						columnNames = {
-								"email"
-						})
-		}
-)
 @Entity
-@EqualsAndHashCode(of = "id")
-@AllArgsConstructor
-@Builder
 public class Member extends BaseTimeEntity {
 
 	@Id
@@ -28,6 +18,7 @@ public class Member extends BaseTimeEntity {
 	@Column(name = "member_id")
 	private Long id;
 
+	@Column(unique = true)
 	private String email;
 
 	private String password;
@@ -37,16 +28,29 @@ public class Member extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private MemberRole role;
 
-	public void addRole(MemberRole role) {
-		this.role = role;
+	private String profileImageName;
+	private String profileImagePath;
+	private String profileMessage;
+
+	public Member(String email, String password, String name) {
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.role = MemberRole.USER;
 	}
 
-	public void passwordEncoding(String password) {
+	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public void updateProfileImage(String profileImageName, String profileImageUrl) {
+		this.profileImageName = profileImageName;
+		this.profileImagePath = profileImageUrl;
+	}
+
+	public void update(String name, String profileMessage) {
+		this.name = name;
+		this.profileMessage = profileMessage;
 	}
 }
 
-
-//	private String profileImageName;
-//	private String profileImageUrl;
-//	private String profileMessage;

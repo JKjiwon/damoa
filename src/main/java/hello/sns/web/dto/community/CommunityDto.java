@@ -1,9 +1,5 @@
 package hello.sns.web.dto.community;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import hello.sns.entity.community.Community;
-import hello.sns.entity.member.Member;
-import hello.sns.entity.member.MemberSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +7,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 @Getter
-public class CommunityResponseDto {
+public class CommunityDto {
 
     private Long id;
 
@@ -27,6 +23,5 @@ public class CommunityResponseDto {
 
     private String introduction;
 
-    @JsonSerialize(using = MemberSerializer.class)
-    private Member admin;
+    private Long ownerId;
 }

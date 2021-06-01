@@ -2,7 +2,7 @@ package hello.sns.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.sns.repository.MemberRepository;
-import hello.sns.service.AuthService;
+import hello.sns.service.MemberService;
 import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,7 +23,7 @@ public class BaseControllerTest {
     protected ObjectMapper objectMapper;
 
     @Autowired
-    protected AuthService authService;
+    protected MemberService memberService;
 
     @Autowired
     protected MemberRepository memberRepository;

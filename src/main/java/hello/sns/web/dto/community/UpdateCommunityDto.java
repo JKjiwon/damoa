@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Builder
-public class CommunityUpdateDto {
+public class UpdateCommunityDto {
 
     private String thumbNailImageName;
 
