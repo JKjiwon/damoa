@@ -39,8 +39,16 @@ public class MemberController {
         return ResponseEntity.created(selfLinkBuilder.slash("me").toUri()).body(entityModel); // 나중에 created 로 변경
     }
 
+    @GetMapping("/{email}/exists")
+    public ResponseEntity checkDuplicatedEmail(@PathVariable String email) {
+        memberService.checkDuplicatedEmail(email);
+
+        return ResponseEntity.ok("ok");
+    }
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Validated LoginMemberDto loginMemberDto) {
+
         String jwtToken = authService.login(loginMemberDto);
 
         EntityModel<JwtTokenDto> entityModel = EntityModel.of(

@@ -6,7 +6,7 @@ import hello.sns.web.dto.common.FileDto;
 import hello.sns.web.dto.member.JoinMemberDto;
 import hello.sns.web.dto.member.MemberDto;
 import hello.sns.web.dto.member.UpdateMemberDto;
-import hello.sns.web.exception.EmailDuplicatedException;
+import hello.sns.web.exception.DuplicatedEmailException;
 import hello.sns.web.exception.FileUploadException;
 import hello.sns.web.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -25,20 +25,21 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public MemberDto join(JoinMemberDto joinMemberDto) {
-        validateDuplicateEmail(joinMemberDto.getEmail());
 
         Member member = new Member(joinMemberDto.getEmail(),
                 passwordEncoder.encode(joinMemberDto.getPassword()),
                 joinMemberDto.getName());
 
         memberRepository.save(member);
-
         return new MemberDto(member);
     }
 
-    private void validateDuplicateEmail(String email) {
-        if (memberRepository.existsByEmail(email)) {
-            throw new EmailDuplicatedException("이미 존재하는 이메일 입니다.");
+    @Transactional(readOnly = true)
+    public void checkDuplicatedEmail(String email) throws DuplicatedEmailException {
+        boolean isExistedEmail = memberRepository.existsByEmail(email);
+
+        if (isExistedEmail) {
+            throw new DuplicatedEmailException("이미 존재하는 이메일 입니다.");
         }
     }
 
@@ -49,12 +50,9 @@ public class MemberService {
                 () -> new MemberNotFoundException("해당 회원이 존재하지 않습니다."));
 
 
-        FileDto fileDto = fileService.uploadFile(profileImage, findMember.getId());
-        String profileImageUrl = currentMember.getProfileImagePath();
+        fileService.deleteFile(currentMember.getProfileImagePath());
 
-        if (currentMember.getProfileImagePath() != null) {
-            fileService.deleteFile(profileImageUrl);
-        }
+        FileDto fileDto = fileService.uploadFile(profileImage, findMember.getId());
 
         findMember.updateProfileImage(fileDto.getFileName(), fileDto.getFilePath());
 
