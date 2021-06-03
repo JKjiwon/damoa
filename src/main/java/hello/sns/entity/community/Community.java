@@ -1,8 +1,9 @@
 package hello.sns.entity.community;
 
 import hello.sns.entity.BaseTimeEntity;
+import hello.sns.entity.category.Category;
 import hello.sns.entity.member.Member;
-import hello.sns.web.dto.community.UpdateCommunityDto;
+import hello.sns.web.dto.common.FileInfo;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @Builder
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Community extends BaseTimeEntity {
@@ -32,14 +33,27 @@ public class Community extends BaseTimeEntity {
 
 	private String thumbNailImageName;
 
-	private String thumbNailImageUrl;
+	private String thumbNailImagePath;
 
 	private String mainImageName;
 
-	private String mainImageUrl;
+	private String mainImagePath;
 
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
 
-	public void update(UpdateCommunityDto updateCommunityDto) {
-		introduction = updateCommunityDto.getIntroduction();
+	public void changeMainImage(FileInfo imageInfo) {
+		mainImageName = imageInfo.getFileName();
+		mainImagePath = imageInfo.getFilePath();
+	}
+
+	public void changeThumbNailImage(FileInfo imageInfo) {
+		thumbNailImageName = imageInfo.getFileName();
+		thumbNailImagePath = imageInfo.getFilePath();
+	}
+
+	public void changeOwner(Member owner) {
+		this.owner = owner;
 	}
 }

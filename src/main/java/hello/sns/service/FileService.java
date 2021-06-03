@@ -6,7 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FileService {
 
-    FileInfo uploadImageFile(MultipartFile file, Long memberId) throws FileUploadException;
+    FileInfo uploadMemberImageFile(MultipartFile file, Long memberId) throws FileUploadException;
+
+    FileInfo uploadCommunityImageFile(MultipartFile file, String communityName) throws FileUploadException;
 
     void deleteFile(String filePath);
 }

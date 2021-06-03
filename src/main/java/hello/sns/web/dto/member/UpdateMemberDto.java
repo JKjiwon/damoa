@@ -15,4 +15,12 @@ public class UpdateMemberDto {
     private String name;
 
     private String profileMessage;
+
+    private String thumbNailImageName;
+
+    private String thumbNailImageUrl;
+
+    private String mainImageName;
+
+    private String mainImageUrl;
 }

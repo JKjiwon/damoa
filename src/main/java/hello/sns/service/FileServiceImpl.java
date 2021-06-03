@@ -16,16 +16,21 @@ public class FileServiceImpl implements FileService {
     @Value("${sns.upload.path}")
     private String baseDir;
 
-    @Override
-    public FileInfo uploadImageFile(MultipartFile file, Long memberId) throws FileUploadException {
+    public FileInfo uploadMemberImageFile(MultipartFile file, Long memberId) throws FileUploadException {
         checkImageFile(file);
-        return uploadFile(file, memberId);
+        return uploadFile(file, "member", String.valueOf(memberId));
     }
 
-    private FileInfo uploadFile(MultipartFile file, Long memberId) throws FileUploadException {
+    @Override
+    public FileInfo uploadCommunityImageFile(MultipartFile file, String communityName) throws FileUploadException {
+        checkImageFile(file);
+        return uploadFile(file, "community", communityName);
+    }
+
+    private FileInfo uploadFile(MultipartFile file, String type, String uniqueId) throws FileUploadException {
         String newFileName = FileUtil.changeFileName(file);
-        createDirectory(memberId);
-        return createFile(file, memberId, newFileName);
+        createDirectory(type, uniqueId);
+        return createFile(file, type, uniqueId, newFileName);
     }
 
     @Override
@@ -35,12 +40,14 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private void createDirectory(Long memberId) {
+    private void createDirectory(String type, String uniqueId) {
 
         StringBuilder dirPath = new StringBuilder()
                 .append(baseDir)
                 .append(File.separator)
-                .append(memberId);
+                .append(type)
+                .append(File.separator)
+                .append(uniqueId);
 
         File directory = new File(String.valueOf(dirPath));
 
@@ -49,12 +56,14 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private FileInfo createFile(MultipartFile file, Long memberId, String newFileName) {
+    private FileInfo createFile(MultipartFile file, String type, String uniqueId, String newFileName) {
 
         StringBuilder filePath = new StringBuilder()
                 .append(baseDir)
                 .append(File.separator)
-                .append(memberId)
+                .append(type)
+                .append(File.separator)
+                .append(uniqueId)
                 .append(File.separator)
                 .append(newFileName);
         try {
@@ -66,10 +75,15 @@ public class FileServiceImpl implements FileService {
     }
 
     private void checkImageFile(MultipartFile file) {
-
-        boolean isImage = file.getContentType().startsWith("image");
+        boolean isImage = false;
+        try {
+            isImage = file.getContentType().startsWith("image");
+        } catch (NullPointerException e) {
+            throw new FileUploadException(("Not exists an image"));
+        }
         if (!isImage) {
             throw new FileUploadException(("Not an image file"));
         }
     }
+
 }

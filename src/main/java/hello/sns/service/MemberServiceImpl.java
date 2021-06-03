@@ -24,6 +24,7 @@ public class MemberServiceImpl implements MemberService{
     private final PasswordEncoder passwordEncoder;
 
     public MemberDto join(JoinMemberDto joinMemberDto) {
+        checkDuplicatedEmail(joinMemberDto.getEmail());
         joinMemberDto.setPassword(passwordEncoder.encode(joinMemberDto.getPassword()));
         Member member = joinMemberDto.toEntity();
         memberRepository.save(member);
@@ -45,7 +46,7 @@ public class MemberServiceImpl implements MemberService{
         Member findMember = memberRepository.findById(currentMember.getId()).orElseThrow(
                 () -> new MemberNotFoundException("해당 회원이 존재하지 않습니다."));
 
-        FileInfo fileInfo = fileService.uploadImageFile(profileImage, findMember.getId());
+        FileInfo fileInfo = fileService.uploadMemberImageFile(profileImage, findMember.getId());
         fileService.deleteFile(findMember.getProfileImagePath());
         findMember.updateProfileImage(fileInfo);
 

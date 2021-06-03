@@ -1,41 +1,11 @@
 package hello.sns.service;
 
-import hello.sns.repository.CommunityRepository;
-import hello.sns.web.exception.CommunityNameDuplicateException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import hello.sns.entity.member.Member;
+import hello.sns.web.dto.community.CreateCommunityDto;
+import org.springframework.web.multipart.MultipartFile;
 
-@Service
-@RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class CommunityService {
+public interface CommunityService {
+    void create(CreateCommunityDto createCommunityDto, MultipartFile mainImage, MultipartFile thumbNailImage, Member currentMember);
 
-    private final CommunityRepository communityRepository;
-
-//    @Transactional
-//    public CommunityResponseDto creatCommunity(CommunitySaveDto communitySaveDto) {
-//        // 이름 중복 확인
-//        validateDuplicateName(communitySaveDto.getName());
-//
-//        Community community = communitySaveDto.toEntity();
-//
-//
-//        return new CommunityResponseDto(communityRepository.save(community));
-//    }
-
-//    @Transactional
-//    public CommunityResponseDto updateCommunity(Long id, CommunityUpdateDto communityUpdateDto) {
-//        Community community = communityRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 커뮤니티가 없습니다. id=" + id));
-//
-//        community.update(communityUpdateDto);
-//        return new CommunityResponseDto(community);
-//    }
-
-    private void validateDuplicateName(String name) {
-        if (communityRepository.existsByName(name)) {
-            throw new CommunityNameDuplicateException("이미 존재하는 커뮤니티 이름 입니다.");
-        }
-    }
+    void checkDuplicatedName(String name);
 }
