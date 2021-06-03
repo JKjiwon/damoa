@@ -32,10 +32,6 @@ public class Member extends BaseTimeEntity {
 	private String profileImagePath;
 	private String profileMessage;
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public void updateProfileImage(FileInfo fileInfo) {
 		this.profileImageName = fileInfo.getFileName();
 		this.profileImagePath = fileInfo.getFilePath();

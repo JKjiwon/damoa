@@ -24,9 +24,8 @@ public class MemberServiceImpl implements MemberService{
     private final PasswordEncoder passwordEncoder;
 
     public MemberDto join(JoinMemberDto joinMemberDto) {
-
+        joinMemberDto.setPassword(passwordEncoder.encode(joinMemberDto.getPassword()));
         Member member = joinMemberDto.toEntity();
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
         memberRepository.save(member);
         return new MemberDto(member);
     }

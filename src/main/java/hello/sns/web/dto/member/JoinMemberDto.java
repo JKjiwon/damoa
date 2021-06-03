@@ -35,6 +35,5 @@ public class JoinMemberDto {
                 .password(password)
                 .role(MemberRole.USER)
                 .build();
-
     }
 }

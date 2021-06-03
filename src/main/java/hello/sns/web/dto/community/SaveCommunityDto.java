@@ -28,4 +28,12 @@ public class SaveCommunityDto {
                 .owner(owner)
                 .build();
     }
+
+    private String thumbNailImageName;
+
+    private String thumbNailImageUrl;
+
+    private String mainImageName;
+
+    private String mainImageUrl;
 }

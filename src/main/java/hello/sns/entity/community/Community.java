@@ -30,21 +30,16 @@ public class Community extends BaseTimeEntity {
 	@JoinColumn(name = "member_id")
 	private Member owner;
 
-	/**
-	 * 커뮤니티 생성
-	 */
+	private String thumbNailImageName;
+
+	private String thumbNailImageUrl;
+
+	private String mainImageName;
+
+	private String mainImageUrl;
 
 
 	public void update(UpdateCommunityDto updateCommunityDto) {
 		introduction = updateCommunityDto.getIntroduction();
 	}
 }
-
-
-//	private String thumbNailImageName;
-//
-//	private String thumbNailImageUrl;
-//
-//	private String mainImageName;
-//
-//	private String mainImageUrl;
