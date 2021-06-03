@@ -1,7 +1,7 @@
 package hello.sns.service;
 
 import hello.sns.repository.CommunityRepository;
-import hello.sns.web.exception.NameDuplicatedException;
+import hello.sns.web.exception.CommunityNameDuplicateException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +35,7 @@ public class CommunityService {
 
     private void validateDuplicateName(String name) {
         if (communityRepository.existsByName(name)) {
-            throw new NameDuplicatedException("이미 존재하는 커뮤니티 이름 입니다.");
+            throw new CommunityNameDuplicateException("이미 존재하는 커뮤니티 이름 입니다.");
         }
     }
 }

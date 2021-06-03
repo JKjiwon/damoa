@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class FileDto {
+public class FileInfo {
 
     private final String fileName;
 

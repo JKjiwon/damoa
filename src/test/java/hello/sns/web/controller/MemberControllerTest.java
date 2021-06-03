@@ -1,9 +1,8 @@
 package hello.sns.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hello.sns.common.BaseControllerTest;
 import hello.sns.repository.MemberRepository;
-import hello.sns.service.MemberService;
+import hello.sns.service.MemberServiceImpl;
 import hello.sns.web.dto.member.JoinMemberDto;
 import hello.sns.web.dto.member.JwtTokenDto;
 import hello.sns.web.dto.member.LoginMemberDto;
@@ -38,7 +37,7 @@ class MemberControllerTest{
     protected ObjectMapper objectMapper;
 
     @Autowired
-    protected MemberService memberService;
+    protected MemberServiceImpl memberService;
 
     @Autowired
     protected MemberRepository memberRepository;

@@ -3,8 +3,12 @@ package hello.sns.web.controller;
 import hello.sns.entity.member.Member;
 import hello.sns.service.AuthService;
 import hello.sns.service.MemberService;
+import hello.sns.service.MemberServiceImpl;
 import hello.sns.web.dto.common.CurrentMember;
 import hello.sns.web.dto.member.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -43,7 +47,20 @@ public class MemberController {
     public ResponseEntity checkDuplicatedEmail(@PathVariable String email) {
         memberService.checkDuplicatedEmail(email);
 
-        return ResponseEntity.ok("ok");
+        EntityModel entityModel = EntityModel.of(
+                new CheckDto(200, email),
+                linkTo(methodOn(MemberController.class).checkDuplicatedEmail(email)).withSelfRel(),
+                linkTo(methodOn(MemberController.class).join(null)).withRel("join")
+        );
+        return ResponseEntity.ok(entityModel);
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class CheckDto {
+        int status;
+        String email;
     }
 
     @PostMapping("/login")

@@ -31,6 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 요청 헤더로 부터 토큰 값을 받아와서
             String jwt = getJwtFromRequest(request);
 
+            // 토큰 검증 후 인증 요청
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 Long userId = tokenProvider.getUserIdFromJWT(jwt);
 

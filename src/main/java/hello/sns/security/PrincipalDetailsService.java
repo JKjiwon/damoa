@@ -20,7 +20,7 @@ public class PrincipalDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
-        //  이메일 또는 아이디로 로그인
+        // 이메일로 인증 요청
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(email)

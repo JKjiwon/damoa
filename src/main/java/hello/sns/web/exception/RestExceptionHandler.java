@@ -3,7 +3,6 @@ package hello.sns.web.exception;
 import hello.sns.web.dto.common.ErrorResponse;
 import hello.sns.web.dto.common.ErrorResponseDetails;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -21,8 +20,8 @@ import java.util.Map;
 public class RestExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(DuplicatedEmailException.class)
-    public ErrorResponse handlerEmailDuplicatedException(DuplicatedEmailException e, HttpServletRequest req) {
+    @ExceptionHandler(EmailDuplicateException.class)
+    public ErrorResponse handlerEmailDuplicatedException(EmailDuplicateException e, HttpServletRequest req) {
         e.printStackTrace();
         return new ErrorResponse(req, HttpStatus.BAD_REQUEST, e.getMessage());
     }

@@ -1,7 +1,7 @@
 package hello.sns.service;
 
-import hello.sns.web.dto.common.FileDto;
 import hello.sns.util.FileUtil;
+import hello.sns.web.dto.common.FileInfo;
 import hello.sns.web.exception.FileUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -9,9 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -20,37 +17,25 @@ public class FileServiceImpl implements FileService {
     private String baseDir;
 
     @Override
-    public FileDto uploadFile(MultipartFile file, Long memberId) throws FileUploadException {
-        String newFileName = FileUtil.changeFileName(file);
-        checkDirectory(memberId);
-        return createFileInfo(file, memberId, newFileName);
+    public FileInfo uploadImageFile(MultipartFile file, Long memberId) throws FileUploadException {
+        checkImageFile(file);
+        return uploadFile(file, memberId);
     }
 
-    @Override
-    public List<FileDto> uploadFiles(List<MultipartFile> files,
-                                     Long memberId) throws FileUploadException {
-
-        HashMap<String, String> newFileNames = FileUtil.changeFileNames(files);
-
-        checkDirectory(memberId);
-
-        List<FileDto> fileDtos = files.stream()
-                .map(file ->
-                        createFileInfo(file, memberId, newFileNames.get(file.getOriginalFilename())))
-                .collect(Collectors.toList());
-
-        return fileDtos;
+    private FileInfo uploadFile(MultipartFile file, Long memberId) throws FileUploadException {
+        String newFileName = FileUtil.changeFileName(file);
+        createDirectory(memberId);
+        return createFile(file, memberId, newFileName);
     }
 
     @Override
     public void deleteFile(String filePath) {
-
         if (filePath != null) {
             new File(filePath).delete();
         }
     }
 
-    private void checkDirectory(Long memberId) {
+    private void createDirectory(Long memberId) {
 
         StringBuilder dirPath = new StringBuilder()
                 .append(baseDir)
@@ -60,11 +45,11 @@ public class FileServiceImpl implements FileService {
         File directory = new File(String.valueOf(dirPath));
 
         if (!directory.exists()) {
-            directory.mkdir();
+            directory.mkdirs();
         }
     }
 
-    private FileDto createFileInfo(MultipartFile file, Long memberId, String newFileName) throws FileUploadException {
+    private FileInfo createFile(MultipartFile file, Long memberId, String newFileName) {
 
         StringBuilder filePath = new StringBuilder()
                 .append(baseDir)
@@ -72,14 +57,19 @@ public class FileServiceImpl implements FileService {
                 .append(memberId)
                 .append(File.separator)
                 .append(newFileName);
-
         try {
             file.transferTo(new File(String.valueOf(filePath)));
-            FileDto fileDto = new FileDto(newFileName, String.valueOf(filePath));
-
-            return fileDto;
+            return new FileInfo(newFileName, String.valueOf(filePath));
         } catch (IOException e) {
-            throw new FileUploadException("파일을 업로드하는데 실패하였습니다.", e);
+            throw new FileUploadException("Fail to create file", e);
+        }
+    }
+
+    private void checkImageFile(MultipartFile file) {
+
+        boolean isImage = file.getContentType().startsWith("image");
+        if (!isImage) {
+            throw new FileUploadException(("Not an image file"));
         }
     }
 }

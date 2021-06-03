@@ -1,11 +1,14 @@
 package hello.sns.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import hello.sns.web.dto.common.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -15,14 +18,22 @@ import java.io.IOException;
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     /**
-     * 이 메서드는 인증이 필요한 리소스에 액세스하려는 인증되지 않은 사용자로 인해 예외가 발생할 때마다 호출됩니다.
-     * 이 경우 예외 메시지가 포함 된 401 오류로 간단히 응답합니다.
+     * 인증되지 않은 사용자가 리소스를 요청할 경우 401
      */
+
+    @Autowired
+    ObjectMapper objectMapper;
+
     @Override
-    public void commence(HttpServletRequest httpServletRequest,
-                         HttpServletResponse httpServletResponse,
-                         AuthenticationException e) throws IOException, ServletException {
+    public void commence(HttpServletRequest request,
+                         HttpServletResponse response,
+                         AuthenticationException e) throws IOException {
         log.error("Responding with unauthenticated error. Message - {}", e.getMessage());
-        httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("Application/json");
+        ErrorResponse errorResponse = new ErrorResponse(request, HttpStatus.UNAUTHORIZED, e.getMessage());
+        String result = objectMapper.writeValueAsString(errorResponse);
+        response.getWriter().write(result);
     }
 }
