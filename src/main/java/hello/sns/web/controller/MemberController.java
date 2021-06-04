@@ -89,7 +89,7 @@ public class MemberController {
         return ResponseEntity.ok(entityModel);
     }
 
-    @PatchMapping("/profile-image")
+    @PutMapping("/profile-image")
     public ResponseEntity updateProfileImage(
             @RequestPart("profileImage") MultipartFile profileImage,
             @CurrentMember Member currentMember) {

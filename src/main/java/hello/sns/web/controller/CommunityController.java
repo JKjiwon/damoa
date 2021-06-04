@@ -8,10 +8,7 @@ import hello.sns.web.dto.community.CreateCommunityDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
@@ -36,5 +33,14 @@ public class CommunityController {
 
         URI uri = new URI("/api/communities/" + communityDto.getCommunityId());
         return ResponseEntity.created(uri).body(communityDto);
+    }
+
+    @PostMapping("/{communityId}/join")
+    public ResponseEntity joinCommunity(
+            @PathVariable("communityId") Long communityId,
+            @CurrentMember Member currentMember) {
+        CommunityDto communityDto = communityService.join(currentMember, communityId);
+
+        return ResponseEntity.ok(communityDto);
     }
 }

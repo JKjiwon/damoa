@@ -85,17 +85,15 @@ class CommunityServiceTest {
                 createCommunityDto.getIntroduction(),
                 member, category);
 
-        CommunityMember communityMember = CommunityMember.of(member, community, MemberGrade.OWNER);
+        community.addCommunityMembers(member, MemberGrade.OWNER);
 
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
-        when(communityMemberRepository.save(any())).thenReturn(communityMember);
         when(categoryService.getCategory(any())).thenReturn(new Category("운동"));
 
         CommunityDto communityDto = communityService.create(createCommunityDto, member, null, null);
 
         verify(communityRepository).save(any());
-        verify(communityMemberRepository).save(any());
         verify(categoryService).getCategory(any());
         verify(fileService, times(0)).uploadCommunityImageFile(any(MultipartFile.class), any(Long.class));
 
@@ -129,11 +127,10 @@ class CommunityServiceTest {
         FileInfo imageFileInfo = new FileInfo("newImage",
                 "/Users/kimjiwon/studyProject/sns/uploads/communities/1/newImage");
 
-        CommunityMember communityMember = CommunityMember.of(member, community, MemberGrade.OWNER);
+        community.addCommunityMembers(member, MemberGrade.OWNER);
 
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
-        when(communityMemberRepository.save(any())).thenReturn(communityMember);
         when(categoryService.getCategory(any())).thenReturn(new Category("운동"));
         when(fileService.uploadCommunityImageFile(any(MultipartFile.class), any(Long.class))).thenReturn(imageFileInfo);
 

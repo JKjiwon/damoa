@@ -10,7 +10,6 @@ import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
 @EqualsAndHashCode(of = "id")
 public class CommunityMember extends BaseTimeEntity {
@@ -31,17 +30,10 @@ public class CommunityMember extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private MemberGrade memberGrade;
 
-	protected CommunityMember(Community community, Member member, MemberGrade memberGrade) {
+	public CommunityMember(Community community, Member member, MemberGrade memberGrade) {
 		this.community = community;
 		this.member = member;
 		this.memberGrade = memberGrade;
-	}
-
-	// static 생성 메서드
-	public static CommunityMember of(Member member, Community community, MemberGrade memberGrade) {
-		CommunityMember communityMember = new CommunityMember(community, member, memberGrade);
-		community.addCommunityMembers(communityMember);
-		return communityMember;
 	}
 
 	public void changeMemberGrade(MemberGrade memberGrade) {

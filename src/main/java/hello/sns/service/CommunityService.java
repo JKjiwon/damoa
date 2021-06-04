@@ -9,4 +9,8 @@ public interface CommunityService {
     CommunityDto create(CreateCommunityDto createCommunityDto, Member currentMember, MultipartFile mainImage, MultipartFile thumbNailImage);
 
     void checkDuplicatedName(String name);
+
+    CommunityDto findById(Long communityId);
+
+    CommunityDto join(Member currentMember, Long communityId);
 }

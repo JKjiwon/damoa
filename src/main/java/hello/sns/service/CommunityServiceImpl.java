@@ -10,9 +10,10 @@ import hello.sns.repository.CommunityRepository;
 import hello.sns.web.dto.common.FileInfo;
 import hello.sns.web.dto.community.CommunityDto;
 import hello.sns.web.dto.community.CreateCommunityDto;
+import hello.sns.web.exception.AlreadyJoinedMember;
 import hello.sns.web.exception.CommunityNameDuplicateException;
+import hello.sns.web.exception.CommunityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CommunityServiceImpl implements CommunityService{
+public class CommunityServiceImpl implements CommunityService {
 
     private final CommunityRepository communityRepository;
     private final FileService fileService;
@@ -30,7 +31,7 @@ public class CommunityServiceImpl implements CommunityService{
     @Transactional
     @Override
     public CommunityDto create(CreateCommunityDto createCommunityDto, Member currentMember,
-                                 MultipartFile mainImage, MultipartFile thumbNailImage) {
+                               MultipartFile mainImage, MultipartFile thumbNailImage) {
         checkDuplicatedName(createCommunityDto.getName());
 
         Category category = categoryService.getCategory(createCommunityDto.getCategory());
@@ -52,12 +53,9 @@ public class CommunityServiceImpl implements CommunityService{
             savedCommunity.changeThumbNailImage(thumbNailImageFile);
         }
 
-        CommunityMember communityMember = CommunityMember.of(currentMember, savedCommunity, MemberGrade.OWNER);
-        communityMemberRepository.save(communityMember);
-
+        savedCommunity.addCommunityMembers(currentMember, MemberGrade.OWNER);
         return new CommunityDto(savedCommunity);
     }
-
 
     @Override
     public void checkDuplicatedName(String name) {
@@ -68,12 +66,31 @@ public class CommunityServiceImpl implements CommunityService{
         }
     }
 
-//    @Transactional
-//    public CommunityResponseDto updateCommunity(Long id, CommunityUpdateDto communityUpdateDto) {
-//        Community community = communityRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 커뮤니티가 없습니다. id=" + id));
-//
-//        community.update(communityUpdateDto);
-//        return new CommunityResponseDto(community);
-//    }
+    @Override
+    public CommunityDto findById(Long communityId) {
+        Community community = communityRepository.findById(communityId).orElseThrow(
+                () -> new CommunityNotFoundException("Not found community"));
+
+        return new CommunityDto(community);
+    }
+
+    @Override
+    @Transactional
+    public CommunityDto join(Member currentMember, Long communityId) {
+
+        Community community = communityRepository.findById(communityId).orElseThrow(
+                () -> new CommunityNotFoundException("Not found community"));
+
+        // 이미 가입된 회원
+        Boolean isJoinedMember = communityMemberRepository.existsByMember(currentMember);
+        if (isJoinedMember) {
+            throw new AlreadyJoinedMember("Already registered member");
+        }
+
+        // 커뮤니티 가입
+        community.addCommunityMembers(currentMember, MemberGrade.USER);
+
+        return new CommunityDto(community);
+    }
 }
+

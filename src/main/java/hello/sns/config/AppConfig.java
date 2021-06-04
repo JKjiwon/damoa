@@ -26,6 +26,14 @@ public class AppConfig {
                         .password("user1234")
                         .build();
                 memberService.join(joinMemberDto);
+
+
+                JoinMemberDto joinMemberDto2 = JoinMemberDto.builder()
+                        .name("user2")
+                        .email("user2@email.com")
+                        .password("user1234")
+                        .build();
+                memberService.join(joinMemberDto2);
             }
         };
     }

@@ -45,11 +45,12 @@ public class Community extends BaseTimeEntity {
 	@JoinColumn(name = "category_id")
 	private Category category;
 
-	@OneToMany(mappedBy = "community")
+	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
 	private final List<CommunityMember> communityMembers = new ArrayList<>();
 
-	public void addCommunityMembers(CommunityMember communityMember) {
-		communityMembers.add(communityMember);
+	public void addCommunityMembers(Member member, MemberGrade memberGrade) {
+		CommunityMember communityMember = new CommunityMember(this, member, memberGrade);
+		getCommunityMembers().add(communityMember);
 	}
 
 	public void changeMainImage(FileInfo imageInfo) {
