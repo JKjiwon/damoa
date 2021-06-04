@@ -39,8 +39,17 @@ public class CommunityController {
     public ResponseEntity joinCommunity(
             @PathVariable("communityId") Long communityId,
             @CurrentMember Member currentMember) {
-        CommunityDto communityDto = communityService.join(currentMember, communityId);
+        communityService.join(currentMember, communityId);
 
-        return ResponseEntity.ok(communityDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{communityId}/withdraw")
+    public ResponseEntity withdrawCommunity(
+            @PathVariable("communityId") Long communityId,
+            @CurrentMember Member currentMember) {
+
+        communityService.withdraw(currentMember, communityId);
+        return ResponseEntity.ok().build();
     }
 }

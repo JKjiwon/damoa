@@ -2,6 +2,7 @@ package hello.sns.service;
 
 import hello.sns.entity.category.Category;
 import hello.sns.entity.community.Community;
+import hello.sns.entity.community.CommunityMember;
 import hello.sns.entity.community.MemberGrade;
 import hello.sns.entity.member.Member;
 import hello.sns.repository.CommunityMemberRepository;
@@ -9,9 +10,10 @@ import hello.sns.repository.CommunityRepository;
 import hello.sns.web.dto.common.FileInfo;
 import hello.sns.web.dto.community.CommunityDto;
 import hello.sns.web.dto.community.CreateCommunityDto;
-import hello.sns.web.exception.business.AlreadyJoinedMember;
+import hello.sns.web.exception.business.CommunityAlreadyJoinException;
 import hello.sns.web.exception.business.CommunityNameDuplicateException;
 import hello.sns.web.exception.business.CommunityNotFoundException;
+import hello.sns.web.exception.business.CommunityNotJoinException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +58,7 @@ public class CommunityServiceImpl implements CommunityService {
             savedCommunity.changeThumbNailImage(thumbNailImageFile);
         }
 
-        savedCommunity.addCommunityMembers(currentMember, MemberGrade.OWNER);
+        savedCommunity.joinCommunityMembers(currentMember, MemberGrade.OWNER);
         return new CommunityDto(savedCommunity);
     }
 
@@ -77,23 +79,38 @@ public class CommunityServiceImpl implements CommunityService {
         return new CommunityDto(community);
     }
 
-    @Override
     @Transactional
-    public CommunityDto join(Member currentMember, Long communityId) {
+    @Override
+    public void join(Member currentMember, Long communityId) {
 
         Community community = communityRepository.findById(communityId).orElseThrow(
                 () -> new CommunityNotFoundException("Not found community"));
 
-        // 이미 가입된 회원
+        // 이미 가입된 회원이면 CommunityAlreadyJoinException 던진다.
         Boolean isJoinedMember = communityMemberRepository.existsByMember(currentMember);
         if (isJoinedMember) {
-            throw new AlreadyJoinedMember("Already registered member");
+            throw new CommunityAlreadyJoinException("Already joined member");
         }
 
         // 커뮤니티 가입
-        community.addCommunityMembers(currentMember, MemberGrade.USER);
+        community.joinCommunityMembers(currentMember, MemberGrade.USER);
+    }
 
-        return new CommunityDto(community);
+    @Transactional
+    @Override
+    public void withdraw(Member currentMember, Long communityId) {
+
+        Community community = communityRepository.findById(communityId).orElseThrow(
+                () -> new CommunityNotFoundException("Not found community"));
+
+        // 가입된 회원이 아니라면 CommunityNotJoinException 던진다.
+        CommunityMember communityMember = communityMemberRepository.findByMember(currentMember)
+                .orElseThrow(() -> new CommunityNotJoinException("Not joined member"));
+
+        // 커뮤니티 탈퇴
+        community.withdrawCommunityMembers(communityMember);
+
+        // currentMember 의 게시물, 사진 삭제 로직
     }
 }
 

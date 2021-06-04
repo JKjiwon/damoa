@@ -80,7 +80,7 @@ class CommunityServiceTest {
                 .category("운동")
                 .build();
 
-        community.addCommunityMembers(member, MemberGrade.OWNER);
+        community.joinCommunityMembers(member, MemberGrade.OWNER);
 
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
@@ -114,7 +114,7 @@ class CommunityServiceTest {
         FileInfo imageFileInfo = new FileInfo("newImage",
                 "/Users/kimjiwon/studyProject/sns/uploads/communities/1/newImage");
 
-        community.addCommunityMembers(member, MemberGrade.OWNER);
+        community.joinCommunityMembers(member, MemberGrade.OWNER);
 
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);

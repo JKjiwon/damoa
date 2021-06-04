@@ -47,9 +47,13 @@ public class Community extends BaseTimeEntity {
 	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
 	private final List<CommunityMember> communityMembers = new ArrayList<>();
 
-	public void addCommunityMembers(Member member, MemberGrade memberGrade) {
+	public void joinCommunityMembers(Member member, MemberGrade memberGrade) {
 		CommunityMember communityMember = new CommunityMember(this, member, memberGrade);
 		getCommunityMembers().add(communityMember);
+	}
+
+	public void withdrawCommunityMembers(CommunityMember communityMember) {
+		getCommunityMembers().remove(communityMember);
 	}
 
 	public void changeMainImage(FileInfo imageInfo) {

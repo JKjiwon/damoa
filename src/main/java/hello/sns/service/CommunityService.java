@@ -12,5 +12,7 @@ public interface CommunityService {
 
     CommunityDto findById(Long communityId);
 
-    CommunityDto join(Member currentMember, Long communityId);
+    void join(Member currentMember, Long communityId);
+
+    void withdraw(Member currentMember, Long communityId);
 }
