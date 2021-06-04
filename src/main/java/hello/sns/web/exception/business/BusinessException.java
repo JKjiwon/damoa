@@ -1,4 +1,4 @@
-package hello.sns.web.exception;
+package hello.sns.web.exception.business;
 
 public class BusinessException extends RuntimeException {
 

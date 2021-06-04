@@ -1,4 +1,6 @@
-package hello.sns.web.exception;
+package hello.sns.web.exception.business;
+
+import hello.sns.web.exception.business.BusinessException;
 
 public class CommunityNotFoundException extends BusinessException {
     public CommunityNotFoundException() {

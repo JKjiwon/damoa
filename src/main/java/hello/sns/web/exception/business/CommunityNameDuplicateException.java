@@ -1,6 +1,9 @@
-package hello.sns.web.exception;
+package hello.sns.web.exception.business;
 
-public class CommunityNameDuplicateException extends RuntimeException {
+import hello.sns.web.exception.business.BusinessException;
+
+public class CommunityNameDuplicateException extends BusinessException {
+
     public CommunityNameDuplicateException() {
     }
 

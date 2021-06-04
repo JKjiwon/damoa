@@ -2,7 +2,7 @@ package hello.sns.web.exception;
 
 import hello.sns.web.dto.common.ErrorResponse;
 import hello.sns.web.dto.common.ErrorResponseDetails;
-import lombok.extern.log4j.Log4j2;
+import hello.sns.web.exception.business.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -22,22 +22,8 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(EmailDuplicateException.class)
-    public ErrorResponse handlerEmailDuplicatedException(EmailDuplicateException e, HttpServletRequest req) {
-        e.printStackTrace();
-        return new ErrorResponse(req, HttpStatus.BAD_REQUEST, e.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(FileUploadException.class)
-    public ErrorResponse handlerFileUploadException(FileUploadException e, HttpServletRequest req) {
-        e.printStackTrace();
-        return new ErrorResponse(req, HttpStatus.BAD_REQUEST, e.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(CommunityNameDuplicateException.class)
-    public ErrorResponse handlerCommunityNameDuplicatedException(CommunityNameDuplicateException e, HttpServletRequest req) {
+    @ExceptionHandler(BusinessException.class)
+    public ErrorResponse handlerBusinessException(BusinessException e, HttpServletRequest req) {
         e.printStackTrace();
         return new ErrorResponse(req, HttpStatus.BAD_REQUEST, e.getMessage());
     }

@@ -23,12 +23,3 @@ public class Category {
 		this.name = name;
 	}
 }
-
-/*
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "parent_id")
-	private Category parent;
-
-	@OneToMany(mappedBy = "parent")
-	private List<Category> child = new ArrayList<>();
- */

@@ -1,6 +1,8 @@
-package hello.sns.web.exception;
+package hello.sns.web.exception.business;
 
-public class MemberNotFoundException extends RuntimeException{
+import hello.sns.web.exception.business.BusinessException;
+
+public class MemberNotFoundException extends BusinessException {
     public MemberNotFoundException() {
     }
 

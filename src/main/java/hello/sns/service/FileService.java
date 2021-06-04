@@ -1,7 +1,7 @@
 package hello.sns.service;
 
 import hello.sns.web.dto.common.FileInfo;
-import hello.sns.web.exception.FileUploadException;
+import hello.sns.web.exception.business.FileUploadException;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FileService {

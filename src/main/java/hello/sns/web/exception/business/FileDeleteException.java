@@ -1,6 +1,8 @@
-package hello.sns.web.exception;
+package hello.sns.web.exception.business;
 
-public class FileDeleteException extends RuntimeException{
+import hello.sns.web.exception.business.BusinessException;
+
+public class FileDeleteException extends BusinessException {
     public FileDeleteException() {
     }
 

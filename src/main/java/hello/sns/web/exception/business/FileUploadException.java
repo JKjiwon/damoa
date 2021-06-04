@@ -1,8 +1,11 @@
-package hello.sns.web.exception;
+package hello.sns.web.exception.business;
 
-public class FileUploadException extends RuntimeException{
+import hello.sns.web.exception.business.BusinessException;
+
+public class FileUploadException extends BusinessException {
     public FileUploadException() {
     }
+
     public FileUploadException(String message) {
         super(message);
     }

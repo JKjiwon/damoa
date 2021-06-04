@@ -2,7 +2,7 @@ package hello.sns.service;
 
 import hello.sns.util.FileUtil;
 import hello.sns.web.dto.common.FileInfo;
-import hello.sns.web.exception.FileUploadException;
+import hello.sns.web.exception.business.FileUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
