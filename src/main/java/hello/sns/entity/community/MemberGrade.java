@@ -1,5 +1,5 @@
 package hello.sns.entity.community;
 
 public enum MemberGrade {
-    ADMIN, USER
+    OWNER, ADMIN, USER
 }

@@ -7,14 +7,16 @@ import hello.sns.web.dto.common.FileInfo;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
-@Builder
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@EqualsAndHashCode(of = "id")
+@AllArgsConstructor
 public class Community extends BaseTimeEntity {
 
 	@Id
@@ -28,7 +30,7 @@ public class Community extends BaseTimeEntity {
 	private String introduction;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "member_id")
+	@JoinColumn(name = "owner_id")
 	private Member owner;
 
 	private String thumbNailImageName;
@@ -43,6 +45,13 @@ public class Community extends BaseTimeEntity {
 	@JoinColumn(name = "category_id")
 	private Category category;
 
+	@OneToMany(mappedBy = "community")
+	private final List<CommunityMember> communityMembers = new ArrayList<>();
+
+	public void addCommunityMembers(CommunityMember communityMember) {
+		communityMembers.add(communityMember);
+	}
+
 	public void changeMainImage(FileInfo imageInfo) {
 		mainImageName = imageInfo.getFileName();
 		mainImagePath = imageInfo.getFilePath();
@@ -53,7 +62,19 @@ public class Community extends BaseTimeEntity {
 		thumbNailImagePath = imageInfo.getFilePath();
 	}
 
-	public void changeOwner(Member owner) {
+	protected Community(String name, String introduction, Member owner, Category category) {
+		this.name = name;
+		this.introduction = introduction;
 		this.owner = owner;
+		this.category = category;
+	}
+
+	// 정적 팩토리 메서드
+	public static Community of(String name, String introduction, Member owner, Category category) {
+		return new Community(name, introduction, owner, category);
+	}
+
+	public void changeCategory(Category category) {
+		this.category = category;
 	}
 }

@@ -1,12 +1,13 @@
 package hello.sns.entity.category;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
-@NoArgsConstructor()
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Category {
 
@@ -18,8 +19,8 @@ public class Category {
 	@Column(unique = true)
 	private String name;
 
-	public void setId(Long id) {
-		this.id = id;
+	public Category(String name) {
+		this.name = name;
 	}
 }
 

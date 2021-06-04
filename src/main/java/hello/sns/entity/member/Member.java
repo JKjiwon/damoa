@@ -8,9 +8,10 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
+@AllArgsConstructor
 @Builder
+@EqualsAndHashCode(of = "id")
+@Entity
 public class Member extends BaseTimeEntity {
 
 	@Id

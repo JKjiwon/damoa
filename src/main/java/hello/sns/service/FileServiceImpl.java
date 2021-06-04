@@ -18,19 +18,19 @@ public class FileServiceImpl implements FileService {
 
     public FileInfo uploadMemberImageFile(MultipartFile file, Long memberId) throws FileUploadException {
         checkImageFile(file);
-        return uploadFile(file, "member", String.valueOf(memberId));
+        return uploadFile(file, "members", memberId);
     }
 
     @Override
-    public FileInfo uploadCommunityImageFile(MultipartFile file, String communityName) throws FileUploadException {
+    public FileInfo uploadCommunityImageFile(MultipartFile file, Long communityId) throws FileUploadException {
         checkImageFile(file);
-        return uploadFile(file, "community", communityName);
+        return uploadFile(file, "communities", communityId);
     }
 
-    private FileInfo uploadFile(MultipartFile file, String type, String uniqueId) throws FileUploadException {
+    private FileInfo uploadFile(MultipartFile file, String type, Long entityId) throws FileUploadException {
         String newFileName = FileUtil.changeFileName(file);
-        createDirectory(type, uniqueId);
-        return createFile(file, type, uniqueId, newFileName);
+        createDirectory(type, entityId);
+        return createFile(file, type, entityId, newFileName);
     }
 
     @Override
@@ -40,14 +40,14 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private void createDirectory(String type, String uniqueId) {
+    private void createDirectory(String type, Long entityId) {
 
         StringBuilder dirPath = new StringBuilder()
                 .append(baseDir)
                 .append(File.separator)
                 .append(type)
                 .append(File.separator)
-                .append(uniqueId);
+                .append(entityId);
 
         File directory = new File(String.valueOf(dirPath));
 
@@ -56,14 +56,14 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private FileInfo createFile(MultipartFile file, String type, String uniqueId, String newFileName) {
+    private FileInfo createFile(MultipartFile file, String type, Long entityId, String newFileName) {
 
         StringBuilder filePath = new StringBuilder()
                 .append(baseDir)
                 .append(File.separator)
                 .append(type)
                 .append(File.separator)
-                .append(uniqueId)
+                .append(entityId)
                 .append(File.separator)
                 .append(newFileName);
         try {

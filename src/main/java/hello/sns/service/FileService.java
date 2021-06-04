@@ -8,7 +8,7 @@ public interface FileService {
 
     FileInfo uploadMemberImageFile(MultipartFile file, Long memberId) throws FileUploadException;
 
-    FileInfo uploadCommunityImageFile(MultipartFile file, String communityName) throws FileUploadException;
+    FileInfo uploadCommunityImageFile(MultipartFile file, Long communityId) throws FileUploadException;
 
     void deleteFile(String filePath);
 }

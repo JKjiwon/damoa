@@ -6,14 +6,13 @@ import javax.persistence.*;
 
 import hello.sns.entity.BaseTimeEntity;
 import hello.sns.entity.member.Member;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
+@EqualsAndHashCode(of = "id")
 public class CommunityMember extends BaseTimeEntity {
 
 	@Id
@@ -32,10 +31,20 @@ public class CommunityMember extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private MemberGrade memberGrade;
 
-	@Builder
-	public CommunityMember(Community community, Member member, MemberGrade memberGrade) {
+	protected CommunityMember(Community community, Member member, MemberGrade memberGrade) {
 		this.community = community;
 		this.member = member;
+		this.memberGrade = memberGrade;
+	}
+
+	// static 생성 메서드
+	public static CommunityMember of(Member member, Community community, MemberGrade memberGrade) {
+		CommunityMember communityMember = new CommunityMember(community, member, memberGrade);
+		community.addCommunityMembers(communityMember);
+		return communityMember;
+	}
+
+	public void changeMemberGrade(MemberGrade memberGrade) {
 		this.memberGrade = memberGrade;
 	}
 }

@@ -95,26 +95,9 @@ class MemberServiceTest {
         assertThat(memberDto.getName()).isEqualTo(joinMemberDto.getName());
     }
 
-    @DisplayName("이메일 중복 체크 시, 중복된 이메일이 있을 경우 DuplicatedEmailException을 던진다.")
+    @DisplayName("회원 생성시 중복된 이메일이 있을 경우 DuplicatedEmailException을 던지며 .")
     @Test
-    public void checkDuplicatedEmailTestWithDupe() {
-
-        // given
-        String email = "user@email.com";
-        when(memberRepository.existsByEmail(email)).thenReturn(true);
-
-        // when & then
-        assertThrows(
-                EmailDuplicateException.class,
-                () -> memberService.checkDuplicatedEmail(email)
-        );
-
-        verify(memberRepository).existsByEmail(email);
-    }
-
-    @DisplayName("이메일 중복 체크 시, 중복된 이메일이 있을 경우 DuplicatedEmailException을 던진다.")
-    @Test
-    public void checkDuplicatedEmailTestWithoutDupe() {
+    public void createMeberTestWithDuplicatedEmail() {
 
         // given
         String email = "user@email.com";
@@ -126,6 +109,7 @@ class MemberServiceTest {
         );
 
         verify(memberRepository).existsByEmail(email);
+        verify(memberRepository,times(0)).save(any(Member.class));
     }
 
     @DisplayName("필수 입력값(name)이 주어졌을 때 회원 정보 업데이트 성공")
@@ -175,7 +159,7 @@ class MemberServiceTest {
         assertThat(savedMember.getProfileImagePath()).isEqualTo(fileInfo.getFilePath());
     }
 
-    @DisplayName("회원 프로필 이미지가 이미지 파일이 아닌 파일이 주어졌을 때 회원 프로필 정보 업데이트 실패")
+    @DisplayName("이미지 업로드 실패 시 FileUploadException을 던지며 회원 프로필 정보 업데이트 실패")
     @Test
     public void updateProfileImageThatIsNotImageFile() {
         // given
