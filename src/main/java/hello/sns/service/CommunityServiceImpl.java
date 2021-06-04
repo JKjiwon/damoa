@@ -111,6 +111,11 @@ public class CommunityServiceImpl implements CommunityService {
         CommunityMember communityMember = communityMemberRepository.findByMember(currentMember)
                 .orElseThrow(() -> new CommunityNotJoinException("Not joined member"));
 
+        // 가입된 회원 등급이 OWNER 라면 AccessDeniedException 던진다.
+        if (communityMember.getMemberGrade().equals(MemberGrade.OWNER)) {
+            throw new AccessDeniedException("Your grade is OWNER. Hand over the community to someone else");
+        }
+
         // 커뮤니티 탈퇴
         community.withdrawCommunityMembers(communityMember);
 
@@ -134,7 +139,7 @@ public class CommunityServiceImpl implements CommunityService {
 
         // 가입된 회원의 등급이 OWNER 이거나 ADMIN 인지 확인
         MemberGrade memberGrade = communityMember.getMemberGrade();
-        if (!(memberGrade == MemberGrade.OWNER) && !(memberGrade == MemberGrade.ADMIN)) {
+        if (!(memberGrade.equals(MemberGrade.OWNER)) && !(memberGrade.equals(MemberGrade.ADMIN))) {
             throw new AccessDeniedException("Not ADMIN or OWNER");
         }
         // 커뮤니티 정보 수정
