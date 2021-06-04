@@ -44,7 +44,7 @@ public class Community extends BaseTimeEntity {
 	@JoinColumn(name = "category_id")
 	private Category category;
 
-	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true)
 	private final List<CommunityMember> communityMembers = new ArrayList<>();
 
 	public void joinCommunityMembers(Member member, MemberGrade memberGrade) {

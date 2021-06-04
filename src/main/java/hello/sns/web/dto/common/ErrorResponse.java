@@ -20,13 +20,12 @@ public class ErrorResponse {
     private int status;
     private String error;
     private String message;
-
     private String path;
 
     public ErrorResponse(HttpServletRequest req, HttpStatus httpStatus, String message) {
         this.status = httpStatus.value();
         this.error = httpStatus.name();
-        this.message = message;
+        this.message = message != null ? message : "";
         this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM_dd hh:mm:ss"));
         this.path = req.getRequestURI();
     }

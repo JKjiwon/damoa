@@ -148,11 +148,13 @@ public class CommunityServiceImpl implements CommunityService {
 
         // 커뮤니티 사진 수정
         if (mainImage != null) {
+            fileService.deleteFile(community.getMainImagePath());
             FileInfo mainImageFile = fileService.uploadCommunityImageFile(mainImage, community.getId());
             community.changeMainImage(mainImageFile);
         }
 
         if (thumbNailImage != null) {
+            fileService.deleteFile(community.getThumbNailImagePath());
             FileInfo thumbNailImageFile = fileService.uploadCommunityImageFile(thumbNailImage, community.getId());
             community.changeThumbNailImage(thumbNailImageFile);
         }

@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ErrorResponse handlerAccessDeniedException(AccessDeniedException e, HttpServletRequest req) {
         e.printStackTrace();
-        return new ErrorResponse(req, HttpStatus.BAD_REQUEST, e.getMessage());
+        return new ErrorResponse(req, HttpStatus.FORBIDDEN, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
