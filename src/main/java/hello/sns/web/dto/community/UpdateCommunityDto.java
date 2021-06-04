@@ -1,21 +1,19 @@
 package hello.sns.web.dto.community;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 
-@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UpdateCommunityDto {
 
-    private String thumbNailImageName;
-
-    private String thumbNailImageUrl;
-
-    private String mainImageName;
-
-    private String mainImageUrl;
+    @NotBlank
+    private String category;
 
     @Length(min = 10, message = "최소 {min}자 이상으로 입력해주시기 바랍니다.")
     @NotBlank(message = "커뮤니티 소개를 입력해주시기 바랍니다.")

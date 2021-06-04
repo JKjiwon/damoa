@@ -3,10 +3,14 @@ package hello.sns.service;
 import hello.sns.entity.member.Member;
 import hello.sns.web.dto.community.CommunityDto;
 import hello.sns.web.dto.community.CreateCommunityDto;
+import hello.sns.web.dto.community.UpdateCommunityDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface CommunityService {
-    CommunityDto create(CreateCommunityDto createCommunityDto, Member currentMember, MultipartFile mainImage, MultipartFile thumbNailImage);
+    CommunityDto create(Member currentMember,
+                        CreateCommunityDto createCommunityDto,
+                        MultipartFile mainImage,
+                        MultipartFile thumbNailImage);
 
     void checkDuplicatedName(String name);
 
@@ -15,4 +19,9 @@ public interface CommunityService {
     void join(Member currentMember, Long communityId);
 
     void withdraw(Member currentMember, Long communityId);
+
+    CommunityDto update(Long communityId,
+                        Member currentMember,
+                        UpdateCommunityDto updateCommunityDto,
+                        MultipartFile mainImage, MultipartFile thumbNailImage);
 }

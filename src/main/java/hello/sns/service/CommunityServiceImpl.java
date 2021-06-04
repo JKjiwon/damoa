@@ -10,6 +10,8 @@ import hello.sns.repository.CommunityRepository;
 import hello.sns.web.dto.common.FileInfo;
 import hello.sns.web.dto.community.CommunityDto;
 import hello.sns.web.dto.community.CreateCommunityDto;
+import hello.sns.web.dto.community.UpdateCommunityDto;
+import hello.sns.web.exception.AccessDeniedException;
 import hello.sns.web.exception.business.CommunityAlreadyJoinException;
 import hello.sns.web.exception.business.CommunityNameDuplicateException;
 import hello.sns.web.exception.business.CommunityNotFoundException;
@@ -31,7 +33,8 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Transactional
     @Override
-    public CommunityDto create(CreateCommunityDto createCommunityDto, Member currentMember,
+    public CommunityDto create(Member currentMember,
+                               CreateCommunityDto createCommunityDto,
                                MultipartFile mainImage, MultipartFile thumbNailImage) {
         checkDuplicatedName(createCommunityDto.getName());
 
@@ -83,6 +86,7 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public void join(Member currentMember, Long communityId) {
 
+        // 커뮤니티 확인
         Community community = communityRepository.findById(communityId).orElseThrow(
                 () -> new CommunityNotFoundException("Not found community"));
 
@@ -111,6 +115,44 @@ public class CommunityServiceImpl implements CommunityService {
         community.withdrawCommunityMembers(communityMember);
 
         // currentMember 의 게시물, 사진 삭제 로직
+    }
+
+    @Transactional
+    @Override
+    public CommunityDto update(Long communityId,
+                               Member currentMember,
+                               UpdateCommunityDto updateCommunityDto,
+                               MultipartFile mainImage, MultipartFile thumbNailImage) {
+
+        // 커뮤니티 확인
+        Community community = communityRepository.findById(communityId).orElseThrow(
+                () -> new CommunityNotFoundException("Not found community"));
+
+        // 가입된 회원인지 확인
+        CommunityMember communityMember = communityMemberRepository.findByMember(currentMember)
+                .orElseThrow(() -> new CommunityNotJoinException("Not joined member"));
+
+        // 가입된 회원의 등급이 OWNER 이거나 ADMIN 인지 확인
+        MemberGrade memberGrade = communityMember.getMemberGrade();
+        if (!(memberGrade == MemberGrade.OWNER) && !(memberGrade == MemberGrade.ADMIN)) {
+            throw new AccessDeniedException("Not ADMIN or OWNER");
+        }
+        // 커뮤니티 정보 수정
+        Category category = categoryService.getCategory(updateCommunityDto.getCategory());
+        community.update(updateCommunityDto.getIntroduction(), category);
+
+        // 커뮤니티 사진 수정
+        if (mainImage != null) {
+            FileInfo mainImageFile = fileService.uploadCommunityImageFile(mainImage, community.getId());
+            community.changeMainImage(mainImageFile);
+        }
+
+        if (thumbNailImage != null) {
+            FileInfo thumbNailImageFile = fileService.uploadCommunityImageFile(thumbNailImage, community.getId());
+            community.changeThumbNailImage(thumbNailImageFile);
+        }
+
+        return new CommunityDto(community);
     }
 }
 

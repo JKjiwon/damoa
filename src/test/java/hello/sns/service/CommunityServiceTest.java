@@ -87,7 +87,7 @@ class CommunityServiceTest {
         when(categoryService.getCategory(any())).thenReturn(category);
 
         // when
-        communityService.create(createCommunityDto, member, null, null);
+        communityService.create(member, createCommunityDto, null, null);
 
         // then
         verify(communityRepository).save(any(Community.class));
@@ -122,7 +122,7 @@ class CommunityServiceTest {
         when(fileService.uploadCommunityImageFile(any(MultipartFile.class), any(Long.class))).thenReturn(imageFileInfo);
 
         // when
-        communityService.create(createCommunityDto, member, imageFile, imageFile);
+        communityService.create(member, createCommunityDto, imageFile, imageFile);
 
         // then
         verify(fileService, times(2)).uploadCommunityImageFile(any(MultipartFile.class), any(Long.class));
@@ -142,7 +142,7 @@ class CommunityServiceTest {
 
         // when & then
         assertThrows(CommunityNameDuplicateException.class,
-                () -> communityService.create(createCommunityDto, member, null, null));
+                () -> communityService.create(member, createCommunityDto, null, null));
 
         verify(communityRepository, times(0)).save(any(Community.class));
         verify(communityMemberRepository, times(0)).save(any(CommunityMember.class));
@@ -173,7 +173,7 @@ class CommunityServiceTest {
 
         // when & then
         assertThrows(FileUploadException.class,
-                () -> communityService.create(createCommunityDto, member, imageFile, imageFile));
+                () -> communityService.create(member, createCommunityDto, imageFile, imageFile));
 
         verify(communityMemberRepository, times(0)).save(any(CommunityMember.class));
     }

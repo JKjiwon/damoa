@@ -28,6 +28,13 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(req, HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccessDeniedException.class)
+    public ErrorResponse handlerAccessDeniedException(AccessDeniedException e, HttpServletRequest req) {
+        e.printStackTrace();
+        return new ErrorResponse(req, HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
     public ErrorResponseDetails handlerBindException(BindException e,

@@ -78,4 +78,9 @@ public class Community extends BaseTimeEntity {
 	public void changeCategory(Category category) {
 		this.category = category;
 	}
+
+	public void update(String introduction, Category category) {
+		this.introduction = introduction;
+		this.category = category;
+	}
 }
