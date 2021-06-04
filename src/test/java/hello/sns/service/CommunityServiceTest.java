@@ -8,11 +8,9 @@ import hello.sns.entity.member.Member;
 import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
 import hello.sns.web.dto.common.FileInfo;
-import hello.sns.web.dto.community.CommunityDto;
 import hello.sns.web.dto.community.CreateCommunityDto;
 import hello.sns.web.exception.CommunityNameDuplicateException;
 import hello.sns.web.exception.FileUploadException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +27,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class})
-//@MockitoSettings(strictness = Strictness.LENIENT)
 class CommunityServiceTest {
     @InjectMocks
     CommunityServiceImpl communityService;
@@ -47,9 +44,7 @@ class CommunityServiceTest {
     CategoryService categoryService;
 
     Member member;
-
     Community community;
-
     Category category;
 
     @BeforeEach
@@ -66,57 +61,49 @@ class CommunityServiceTest {
 
         category = new Category("운동");
 
-        community = Community.of("다모아 수영", "일단 와바. 수영 너도 할 수 있어.", member, category);
+        community = Community.builder()
+                .id(1L)
+                .name("다모아 수영")
+                .introduction("일단 와바. 수영 너도 할 수 있어.")
+                .owner(member)
+                .category(category)
+                .build();
     }
 
     @Test
     @DisplayName("이미지가 없고, 필수 입력값(name, introduction, category)이 주어졌을 경우 커뮤니티 생성 성공")
     public void createCommunityTest() {
-
+        // given
         CreateCommunityDto createCommunityDto = CreateCommunityDto.builder()
-                .name("community1")
-                .introduction("Welcome to community1")
+                .name("다모아 수영")
+                .introduction("일단 와바. 수영 너도 할 수 있어.")
                 .category("운동")
                 .build();
-
-        Category category = new Category("운동");
-        Community community = Community.of(
-                createCommunityDto.getName(),
-                createCommunityDto.getIntroduction(),
-                member, category);
 
         community.addCommunityMembers(member, MemberGrade.OWNER);
 
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
-        when(categoryService.getCategory(any())).thenReturn(new Category("운동"));
+        when(categoryService.getCategory(any())).thenReturn(category);
 
-        CommunityDto communityDto = communityService.create(createCommunityDto, member, null, null);
+        // when
+        communityService.create(createCommunityDto, member, null, null);
 
-        verify(communityRepository).save(any());
-        verify(categoryService).getCategory(any());
+        // then
+        verify(communityRepository).save(any(Community.class));
+        verify(categoryService).getCategory(any(String.class));
         verify(fileService, times(0)).uploadCommunityImageFile(any(MultipartFile.class), any(Long.class));
-
-        Assertions.assertThat(createCommunityDto.getName()).isEqualTo(communityDto.getName());
     }
 
     @Test
     @DisplayName("이미지(Thumbnail, Main)가 2개 있고, 필수 입력값(name, introduction, category)이 주어졌을 경우 커뮤니티 생성 성공")
     public void createCommunityWithImageTest() {
-
+        // given
         CreateCommunityDto createCommunityDto = CreateCommunityDto.builder()
-                .name("community1")
-                .introduction("Welcome to community1")
+                .name("다모아 수영")
+                .introduction("일단 와바. 수영 너도 할 수 있어.")
                 .category("운동")
                 .build();
-
-        Category category = new Category("운동");
-
-        Community community = new Community(1L,
-                createCommunityDto.getName(),
-                createCommunityDto.getIntroduction(),
-                member, null, null, null, null, category);
-
 
         MockMultipartFile imageFile = new MockMultipartFile(
                 "newImage",
@@ -131,25 +118,29 @@ class CommunityServiceTest {
 
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
-        when(categoryService.getCategory(any())).thenReturn(new Category("운동"));
+        when(categoryService.getCategory(any())).thenReturn(category);
         when(fileService.uploadCommunityImageFile(any(MultipartFile.class), any(Long.class))).thenReturn(imageFileInfo);
 
+        // when
         communityService.create(createCommunityDto, member, imageFile, imageFile);
+
+        // then
         verify(fileService, times(2)).uploadCommunityImageFile(any(MultipartFile.class), any(Long.class));
     }
 
     @Test
     @DisplayName("이미 생성된 커뮤니티 이름이 주어졌을 경우 CommunityNameDuplicateException 을 던지며 커뮤니티 생성 실패")
     public void createCommunityWithDuplicatedNameTest() {
-
+        // given
         CreateCommunityDto createCommunityDto = CreateCommunityDto.builder()
                 .name("다모아 수영")
-                .introduction("Welcome to community1")
+                .introduction("일단 와바. 수영 너도 할 수 있어.")
                 .category("운동")
                 .build();
 
         when(communityRepository.existsByName(any())).thenReturn(true);
 
+        // when & then
         assertThrows(CommunityNameDuplicateException.class,
                 () -> communityService.create(createCommunityDto, member, null, null));
 
@@ -160,18 +151,12 @@ class CommunityServiceTest {
     @Test
     @DisplayName("이미지 업로드 실패 시 FileUploadException을 던지며 커뮤니티 생성 실패")
     public void createCommunityWithNotImageFileTest() {
+        // given
         CreateCommunityDto createCommunityDto = CreateCommunityDto.builder()
-                .name("community1")
-                .introduction("Welcome to community1")
+                .name("다모아 수영")
+                .introduction("일단 와바. 수영 너도 할 수 있어.")
                 .category("운동")
                 .build();
-
-        Category category = new Category("운동");
-
-        Community community = new Community(1L,
-                createCommunityDto.getName(),
-                createCommunityDto.getIntroduction(),
-                member, null, null, null, null, category);
 
         MockMultipartFile imageFile = new MockMultipartFile(
                 "newImage",
@@ -184,8 +169,9 @@ class CommunityServiceTest {
 
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
-
         doThrow(FileUploadException.class).when(fileService).uploadCommunityImageFile(imageFile, community.getId());
+
+        // when & then
         assertThrows(FileUploadException.class,
                 () -> communityService.create(createCommunityDto, member, imageFile, imageFile));
 

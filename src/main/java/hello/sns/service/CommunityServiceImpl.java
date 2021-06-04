@@ -35,8 +35,12 @@ public class CommunityServiceImpl implements CommunityService {
         checkDuplicatedName(createCommunityDto.getName());
 
         Category category = categoryService.getCategory(createCommunityDto.getCategory());
-        Community community = Community.of(createCommunityDto.getName(),
-                createCommunityDto.getIntroduction(), currentMember, category);
+        Community community = Community.builder()
+                .name(createCommunityDto.getName())
+                .introduction(createCommunityDto.getName())
+                .owner(currentMember)
+                .category(category)
+                .build();
 
         // community 영속화
         Community savedCommunity = communityRepository.save(community);

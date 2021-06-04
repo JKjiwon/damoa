@@ -13,10 +13,9 @@ import java.util.List;
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@EqualsAndHashCode(of = "id")
-@AllArgsConstructor
 public class Community extends BaseTimeEntity {
 
 	@Id
@@ -63,16 +62,13 @@ public class Community extends BaseTimeEntity {
 		thumbNailImagePath = imageInfo.getFilePath();
 	}
 
-	protected Community(String name, String introduction, Member owner, Category category) {
+	@Builder
+	protected Community(Long id, String name, String introduction, Member owner, Category category) {
+		this.id = id;
 		this.name = name;
 		this.introduction = introduction;
 		this.owner = owner;
 		this.category = category;
-	}
-
-	// 정적 팩토리 메서드
-	public static Community of(String name, String introduction, Member owner, Category category) {
-		return new Community(name, introduction, owner, category);
 	}
 
 	public void changeCategory(Category category) {
