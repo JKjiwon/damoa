@@ -9,7 +9,9 @@ import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
 import hello.sns.web.dto.common.FileInfo;
 import hello.sns.web.dto.community.CreateCommunityDto;
+import hello.sns.web.exception.business.CommunityAlreadyJoinException;
 import hello.sns.web.exception.business.CommunityNameDuplicateException;
+import hello.sns.web.exception.business.CommunityNotFoundException;
 import hello.sns.web.exception.business.FileUploadException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,6 +23,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -176,6 +180,57 @@ class CommunityServiceTest {
                 () -> communityService.create(member, createCommunityDto, imageFile, imageFile));
 
         verify(communityMemberRepository, times(0)).save(any(CommunityMember.class));
+    }
+
+    @Test
+    @DisplayName("해당 커뮤니티에 가입하지 않은 회원이면 가입 성공")
+    public void joinCommunity() {
+
+        // given
+        Member member2 = Member.builder()
+                .id(2L)
+                .name("user2")
+                .email("user2@email.com")
+                .password(new BCryptPasswordEncoder().encode("user1234"))
+                .profileMessage("오늘도 화이팅")
+                .profileImageName("userImage")
+                .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
+                .build();
+
+        when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
+        when(communityMemberRepository.existsByMember(member2)).thenReturn(false);
+
+        // when
+        communityService.join(member2, community.getId());
+
+        // then
+        verify(communityRepository).findById(community.getId());
+        verify(communityMemberRepository).existsByMember(member2);
+    }
+
+    @Test
+    @DisplayName("해당 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던지며 가입 실패")
+    public void joinCommunityWithNotFoundCommunity() {
+
+        // given
+        when(communityRepository.findById(any())).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(CommunityNotFoundException.class,
+                () -> communityService.join(any(), community.getId()));
+    }
+
+    @Test
+    @DisplayName("해당 커뮤니티에 이미 가입했으면 CommunityAlreadyJoinException 던지며 가입 실패")
+    public void joinCommunityWithAlreadyJoinedMember() {
+
+        // given
+        when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
+        when(communityMemberRepository.existsByMember(any())).thenReturn(true);
+
+        // when & then
+        assertThrows(CommunityAlreadyJoinException.class,
+                () -> communityService.join(any(), community.getId()));
     }
 }
 

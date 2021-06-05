@@ -70,6 +70,7 @@ public class JwtTokenProvider {
         } catch (IllegalArgumentException e) {
             log.info("JWT claims string is empty.");
         }
+
         return false;
     }
 }
