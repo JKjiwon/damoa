@@ -11,7 +11,6 @@ import hello.sns.web.dto.common.FileInfo;
 import hello.sns.web.dto.community.CreateCommunityDto;
 import hello.sns.web.exception.AccessDeniedException;
 import hello.sns.web.exception.business.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -76,7 +75,8 @@ class CommunityServiceTest {
 
     @Test
     @DisplayName("이미지가 없고, 필수 입력값(name, introduction, category)이 주어졌을 경우 커뮤니티 생성 성공")
-    public void createCommunityTest() {
+    public void createCommunityTest_Success() {
+
         // given
         CreateCommunityDto createCommunityDto = CreateCommunityDto.builder()
                 .name("다모아 수영")
@@ -101,7 +101,8 @@ class CommunityServiceTest {
 
     @Test
     @DisplayName("이미지(Thumbnail, Main)가 2개 있고, 필수 입력값(name, introduction, category)이 주어졌을 경우 커뮤니티 생성 성공")
-    public void createCommunityWithImageTest() {
+    public void createCommunityWithImageTest_Success() {
+
         // given
         CreateCommunityDto createCommunityDto = CreateCommunityDto.builder()
                 .name("다모아 수영")
@@ -133,8 +134,9 @@ class CommunityServiceTest {
     }
 
     @Test
-    @DisplayName("이미 생성된 커뮤니티 이름이 주어졌을 경우 CommunityNameDuplicateException 을 던지며 커뮤니티 생성 실패")
-    public void createCommunityWithDuplicatedNameTest() {
+    @DisplayName("이미 생성된 커뮤니티 이름이 주어졌을 경우 CommunityNameDuplicateException을 던지며 커뮤니티 생성 실패")
+    public void createCommunityWithDuplicatedNameTest_Fail() {
+
         // given
         CreateCommunityDto createCommunityDto = CreateCommunityDto.builder()
                 .name("다모아 수영")
@@ -154,7 +156,8 @@ class CommunityServiceTest {
 
     @Test
     @DisplayName("이미지 업로드 실패 시 FileUploadException을 던지며 커뮤니티 생성 실패")
-    public void createCommunityWithNotImageFileTest() {
+    public void createCommunityWithNotImageFileTest_Fail() {
+
         // given
         CreateCommunityDto createCommunityDto = CreateCommunityDto.builder()
                 .name("다모아 수영")
@@ -181,7 +184,7 @@ class CommunityServiceTest {
 
     @Test
     @DisplayName("해당 커뮤니티에 가입하지 않은 회원이면 가입 성공")
-    public void joinCommunity() {
+    public void joinCommunity_Success() {
 
         // given
         Member member = Member.builder()
@@ -210,8 +213,8 @@ class CommunityServiceTest {
     }
 
     @Test
-    @DisplayName("해당 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던지며 가입 실패")
-    public void joinCommunityWithNotFoundCommunity() {
+    @DisplayName("해당 커뮤니티가 존재하지 않으면 CommunityNotFoundException를 던지며 가입 실패")
+    public void joinCommunityWithNotFoundCommunity_Fail() {
 
         // given
         when(communityRepository.findById(any())).thenReturn(Optional.empty());
@@ -226,8 +229,8 @@ class CommunityServiceTest {
     }
 
     @Test
-    @DisplayName("해당 커뮤니티에 이미 가입했으면 CommunityAlreadyJoinException 던지며 가입 실패")
-    public void joinCommunityWithAlreadyJoinedMember() {
+    @DisplayName("해당 커뮤니티에 이미 가입했으면 CommunityAlreadyJoinException를 던지며 가입 실패")
+    public void joinCommunityWithAlreadyJoinedMember_Fail() {
 
         // given
         when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
@@ -243,8 +246,9 @@ class CommunityServiceTest {
     }
 
     @Test
-    @DisplayName("해당 커뮤니티에 가입된 회원이면서, MemberGrade 가 OWNER 이 아니면 커뮤니티 탈퇴 성공")
-    public void withdrawCommunity() {
+    @DisplayName("해당 커뮤니티에 가입된 회원이면서, MemberGrade가 OWNER이 아니면 커뮤니티 탈퇴 성공")
+    public void withdrawCommunity_Success() {
+
         // given
         Member member = Member.builder()
                 .id(2L)
@@ -274,8 +278,8 @@ class CommunityServiceTest {
     }
 
     @Test
-    @DisplayName("해당 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던지며 커뮤니티 탈퇴 실패")
-    public void withdrawCommunityWithNotFoundCommunity() {
+    @DisplayName("해당 커뮤니티가 존재하지 않으면 CommunityNotFoundException를 던지며 커뮤니티 탈퇴 실패")
+    public void withdrawCommunityWithNotFoundCommunity_Fail() {
 
         // given
         when(communityRepository.findById(any())).thenReturn(Optional.empty());
@@ -290,8 +294,8 @@ class CommunityServiceTest {
     }
 
     @Test
-    @DisplayName("해당 커뮤니티에 가입된 회원이 아니면 CommunityNotJoinException 를 던지며 커뮤니티 탈퇴 실패")
-    public void withdrawCommunityWithNotJoinedMember(){
+    @DisplayName("해당 커뮤니티에 가입된 회원이 아니면 CommunityNotJoinException를 던지며 커뮤니티 탈퇴 실패")
+    public void withdrawCommunityWithNotJoinedMember_Fail(){
 
         // given
         Member member = Member.builder()
@@ -317,8 +321,8 @@ class CommunityServiceTest {
     }
 
     @Test
-    @DisplayName("해당 커뮤니티에 가입된 회원 등급이 OWNER 라면 AccessDeniedException 를 던지며 커뮤니티 탈퇴 실패")
-    public void withdrawCommunityWithOwnerMember(){
+    @DisplayName("해당 커뮤니티에 가입된 회원 등급이 OWNER라면 AccessDeniedException를 던지며 커뮤니티 탈퇴 실패")
+    public void withdrawCommunityWithOwnerMember_Fail(){
 
         // given
         community.joinCommunityMembers(owner, MemberGrade.OWNER);
