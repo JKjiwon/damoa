@@ -86,7 +86,7 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public void join(Member currentMember, Long communityId) {
 
-        // 커뮤니티 확인
+        // 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던진다.
         Community community = communityRepository.findById(communityId).orElseThrow(
                 () -> new CommunityNotFoundException("Not found community"));
 
@@ -104,6 +104,7 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public void withdraw(Member currentMember, Long communityId) {
 
+        // 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던진다.
         Community community = communityRepository.findById(communityId).orElseThrow(
                 () -> new CommunityNotFoundException("Not found community"));
 
