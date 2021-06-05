@@ -72,7 +72,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("필수 입력값(email, password, name)이 주어졌을 경우 회원 가입 성공")
-    public void joinMemberTest() {
+    public void joinMemberTest_Success() {
 
         // given
         JoinMemberDto joinMemberDto = JoinMemberDto.builder()
@@ -94,9 +94,9 @@ class MemberServiceTest {
         assertThat(memberDto.getName()).isEqualTo(joinMemberDto.getName());
     }
 
-    @DisplayName("회원 생성시 중복된 이메일이 있을 경우 DuplicatedEmailException을 던지며 .")
+    @DisplayName("회원 생성시 중복된 이메일이 있을 경우 DuplicatedEmailException을 던지며 회원가입 실패")
     @Test
-    public void createMeberTestWithDuplicatedEmail() {
+    public void createMemberTestWithDuplicatedEmail_Fail() {
 
         // given
         String email = "user@email.com";
@@ -113,7 +113,7 @@ class MemberServiceTest {
 
     @DisplayName("필수 입력값(name)이 주어졌을 때 회원 정보 업데이트 성공")
     @Test
-    public void updateMemberTest() {
+    public void updateMemberTest_Success() {
 
         String updatedName = "user3";
         String updatedProfileMessage = "내일도 화이팅";
@@ -135,7 +135,7 @@ class MemberServiceTest {
 
     @DisplayName("회원 프로필 이미지가 주어졌을 때 회원 프로필 정보 업데이트 성공")
     @Test
-    public void updateProfileImage() {
+    public void updateProfileImage_Success() {
         // given
         MockMultipartFile newImage = new MockMultipartFile(
                 "newImage",
@@ -158,9 +158,9 @@ class MemberServiceTest {
         assertThat(savedMember.getProfileImagePath()).isEqualTo(fileInfo.getFilePath());
     }
 
-    @DisplayName("이미지 업로드 실패 시 FileUploadException을 던지며 회원 프로필 정보 업데이트 실패")
+    @DisplayName("이미지 업로드 실패 시 FileUploadException을 던지며 회원 프로필 이미지 업데이트 실패")
     @Test
-    public void updateProfileImageThatIsNotImageFile() {
+    public void updateProfileImageThatIsNotImageFile_Fail() {
         // given
         MockMultipartFile newImage = new MockMultipartFile(
                 "newImage",
