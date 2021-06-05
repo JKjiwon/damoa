@@ -1,10 +1,13 @@
 package hello.sns.entity.member;
 
 import hello.sns.entity.BaseTimeEntity;
+import hello.sns.entity.community.CommunityMember;
 import hello.sns.web.dto.common.FileInfo;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,6 +31,9 @@ public class Member extends BaseTimeEntity {
 
 	@Enumerated(EnumType.STRING)
 	private MemberRole role = MemberRole.USER;
+
+	@OneToMany(mappedBy = "member")
+	private List<CommunityMember> communityMembers = new ArrayList<>();
 
 	private String profileImageName;
 	private String profileImagePath;

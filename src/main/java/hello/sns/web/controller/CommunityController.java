@@ -7,6 +7,8 @@ import hello.sns.web.dto.community.CommunityDto;
 import hello.sns.web.dto.community.CreateCommunityDto;
 import hello.sns.web.dto.community.UpdateCommunityDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -65,5 +67,21 @@ public class CommunityController {
         CommunityDto communityDto =
                 communityService.update(communityId, currentMember, updateCommunityDto, mainImage, thumbNailImage);
         return ResponseEntity.ok(communityDto);
+    }
+
+    @GetMapping("/{communityId}")
+    public ResponseEntity findById(
+            @PathVariable("communityId") Long communityId,
+            @CurrentMember Member currentMember) {
+        CommunityDto communityDto = communityService.findById(communityId, currentMember);
+        return ResponseEntity.ok(communityDto);
+    }
+
+    @GetMapping
+    public ResponseEntity findAll(
+            @CurrentMember Member currentMember,
+            Pageable pageable) {
+        Page<CommunityDto> communityDtos = communityService.findByAll(currentMember, pageable);
+        return ResponseEntity.ok(communityDtos);
     }
 }

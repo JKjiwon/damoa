@@ -118,14 +118,14 @@ class CommunityServiceTest {
 
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
-        when(categoryService.getCategory(any())).thenReturn(category);
+        when(categoryService.addCategory(any())).thenReturn(category);
 
         // when
         communityService.create(owner, createCommunityDto, null, null);
 
         // then
         verify(communityRepository).save(any(Community.class));
-        verify(categoryService).getCategory(any(String.class));
+        verify(categoryService).addCategory(any(String.class));
         verify(fileService, times(0)).uploadCommunityImageFile(any(MultipartFile.class), any(Long.class));
     }
 
@@ -138,7 +138,7 @@ class CommunityServiceTest {
 
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
-        when(categoryService.getCategory(any())).thenReturn(category);
+        when(categoryService.addCategory(any())).thenReturn(category);
         when(fileService.uploadCommunityImageFile(any(MultipartFile.class), any(Long.class))).thenReturn(imageFileInfo);
 
         // when
@@ -321,7 +321,7 @@ class CommunityServiceTest {
         when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
         when(communityMemberRepository.findByMemberAndCommunity(owner, community))
                 .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(0)));
-        when(categoryService.getCategory(updateCommunityDto.getCategory()))
+        when(categoryService.addCategory(updateCommunityDto.getCategory()))
                 .thenReturn(new Category(updateCommunityDto.getCategory()));
 
         // when
@@ -335,7 +335,7 @@ class CommunityServiceTest {
         verify(fileService, times(0)).uploadCommunityImageFile(any(), any());
         verify(communityRepository).findById(community.getId());
         verify(communityMemberRepository).findByMemberAndCommunity(owner, community);
-        verify(categoryService).getCategory(updateCommunityDto.getCategory());
+        verify(categoryService).addCategory(updateCommunityDto.getCategory());
     }
 
     @Test
@@ -348,7 +348,7 @@ class CommunityServiceTest {
         when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
         when(communityMemberRepository.findByMemberAndCommunity(owner, community))
                 .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(0)));
-        when(categoryService.getCategory(updateCommunityDto.getCategory()))
+        when(categoryService.addCategory(updateCommunityDto.getCategory()))
                 .thenReturn(new Category(updateCommunityDto.getCategory()));
 
         // when
@@ -369,7 +369,7 @@ class CommunityServiceTest {
         when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
         when(communityMemberRepository.findByMemberAndCommunity(owner, community))
                 .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(0)));
-        when(categoryService.getCategory(updateCommunityDto.getCategory()))
+        when(categoryService.addCategory(updateCommunityDto.getCategory()))
                 .thenReturn(new Category(updateCommunityDto.getCategory()));
 
         doThrow(FileUploadException.class).when(fileService).uploadCommunityImageFile(imageFile, community.getId());

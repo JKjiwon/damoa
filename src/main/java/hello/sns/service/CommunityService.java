@@ -4,6 +4,8 @@ import hello.sns.entity.member.Member;
 import hello.sns.web.dto.community.CommunityDto;
 import hello.sns.web.dto.community.CreateCommunityDto;
 import hello.sns.web.dto.community.UpdateCommunityDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface CommunityService {
@@ -14,8 +16,6 @@ public interface CommunityService {
 
     void checkDuplicatedName(String name);
 
-    CommunityDto findById(Long communityId);
-
     void join(Member currentMember, Long communityId);
 
     void withdraw(Member currentMember, Long communityId);
@@ -24,4 +24,8 @@ public interface CommunityService {
                         Member currentMember,
                         UpdateCommunityDto updateCommunityDto,
                         MultipartFile mainImage, MultipartFile thumbNailImage);
+
+    CommunityDto findById(Long communityId, Member currentMember);
+
+    Page<CommunityDto> findByAll(Member currentMember, Pageable pageable);
 }

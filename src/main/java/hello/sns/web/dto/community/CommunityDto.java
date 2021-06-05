@@ -1,5 +1,6 @@
 package hello.sns.web.dto.community;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import hello.sns.entity.community.Community;
 import lombok.Data;
 
@@ -25,7 +26,10 @@ public class CommunityDto {
 
     private String category;
 
-    public CommunityDto(Community community) {
+    @JsonProperty("isJoin")
+    private boolean isJoin;
+
+    public CommunityDto(Community community, boolean isJoin) {
         this.communityId = community.getId();
         this.name = community.getName();
         this.thumbNailImageName = community.getThumbNailImageName() != null ? community.getThumbNailImageName() : "";
@@ -35,5 +39,6 @@ public class CommunityDto {
         this.introduction = community.getIntroduction();
         this.ownerId = community.getOwner().getId();
         this.category = community.getCategory().getName();
+        this.isJoin = isJoin;
     }
 }

@@ -17,12 +17,14 @@ import hello.sns.web.exception.business.CommunityNameDuplicateException;
 import hello.sns.web.exception.business.CommunityNotFoundException;
 import hello.sns.web.exception.business.CommunityNotJoinException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +43,7 @@ public class CommunityServiceImpl implements CommunityService {
                                MultipartFile mainImage, MultipartFile thumbNailImage) {
         checkDuplicatedName(createCommunityDto.getName());
 
-        Category category = categoryService.getCategory(createCommunityDto.getCategory());
+        Category category = categoryService.addCategory(createCommunityDto.getCategory());
         Community community = Community.builder()
                 .name(createCommunityDto.getName())
                 .introduction(createCommunityDto.getName())
@@ -65,7 +67,7 @@ public class CommunityServiceImpl implements CommunityService {
         }
 
         savedCommunity.joinCommunityMembers(currentMember, MemberGrade.OWNER);
-        return new CommunityDto(savedCommunity);
+        return new CommunityDto(savedCommunity, true);
     }
 
     @Override
@@ -139,7 +141,7 @@ public class CommunityServiceImpl implements CommunityService {
             throw new AccessDeniedException("Not ADMIN or OWNER");
         }
         // 커뮤니티 정보 수정
-        Category category = categoryService.getCategory(updateCommunityDto.getCategory());
+        Category category = categoryService.addCategory(updateCommunityDto.getCategory());
         community.update(updateCommunityDto.getIntroduction(), category);
 
         // 커뮤니티 사진 수정
@@ -155,24 +157,34 @@ public class CommunityServiceImpl implements CommunityService {
             community.changeThumbNailImage(thumbNailImageFile);
         }
 
-        return new CommunityDto(community);
+        return new CommunityDto(community, true);
     }
 
     @Override
-    public CommunityDto findById(Long communityId) {
+    public CommunityDto findById(Long communityId, Member currentMember) {
         Community community = communityRepository.findById(communityId).orElseThrow(
                 () -> new CommunityNotFoundException("Not found community"));
 
-        return new CommunityDto(community);
+        List<CommunityMember> communityMembers = communityMemberRepository.findByMember(currentMember);
+        List<Community> joinedCommunities = communityMembers.stream()
+                .map(CommunityMember::getCommunity)
+                .collect(Collectors.toList());
+
+        return new CommunityDto(community, joinedCommunities.contains(community));
     }
 
-//    public List<CommunityDto> findByAll(Member currentMember, Pageable pageable) {
-//        // 내가 가입한 커뮤니티는 안보이게?
-//        // 내가 가입한 커뮤니티는 가입했다고 보이게??
-//
-//        // 내가 가입한 커뮤니티 조회
-//        communityMemberRepository.findByMember(currentMember)
-//        communityRepository.findAll(pageable);
-//    }
+    @Override
+    public Page<CommunityDto> findByAll(Member currentMember, Pageable pageable) {
+        Page<Community> communities = communityRepository.findAll(pageable);
+
+        List<CommunityMember> communityMembers = communityMemberRepository.findByMember(currentMember);
+
+        List<Community> joinedCommunities = communityMembers.stream()
+                .map(CommunityMember::getCommunity)
+                .collect(Collectors.toList());
+
+        return communities
+                .map(community -> new CommunityDto(community, joinedCommunities.contains(community)));
+    }
 }
 
