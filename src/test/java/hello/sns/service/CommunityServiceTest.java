@@ -188,7 +188,7 @@ class CommunityServiceTest {
         community.joinCommunityMembers(owner, MemberGrade.OWNER);
 
         when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
-        when(communityMemberRepository.existsByMember(member)).thenReturn(false);
+        when(communityMemberRepository.existsByMemberAndCommunity(member, community)).thenReturn(false);
 
         // when
         communityService.join(member, community.getId());
@@ -196,7 +196,7 @@ class CommunityServiceTest {
         // then
         assertThat(community.getCommunityMembers().size()).isEqualTo(2); // owner, member 이 포함
         verify(communityRepository).findById(community.getId());
-        verify(communityMemberRepository).existsByMember(member);
+        verify(communityMemberRepository).existsByMemberAndCommunity(member, community);
     }
 
     @Test
@@ -212,7 +212,7 @@ class CommunityServiceTest {
 
         // then
         verify(communityRepository, times(1)).findById(any());
-        verify(communityMemberRepository, times(0)).existsByMember(any());
+        verify(communityMemberRepository, times(0)).existsByMemberAndCommunity(any(), any());
     }
 
     @Test
@@ -221,7 +221,7 @@ class CommunityServiceTest {
 
         // given
         when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
-        when(communityMemberRepository.existsByMember(any())).thenReturn(true);
+        when(communityMemberRepository.existsByMemberAndCommunity(any(), any())).thenReturn(true);
 
         // when & then
         assertThrows(CommunityAlreadyJoinException.class,
@@ -229,7 +229,7 @@ class CommunityServiceTest {
 
         // then
         verify(communityRepository).findById(community.getId());
-        verify(communityMemberRepository).existsByMember(any());
+        verify(communityMemberRepository).existsByMemberAndCommunity(any(), any());
     }
 
     @Test
@@ -242,7 +242,7 @@ class CommunityServiceTest {
         community.joinCommunityMembers(member, MemberGrade.USER);
 
         when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
-        when(communityMemberRepository.findByMember(member))
+        when(communityMemberRepository.findByMemberAndCommunity(member, community))
                 .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(1))); // member
 
         // when
@@ -251,7 +251,7 @@ class CommunityServiceTest {
         // then
         assertThat(community.getCommunityMembers().size()).isEqualTo(1); // owner 이 포함
         verify(communityRepository).findById(community.getId());
-        verify(communityMemberRepository).findByMember(member);
+        verify(communityMemberRepository).findByMemberAndCommunity(member, community);
     }
 
     @Test
@@ -267,7 +267,7 @@ class CommunityServiceTest {
 
         // then
         verify(communityRepository).findById(community.getId());
-        verify(communityMemberRepository, times(0)).findByMember(any());
+        verify(communityMemberRepository, times(0)).findByMemberAndCommunity(any(), any());
     }
 
     @Test
@@ -276,7 +276,7 @@ class CommunityServiceTest {
 
         // given
         when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
-        when(communityMemberRepository.findByMember(member)).thenReturn(Optional.empty());
+        when(communityMemberRepository.findByMemberAndCommunity(member, community)).thenReturn(Optional.empty());
 
         // when & then
         assertThrows(CommunityNotJoinException.class,
@@ -284,7 +284,7 @@ class CommunityServiceTest {
 
         // then
         verify(communityRepository).findById(community.getId());
-        verify(communityMemberRepository).findByMember(any());
+        verify(communityMemberRepository).findByMemberAndCommunity(any(), any());
     }
 
     @Test
@@ -295,7 +295,7 @@ class CommunityServiceTest {
         community.joinCommunityMembers(owner, MemberGrade.OWNER);
 
         when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
-        when(communityMemberRepository.findByMember(owner)).thenReturn(Optional.of(community.getCommunityMembers().get(0)));
+        when(communityMemberRepository.findByMemberAndCommunity(owner, community)).thenReturn(Optional.of(community.getCommunityMembers().get(0)));
 
         // when & then
         assertThrows(AccessDeniedException.class,
@@ -304,7 +304,7 @@ class CommunityServiceTest {
         // then
         assertThat(community.getCommunityMembers().size()).isEqualTo(1); // owner 이 포함
         verify(communityRepository).findById(community.getId());
-        verify(communityMemberRepository).findByMember(owner);
+        verify(communityMemberRepository).findByMemberAndCommunity(owner, community);
     }
 
     @Test
@@ -319,7 +319,7 @@ class CommunityServiceTest {
         community.joinCommunityMembers(owner, MemberGrade.OWNER);
 
         when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
-        when(communityMemberRepository.findByMember(owner))
+        when(communityMemberRepository.findByMemberAndCommunity(owner, community))
                 .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(0)));
         when(categoryService.getCategory(updateCommunityDto.getCategory()))
                 .thenReturn(new Category(updateCommunityDto.getCategory()));
@@ -334,7 +334,7 @@ class CommunityServiceTest {
         verify(fileService, times(0)).deleteFile(any());
         verify(fileService, times(0)).uploadCommunityImageFile(any(), any());
         verify(communityRepository).findById(community.getId());
-        verify(communityMemberRepository).findByMember(owner);
+        verify(communityMemberRepository).findByMemberAndCommunity(owner, community);
         verify(categoryService).getCategory(updateCommunityDto.getCategory());
     }
 
@@ -346,7 +346,7 @@ class CommunityServiceTest {
 
         when(fileService.uploadCommunityImageFile(imageFile, community.getId())).thenReturn(imageFileInfo);
         when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
-        when(communityMemberRepository.findByMember(owner))
+        when(communityMemberRepository.findByMemberAndCommunity(owner, community))
                 .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(0)));
         when(categoryService.getCategory(updateCommunityDto.getCategory()))
                 .thenReturn(new Category(updateCommunityDto.getCategory()));
@@ -367,7 +367,7 @@ class CommunityServiceTest {
         community.joinCommunityMembers(owner, MemberGrade.OWNER);
 
         when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
-        when(communityMemberRepository.findByMember(owner))
+        when(communityMemberRepository.findByMemberAndCommunity(owner, community))
                 .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(0)));
         when(categoryService.getCategory(updateCommunityDto.getCategory()))
                 .thenReturn(new Category(updateCommunityDto.getCategory()));
@@ -399,7 +399,7 @@ class CommunityServiceTest {
 
         // given
         when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
-        when(communityMemberRepository.findByMember(member)).thenReturn(Optional.empty());
+        when(communityMemberRepository.findByMemberAndCommunity(member, community)).thenReturn(Optional.empty());
 
         // when
         assertThrows(CommunityNotJoinException.class,
@@ -414,7 +414,7 @@ class CommunityServiceTest {
         community.joinCommunityMembers(owner, MemberGrade.OWNER);
         community.joinCommunityMembers(member, MemberGrade.USER);
         when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
-        when(communityMemberRepository.findByMember(member)).thenReturn(Optional.ofNullable(community.getCommunityMembers().get(1)));
+        when(communityMemberRepository.findByMemberAndCommunity(member, community)).thenReturn(Optional.ofNullable(community.getCommunityMembers().get(1)));
 
         // when
         assertThrows(AccessDeniedException.class,

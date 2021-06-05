@@ -17,9 +17,12 @@ import hello.sns.web.exception.business.CommunityNameDuplicateException;
 import hello.sns.web.exception.business.CommunityNotFoundException;
 import hello.sns.web.exception.business.CommunityNotJoinException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -74,14 +77,6 @@ public class CommunityServiceImpl implements CommunityService {
         }
     }
 
-    @Override
-    public CommunityDto findById(Long communityId) {
-        Community community = communityRepository.findById(communityId).orElseThrow(
-                () -> new CommunityNotFoundException("Not found community"));
-
-        return new CommunityDto(community);
-    }
-
     @Transactional
     @Override
     public void join(Member currentMember, Long communityId) {
@@ -91,7 +86,7 @@ public class CommunityServiceImpl implements CommunityService {
                 () -> new CommunityNotFoundException("Not found community"));
 
         // 이미 가입된 회원이면 CommunityAlreadyJoinException 던진다.
-        Boolean isJoinedMember = communityMemberRepository.existsByMember(currentMember);
+        Boolean isJoinedMember = communityMemberRepository.existsByMemberAndCommunity(currentMember, community);
         if (isJoinedMember) {
             throw new CommunityAlreadyJoinException("Already joined member");
         }
@@ -109,7 +104,7 @@ public class CommunityServiceImpl implements CommunityService {
                 () -> new CommunityNotFoundException("Not found community"));
 
         // 가입된 회원이 아니라면 CommunityNotJoinException 던진다.
-        CommunityMember communityMember = communityMemberRepository.findByMember(currentMember)
+        CommunityMember communityMember = communityMemberRepository.findByMemberAndCommunity(currentMember, community)
                 .orElseThrow(() -> new CommunityNotJoinException("Not joined member"));
 
         // 가입된 회원 등급이 OWNER 라면 AccessDeniedException 던진다.
@@ -135,7 +130,7 @@ public class CommunityServiceImpl implements CommunityService {
                 () -> new CommunityNotFoundException("Not found community"));
 
         // 가입된 회원인지 확인
-        CommunityMember communityMember = communityMemberRepository.findByMember(currentMember)
+        CommunityMember communityMember = communityMemberRepository.findByMemberAndCommunity(currentMember, community)
                 .orElseThrow(() -> new CommunityNotJoinException("Not joined member"));
 
         // 가입된 회원의 등급이 OWNER 이거나 ADMIN 인지 확인
@@ -162,5 +157,22 @@ public class CommunityServiceImpl implements CommunityService {
 
         return new CommunityDto(community);
     }
+
+    @Override
+    public CommunityDto findById(Long communityId) {
+        Community community = communityRepository.findById(communityId).orElseThrow(
+                () -> new CommunityNotFoundException("Not found community"));
+
+        return new CommunityDto(community);
+    }
+
+//    public List<CommunityDto> findByAll(Member currentMember, Pageable pageable) {
+//        // 내가 가입한 커뮤니티는 안보이게?
+//        // 내가 가입한 커뮤니티는 가입했다고 보이게??
+//
+//        // 내가 가입한 커뮤니티 조회
+//        communityMemberRepository.findByMember(currentMember)
+//        communityRepository.findAll(pageable);
+//    }
 }
 

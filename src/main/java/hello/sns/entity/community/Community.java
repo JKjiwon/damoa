@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
@@ -40,7 +41,7 @@ public class Community extends BaseTimeEntity {
 
 	private String mainImagePath;
 
-	@ManyToOne
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "category_id")
 	private Category category;
 
