@@ -107,6 +107,7 @@ class MemberServiceTest {
                 () -> memberService.checkDuplicatedEmail(email)
         );
 
+        // when
         verify(memberRepository).existsByEmail(email);
         verify(memberRepository,times(0)).save(any(Member.class));
     }
@@ -175,6 +176,7 @@ class MemberServiceTest {
         assertThrows(FileUploadException.class,
                 () -> memberService.updateProfileImage(savedMember, newImage));
 
+        // when
         verify(fileService, times(0)).deleteFile(savedMember.getProfileImagePath());
     }
 }
