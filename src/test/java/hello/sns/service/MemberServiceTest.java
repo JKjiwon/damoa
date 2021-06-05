@@ -161,7 +161,7 @@ class MemberServiceTest {
 
     @DisplayName("이미지 업로드 실패 시 FileUploadException을 던지며 회원 프로필 이미지 업데이트 실패")
     @Test
-    public void updateProfileImageThatIsNotImageFile_Fail() {
+    public void updateProfileImageWithFileUploadFail_Fail() {
         // given
         MockMultipartFile newImage = new MockMultipartFile(
                 "newImage",
@@ -176,7 +176,7 @@ class MemberServiceTest {
         assertThrows(FileUploadException.class,
                 () -> memberService.updateProfileImage(savedMember, newImage));
 
-        // when
+        // then
         verify(fileService, times(0)).deleteFile(savedMember.getProfileImagePath());
     }
 }

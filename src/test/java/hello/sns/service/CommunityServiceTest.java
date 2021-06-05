@@ -9,6 +9,7 @@ import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
 import hello.sns.web.dto.common.FileInfo;
 import hello.sns.web.dto.community.CreateCommunityDto;
+import hello.sns.web.dto.community.UpdateCommunityDto;
 import hello.sns.web.exception.AccessDeniedException;
 import hello.sns.web.exception.business.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,8 +48,13 @@ class CommunityServiceTest {
     CategoryService categoryService;
 
     Member owner;
-    Community community;
+    Member member;
     Category category;
+    Community community;
+    CreateCommunityDto createCommunityDto;
+    UpdateCommunityDto updateCommunityDto;
+    MockMultipartFile imageFile;
+    FileInfo imageFileInfo;
 
     @BeforeEach
     public void init() {
@@ -56,6 +62,16 @@ class CommunityServiceTest {
                 .id(1L)
                 .name("user")
                 .email("user@email.com")
+                .password(new BCryptPasswordEncoder().encode("user1234"))
+                .profileMessage("오늘도 화이팅")
+                .profileImageName("userImage")
+                .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
+                .build();
+
+        member = Member.builder()
+                .id(2L)
+                .name("user2")
+                .email("user2@email.com")
                 .password(new BCryptPasswordEncoder().encode("user1234"))
                 .profileMessage("오늘도 화이팅")
                 .profileImageName("userImage")
@@ -71,6 +87,26 @@ class CommunityServiceTest {
                 .owner(owner)
                 .category(category)
                 .build();
+
+        createCommunityDto = CreateCommunityDto.builder()
+                .name("다모아 수영")
+                .introduction("일단 와바. 수영 너도 할 수 있어.")
+                .category("운동")
+                .build();
+
+        updateCommunityDto = UpdateCommunityDto.builder()
+                .category("친목")
+                .introduction("같이 떠들어 봅시다.!!")
+                .build();
+
+        imageFile = new MockMultipartFile(
+                "newImage",
+                "newImage",
+                "image/jpg",
+                "newImage".getBytes());
+
+        imageFileInfo = new FileInfo("newImage",
+                "/Users/kimjiwon/studyProject/sns/uploads/communities/1/newImage");
     }
 
     @Test
@@ -78,12 +114,6 @@ class CommunityServiceTest {
     public void createCommunityTest_Success() {
 
         // given
-        CreateCommunityDto createCommunityDto = CreateCommunityDto.builder()
-                .name("다모아 수영")
-                .introduction("일단 와바. 수영 너도 할 수 있어.")
-                .category("운동")
-                .build();
-
         community.joinCommunityMembers(owner, MemberGrade.OWNER);
 
         when(communityRepository.existsByName(any())).thenReturn(false);
@@ -104,21 +134,6 @@ class CommunityServiceTest {
     public void createCommunityWithImageTest_Success() {
 
         // given
-        CreateCommunityDto createCommunityDto = CreateCommunityDto.builder()
-                .name("다모아 수영")
-                .introduction("일단 와바. 수영 너도 할 수 있어.")
-                .category("운동")
-                .build();
-
-        MockMultipartFile imageFile = new MockMultipartFile(
-                "newImage",
-                "newImage",
-                "image/jpg",
-                "newImage".getBytes());
-
-        FileInfo imageFileInfo = new FileInfo("newImage",
-                "/Users/kimjiwon/studyProject/sns/uploads/communities/1/newImage");
-
         community.joinCommunityMembers(owner, MemberGrade.OWNER);
 
         when(communityRepository.existsByName(any())).thenReturn(false);
@@ -138,12 +153,6 @@ class CommunityServiceTest {
     public void createCommunityWithDuplicatedNameTest_Fail() {
 
         // given
-        CreateCommunityDto createCommunityDto = CreateCommunityDto.builder()
-                .name("다모아 수영")
-                .introduction("일단 와바. 수영 너도 할 수 있어.")
-                .category("운동")
-                .build();
-
         when(communityRepository.existsByName(any())).thenReturn(true);
 
         // when & then
@@ -159,18 +168,6 @@ class CommunityServiceTest {
     public void createCommunityWithNotImageFileTest_Fail() {
 
         // given
-        CreateCommunityDto createCommunityDto = CreateCommunityDto.builder()
-                .name("다모아 수영")
-                .introduction("일단 와바. 수영 너도 할 수 있어.")
-                .category("운동")
-                .build();
-
-        MockMultipartFile imageFile = new MockMultipartFile(
-                "newImage",
-                "newImage",
-                "image/jpg",
-                "newImage".getBytes());
-
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
         doThrow(FileUploadException.class).when(fileService).uploadCommunityImageFile(imageFile, community.getId());
@@ -187,16 +184,6 @@ class CommunityServiceTest {
     public void joinCommunity_Success() {
 
         // given
-        Member member = Member.builder()
-                .id(2L)
-                .name("user2")
-                .email("user2@email.com")
-                .password(new BCryptPasswordEncoder().encode("user1234"))
-                .profileMessage("오늘도 화이팅")
-                .profileImageName("userImage")
-                .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
-                .build();
-
         // 현재 communityMember 에 owner 이 포함
         community.joinCommunityMembers(owner, MemberGrade.OWNER);
 
@@ -250,16 +237,6 @@ class CommunityServiceTest {
     public void withdrawCommunity_Success() {
 
         // given
-        Member member = Member.builder()
-                .id(2L)
-                .name("user2")
-                .email("user2@email.com")
-                .password(new BCryptPasswordEncoder().encode("user1234"))
-                .profileMessage("오늘도 화이팅")
-                .profileImageName("userImage")
-                .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
-                .build();
-
         // 현재 communityMember 에 owner, member 이 포함
         community.joinCommunityMembers(owner, MemberGrade.OWNER);
         community.joinCommunityMembers(member, MemberGrade.USER);
@@ -298,16 +275,6 @@ class CommunityServiceTest {
     public void withdrawCommunityWithNotJoinedMember_Fail(){
 
         // given
-        Member member = Member.builder()
-                .id(2L)
-                .name("user2")
-                .email("user2@email.com")
-                .password(new BCryptPasswordEncoder().encode("user1234"))
-                .profileMessage("오늘도 화이팅")
-                .profileImageName("userImage")
-                .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
-                .build();
-
         when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
         when(communityMemberRepository.findByMember(member)).thenReturn(Optional.empty());
 
@@ -338,6 +305,120 @@ class CommunityServiceTest {
         assertThat(community.getCommunityMembers().size()).isEqualTo(1); // owner 이 포함
         verify(communityRepository).findById(community.getId());
         verify(communityMemberRepository).findByMember(owner);
+    }
+
+    @Test
+    @DisplayName("이미지가 없고, 필수 입력값(introduction, category)이 주어졌을 경우 커뮤니티 수정 성공")
+    public void updateCommunity_Success() {
+
+        // given
+        UpdateCommunityDto updateCommunityDto = UpdateCommunityDto.builder()
+                .category("친목")
+                .introduction("같이 떠들어 봅시다.!!")
+                .build();
+        community.joinCommunityMembers(owner, MemberGrade.OWNER);
+
+        when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
+        when(communityMemberRepository.findByMember(owner))
+                .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(0)));
+        when(categoryService.getCategory(updateCommunityDto.getCategory()))
+                .thenReturn(new Category(updateCommunityDto.getCategory()));
+
+        // when
+        communityService.update(community.getId(), owner, updateCommunityDto, null, null);
+
+        // then
+        assertThat(community.getIntroduction()).isEqualTo(updateCommunityDto.getIntroduction());
+        assertThat(community.getCategory().getName()).isEqualTo(updateCommunityDto.getCategory());
+
+        verify(fileService, times(0)).deleteFile(any());
+        verify(fileService, times(0)).uploadCommunityImageFile(any(), any());
+        verify(communityRepository).findById(community.getId());
+        verify(communityMemberRepository).findByMember(owner);
+        verify(categoryService).getCategory(updateCommunityDto.getCategory());
+    }
+
+    @Test
+    @DisplayName("이미지(Thumbnail, Main)가 2개 있고, 필수 입력값(introduction, category)이 주어졌을 경우 커뮤니티 수정 성공")
+    public void updateCommunityWithImage_Success() {
+        // given
+        community.joinCommunityMembers(owner, MemberGrade.OWNER);
+
+        when(fileService.uploadCommunityImageFile(imageFile, community.getId())).thenReturn(imageFileInfo);
+        when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
+        when(communityMemberRepository.findByMember(owner))
+                .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(0)));
+        when(categoryService.getCategory(updateCommunityDto.getCategory()))
+                .thenReturn(new Category(updateCommunityDto.getCategory()));
+
+        // when
+        communityService.update(community.getId(), owner, updateCommunityDto, imageFile, imageFile);
+
+        // then
+        verify(fileService, times(2)).deleteFile(any());
+        verify(fileService, times(2)).uploadCommunityImageFile(any(), any());
+    }
+
+    @Test
+    @DisplayName("이미지 업로드 실패 시 FileUploadException을 던지며 커뮤니티 이미지 업데이트 실패")
+    public void updateCommunityWithFileUploadFail_Fail() {
+
+        // given
+        community.joinCommunityMembers(owner, MemberGrade.OWNER);
+
+        when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
+        when(communityMemberRepository.findByMember(owner))
+                .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(0)));
+        when(categoryService.getCategory(updateCommunityDto.getCategory()))
+                .thenReturn(new Category(updateCommunityDto.getCategory()));
+
+        doThrow(FileUploadException.class).when(fileService).uploadCommunityImageFile(imageFile, community.getId());
+
+        // when & then
+        assertThrows(FileUploadException.class,
+                () -> communityService.update(community.getId(), owner, updateCommunityDto, imageFile, imageFile));
+
+        // then
+        verify(fileService, times(0)).deleteFile(any());
+    }
+
+    @Test
+    @DisplayName("해당 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던지며 커뮤니티 업데이트 실패")
+    public void updateCommunityWithNotFoundCommunity_Fail() {
+        // given
+        when(communityRepository.findById(any())).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(CommunityNotFoundException.class,
+                () -> communityService.update(community.getId(), owner, updateCommunityDto, imageFile, imageFile));
+    }
+
+    @Test
+    @DisplayName("해당 커뮤니티에 가입된 회원이 아니면 CommunityNotJoinException 던지며 커뮤니티 업데이트 실패")
+    public void updateCommunityWithNotJoinedMember_Fail() {
+
+        // given
+        when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
+        when(communityMemberRepository.findByMember(member)).thenReturn(Optional.empty());
+
+        // when
+        assertThrows(CommunityNotJoinException.class,
+                () -> communityService.update(community.getId(), member, updateCommunityDto, imageFile, imageFile));
+    }
+
+    @Test
+    @DisplayName("해당 커뮤니티에 가입된 회원의 등급이 OWNER 또는 ADMIN이 아닌 경우 AccessDeniedException 던지며 커뮤니티 업데이트 실패")
+    public void updateCommunityWithAccessDeniedMember_Fail() {
+
+        // given
+        community.joinCommunityMembers(owner, MemberGrade.OWNER);
+        community.joinCommunityMembers(member, MemberGrade.USER);
+        when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
+        when(communityMemberRepository.findByMember(member)).thenReturn(Optional.ofNullable(community.getCommunityMembers().get(1)));
+
+        // when
+        assertThrows(AccessDeniedException.class,
+                () -> communityService.update(community.getId(), member, updateCommunityDto, imageFile, imageFile));
     }
 }
 
