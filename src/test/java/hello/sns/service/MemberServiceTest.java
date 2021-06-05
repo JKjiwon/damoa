@@ -45,6 +45,13 @@ class MemberServiceTest {
 
     Member savedMember;
 
+    JoinMemberDto joinMemberDto;
+
+    UpdateMemberDto updateMemberDto;
+
+    MockMultipartFile imageFile;
+
+    FileInfo imageFileInfo;
 
     @BeforeEach
     public void init() {
@@ -68,6 +75,26 @@ class MemberServiceTest {
                 .profileImageName("userImage")
                 .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
                 .build();
+
+        joinMemberDto = JoinMemberDto.builder()
+                .email("user2@email.com")
+                .password("12341234")
+                .name("Jiwon")
+                .build();
+
+        updateMemberDto = UpdateMemberDto.builder()
+                .name("user3")
+                .profileMessage("내일도 화이팅")
+                .build();
+
+        imageFile = new MockMultipartFile(
+                "imageFile",
+                "imageFile",
+                "image/jpg",
+                "imageFile".getBytes());
+
+        imageFileInfo = new FileInfo("imageFile", "/Users/kimjiwon/studyProject/sns/uploads/1/imageFile");
+
     }
 
     @Test
@@ -75,12 +102,6 @@ class MemberServiceTest {
     public void joinMemberTest_Success() {
 
         // given
-        JoinMemberDto joinMemberDto = JoinMemberDto.builder()
-                .email("user2@email.com")
-                .password("12341234")
-                .name("Jiwon")
-                .build();
-
         Member member = joinMemberDto.toEntity();
         when(memberRepository.save(any())).thenReturn(member);
         when(passwordEncoder.encode(any())).thenReturn(any());
@@ -99,7 +120,7 @@ class MemberServiceTest {
     public void createMemberTestWithDuplicatedEmail_Fail() {
 
         // given
-        String email = "user@email.com";
+        String email = joinMemberDto.getEmail();
         when(memberRepository.existsByEmail(email)).thenReturn(false);
 
         // when & then
@@ -116,13 +137,6 @@ class MemberServiceTest {
     @Test
     public void updateMemberTest_Success() {
 
-        String updatedName = "user3";
-        String updatedProfileMessage = "내일도 화이팅";
-        UpdateMemberDto updateMemberDto = UpdateMemberDto.builder()
-                .name(updatedName)
-                .profileMessage(updatedProfileMessage)
-                .build();
-
         // given
         when(memberRepository.findById(savedMember.getId())).thenReturn(Optional.ofNullable(savedMember));
 
@@ -130,51 +144,44 @@ class MemberServiceTest {
         MemberDto memberDto = memberService.updateMember(savedMember, updateMemberDto);
 
         // then
-        assertThat(memberDto.getName()).isEqualTo(updatedName);
-        assertThat(memberDto.getProfileMessage()).isEqualTo(updatedProfileMessage);
+        assertThat(memberDto.getName()).isEqualTo(updateMemberDto.getName());
+        assertThat(memberDto.getProfileMessage()).isEqualTo(updateMemberDto.getProfileMessage());
     }
 
     @DisplayName("회원 프로필 이미지가 주어졌을 때 회원 프로필 정보 업데이트 성공")
     @Test
     public void updateProfileImage_Success() {
+
         // given
-        MockMultipartFile newImage = new MockMultipartFile(
-                "newImage",
-                "newImage",
-                "image/jpg",
-                "newImage".getBytes());
-
-
-        FileInfo fileInfo = new FileInfo("newImage", "/Users/kimjiwon/studyProject/sns/uploads/1/newImage");
         when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(savedMember));
-        when(fileService.uploadMemberImageFile(newImage, savedMember.getId())).thenReturn(fileInfo);
+        when(fileService.uploadMemberImageFile(imageFile, savedMember.getId())).thenReturn(imageFileInfo);
 
         // when
-        memberService.updateProfileImage(savedMember, newImage);
+        memberService.updateProfileImage(savedMember, imageFile);
 
         // then
         verify(fileService).deleteFile(member.getProfileImagePath());
-        verify(fileService).uploadMemberImageFile(newImage, savedMember.getId());
-        assertThat(savedMember.getProfileImageName()).isEqualTo(fileInfo.getFileName());
-        assertThat(savedMember.getProfileImagePath()).isEqualTo(fileInfo.getFilePath());
+        verify(fileService).uploadMemberImageFile(imageFile, savedMember.getId());
+        assertThat(savedMember.getProfileImageName()).isEqualTo(imageFileInfo.getFileName());
+        assertThat(savedMember.getProfileImagePath()).isEqualTo(imageFileInfo.getFilePath());
     }
 
     @DisplayName("이미지 업로드 실패 시 FileUploadException을 던지며 회원 프로필 이미지 업데이트 실패")
     @Test
     public void updateProfileImageWithFileUploadFail_Fail() {
         // given
-        MockMultipartFile newImage = new MockMultipartFile(
+        MockMultipartFile invalidImage = new MockMultipartFile(
                 "newImage",
                 "newImage",
                 "audio/mpeg",
                 "newImage".getBytes());
 
         when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(savedMember));
-        doThrow(FileUploadException.class).when(fileService).uploadMemberImageFile(newImage, savedMember.getId());
+        doThrow(FileUploadException.class).when(fileService).uploadMemberImageFile(invalidImage, savedMember.getId());
 
         // when & then
         assertThrows(FileUploadException.class,
-                () -> memberService.updateProfileImage(savedMember, newImage));
+                () -> memberService.updateProfileImage(savedMember, invalidImage));
 
         // then
         verify(fileService, times(0)).deleteFile(savedMember.getProfileImagePath());
