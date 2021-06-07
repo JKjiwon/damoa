@@ -56,13 +56,13 @@ public class CommunityServiceImpl implements CommunityService {
 
         // update - dirty checking
         if (mainImage != null) {
-            FileInfo mainImageFile = fileService.uploadCommunityImage(mainImage, savedCommunity.getId());
+            FileInfo mainImageFile = fileService.uploadImage(mainImage);
             savedCommunity.changeMainImage(mainImageFile);
         }
 
         // update - dirty checking
         if (thumbNailImage != null) {
-            FileInfo thumbNailImageFile = fileService.uploadCommunityImage(thumbNailImage, savedCommunity.getId());
+            FileInfo thumbNailImageFile = fileService.uploadImage(thumbNailImage);
             savedCommunity.changeThumbNailImage(thumbNailImageFile);
         }
 
@@ -147,13 +147,13 @@ public class CommunityServiceImpl implements CommunityService {
 
         // 커뮤니티 사진 수정
         if (mainImage != null) {
-            FileInfo mainImageFile = fileService.uploadCommunityImage(mainImage, community.getId());
+            FileInfo mainImageFile = fileService.uploadImage(mainImage);
             fileService.deleteFile(community.getMainImagePath());
             community.changeMainImage(mainImageFile);
         }
 
         if (thumbNailImage != null) {
-            FileInfo thumbNailImageFile = fileService.uploadCommunityImage(thumbNailImage, community.getId());
+            FileInfo thumbNailImageFile = fileService.uploadImage(thumbNailImage);
             fileService.deleteFile(community.getThumbNailImagePath());
             community.changeThumbNailImage(thumbNailImageFile);
         }

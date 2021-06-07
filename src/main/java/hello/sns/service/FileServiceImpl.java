@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,41 +23,40 @@ public class FileServiceImpl implements FileService {
     private String baseDir;
 
     @Override
-    public FileInfo uploadMemberImage(MultipartFile file, Long memberId) throws FileUploadException {
+    public FileInfo uploadImage(MultipartFile file) throws FileUploadException {
         checkImageFile(file);
-        return uploadFile(file, "members", memberId);
+        return uploadFile(file);
     }
 
     @Override
-    public FileInfo uploadCommunityImage(MultipartFile file, Long communityId) throws FileUploadException {
-        checkImageFile(file);
-        return uploadFile(file, "communities", communityId);
-    }
-
-    public PostImageInfo uploadPostImage(int postId, FileInfo fileInfo) {
+    public PostImageInfo uploadPostImage(int postId, MultipartFile file) throws FileUploadException{
+        FileInfo fileInfo = uploadImage(file);
         return FileUtil.toPostImageInfo(postId, fileInfo, 1);
     }
 
-    public List<PostImageInfo> uploadPostImages(int postId, List<FileInfo> fileInfos) {
+    @Override
+    public List<PostImageInfo> uploadPostImages(int postId, List<MultipartFile> files) throws FileUploadException{
+        List<FileInfo> fileInfos = uploadFiles(files);
+
         return fileInfos.stream()
                 .map(fileInfo -> FileUtil.toPostImageInfo(postId, fileInfo, fileInfos.indexOf(fileInfo) + 1))
                 .collect(Collectors.toList());
     }
 
-    private List<FileInfo> uploadFiles(List<MultipartFile> files, String type, Long memberId) {
+    private List<FileInfo> uploadFiles(List<MultipartFile> files) {
         Map<String, String> newFileNames = FileUtil.changeFileNames(files);
-        createDirectory(type, memberId);
+        createDirectory();
 
         return files.stream()
                 .map(file ->
-                        createFileInfo(file, type, memberId, newFileNames.get(file.getOriginalFilename())))
+                        createFileInfo(file, newFileNames.get(file.getOriginalFilename())))
                 .collect(Collectors.toList());
     }
 
-    private FileInfo uploadFile(MultipartFile file, String type, Long entityId) throws FileUploadException {
+    private FileInfo uploadFile(MultipartFile file) throws FileUploadException {
         String newFileName = FileUtil.changeFileName(file);
-        createDirectory(type, entityId);
-        return createFileInfo(file, type, entityId, newFileName);
+        createDirectory();
+        return createFileInfo(file, newFileName);
     }
 
     @Override
@@ -65,14 +66,9 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private void createDirectory(String type, Long entityId) {
+    private void createDirectory() {
 
-        StringBuilder dirPath = new StringBuilder()
-                .append(baseDir)
-                .append(File.separator)
-                .append(type)
-                .append(File.separator)
-                .append(entityId);
+        StringBuilder dirPath = getDirectory();
 
         File directory = new File(String.valueOf(dirPath));
 
@@ -81,16 +77,15 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private FileInfo createFileInfo(MultipartFile file, String type, Long entityId, String newFileName) {
+    private StringBuilder getDirectory() {
+        String dirPath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
+                .replace("/", File.separator);
 
-        StringBuilder filePath = new StringBuilder()
-                .append(baseDir)
-                .append(File.separator)
-                .append(type)
-                .append(File.separator)
-                .append(entityId)
-                .append(File.separator)
-                .append(newFileName);
+        return new StringBuilder(baseDir).append(File.separator).append(dirPath);
+    }
+
+    private FileInfo createFileInfo(MultipartFile file, String newFileName) {
+        StringBuilder filePath = getDirectory().append(File.separator).append(newFileName);
         try {
             file.transferTo(new File(String.valueOf(filePath)));
             return new FileInfo(newFileName, String.valueOf(filePath));

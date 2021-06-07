@@ -126,7 +126,7 @@ class CommunityServiceTest {
         // then
         verify(communityRepository).save(any(Community.class));
         verify(categoryService).addCategory(any(String.class));
-        verify(fileService, times(0)).uploadCommunityImage(any(MultipartFile.class), any(Long.class));
+        verify(fileService, times(0)).uploadImage(any(MultipartFile.class));
     }
 
     @Test
@@ -139,13 +139,13 @@ class CommunityServiceTest {
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
         when(categoryService.addCategory(any())).thenReturn(category);
-        when(fileService.uploadCommunityImage(any(MultipartFile.class), any(Long.class))).thenReturn(imageFileInfo);
+        when(fileService.uploadImage(any(MultipartFile.class))).thenReturn(imageFileInfo);
 
         // when
         communityService.create(owner, createCommunityDto, imageFile, imageFile);
 
         // then
-        verify(fileService, times(2)).uploadCommunityImage(any(MultipartFile.class), any(Long.class));
+        verify(fileService, times(2)).uploadImage(any(MultipartFile.class));
     }
 
     @Test
@@ -170,7 +170,7 @@ class CommunityServiceTest {
         // given
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
-        doThrow(FileUploadException.class).when(fileService).uploadCommunityImage(imageFile, community.getId());
+        doThrow(FileUploadException.class).when(fileService).uploadImage(imageFile);
 
         // when & then
         assertThrows(FileUploadException.class,
@@ -332,7 +332,7 @@ class CommunityServiceTest {
         assertThat(community.getCategory().getName()).isEqualTo(updateCommunityDto.getCategory());
 
         verify(fileService, times(0)).deleteFile(any());
-        verify(fileService, times(0)).uploadCommunityImage(any(), any());
+        verify(fileService, times(0)).uploadImage(any());
         verify(communityRepository).findById(community.getId());
         verify(communityMemberRepository).findByMemberAndCommunity(owner, community);
         verify(categoryService).addCategory(updateCommunityDto.getCategory());
@@ -344,7 +344,7 @@ class CommunityServiceTest {
         // given
         community.joinCommunityMembers(owner, MemberGrade.OWNER);
 
-        when(fileService.uploadCommunityImage(imageFile, community.getId())).thenReturn(imageFileInfo);
+        when(fileService.uploadImage(imageFile)).thenReturn(imageFileInfo);
         when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
         when(communityMemberRepository.findByMemberAndCommunity(owner, community))
                 .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(0)));
@@ -356,7 +356,7 @@ class CommunityServiceTest {
 
         // then
         verify(fileService, times(2)).deleteFile(any());
-        verify(fileService, times(2)).uploadCommunityImage(any(), any());
+        verify(fileService, times(2)).uploadImage(any());
     }
 
     @Test
@@ -372,7 +372,7 @@ class CommunityServiceTest {
         when(categoryService.addCategory(updateCommunityDto.getCategory()))
                 .thenReturn(new Category(updateCommunityDto.getCategory()));
 
-        doThrow(FileUploadException.class).when(fileService).uploadCommunityImage(imageFile, community.getId());
+        doThrow(FileUploadException.class).when(fileService).uploadImage(imageFile);
 
         // when & then
         assertThrows(FileUploadException.class,
