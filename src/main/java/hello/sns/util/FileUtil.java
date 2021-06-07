@@ -33,7 +33,7 @@ public class FileUtil {
         return newFileNames;
     }
 
-    public static PostImageInfo toPostImageInfo(int postId, FileInfo fileInfo, int seq) {
-        return new PostImageInfo(postId, fileInfo.getFileName(), fileInfo.getFilePath(), seq);
+    public static PostImageInfo toPostImageInfo(FileInfo fileInfo, int seq) {
+        return new PostImageInfo(fileInfo.getFileName(), fileInfo.getFilePath(), seq);
     }
 }

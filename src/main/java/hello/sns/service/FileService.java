@@ -10,9 +10,9 @@ import java.util.List;
 public interface FileService {
     FileInfo uploadImage(MultipartFile file) throws FileUploadException;
 
-    PostImageInfo uploadPostImage(int postId, MultipartFile file) throws FileUploadException;
+    PostImageInfo uploadPostImage(MultipartFile file) throws FileUploadException;
 
-    public List<PostImageInfo> uploadPostImages(int postId, List<MultipartFile> files) throws FileUploadException;
+    List<PostImageInfo> uploadPostImages(List<MultipartFile> files) throws FileUploadException;
 
     void deleteFile(String filePath);
 }

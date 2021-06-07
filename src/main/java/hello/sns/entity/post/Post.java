@@ -1,9 +1,5 @@
 package hello.sns.entity.post;
 
-import static javax.persistence.FetchType.*;
-
-import javax.persistence.*;
-
 import hello.sns.entity.BaseTimeEntity;
 import hello.sns.entity.community.Community;
 import hello.sns.entity.member.Member;
@@ -12,8 +8,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -39,6 +38,10 @@ public class Post extends BaseTimeEntity {
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Image> images = new ArrayList<>();
+
+	public void addImages(Image image) {
+		this.images.add(image);
+	}
 
 	@Builder
 	public Post(String title, String content, Member writer, Community community) {

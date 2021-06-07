@@ -29,17 +29,19 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public PostImageInfo uploadPostImage(int postId, MultipartFile file) throws FileUploadException{
+    public PostImageInfo uploadPostImage(MultipartFile file) throws FileUploadException{
         FileInfo fileInfo = uploadImage(file);
-        return FileUtil.toPostImageInfo(postId, fileInfo, 1);
+        return FileUtil.toPostImageInfo(fileInfo, 1);
     }
 
     @Override
-    public List<PostImageInfo> uploadPostImages(int postId, List<MultipartFile> files) throws FileUploadException{
+    public List<PostImageInfo> uploadPostImages(List<MultipartFile> files) throws FileUploadException{
+        files.stream().forEach(file -> checkImageFile(file));
+
         List<FileInfo> fileInfos = uploadFiles(files);
 
         return fileInfos.stream()
-                .map(fileInfo -> FileUtil.toPostImageInfo(postId, fileInfo, fileInfos.indexOf(fileInfo) + 1))
+                .map(fileInfo -> FileUtil.toPostImageInfo(fileInfo, fileInfos.indexOf(fileInfo) + 1))
                 .collect(Collectors.toList());
     }
 

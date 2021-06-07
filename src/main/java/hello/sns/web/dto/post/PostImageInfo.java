@@ -1,5 +1,9 @@
 package hello.sns.web.dto.post;
 
+import hello.sns.entity.community.Community;
+import hello.sns.entity.member.Member;
+import hello.sns.entity.post.Image;
+import hello.sns.entity.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -7,11 +11,18 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PostImageInfo {
 
-    private long postId;
+    private String name;
 
-    private String imageName;
-
-    private String imagePath;
+    private String path;
 
     private int seq;
+
+    public Image toEntity(Post post) {
+        return Image.builder()
+                .post(post)
+                .name(name)
+                .path(path)
+                .seq(seq)
+                .build();
+    }
 }
