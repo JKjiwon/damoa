@@ -24,12 +24,12 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity create(@PathVariable("communityId") Long communityId,
-                          @CurrentMember Member currentMember,
-                          CreatePostDto createPostDto,
-                          @RequestPart("image") List<MultipartFile> images) throws URISyntaxException {
+                                 @CurrentMember Member currentMember,
+                                 CreatePostDto createPostDto,
+                                 @RequestPart(value = "image", required = false) List<MultipartFile> images) throws URISyntaxException {
 
-        PostDto postDto = postService.create(communityId, currentMember, createPostDto, images);
-        URI uri = new URI(String.format("/api/communities/%d/posts/%d",communityId,postDto.getId()));
+            PostDto postDto = postService.create(communityId, currentMember, createPostDto, images);
+        URI uri = new URI(String.format("/api/communities/%d/posts/%d", communityId, postDto.getId()));
         return ResponseEntity.created(uri).body(postDto);
     }
 

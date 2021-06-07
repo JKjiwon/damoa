@@ -29,15 +29,8 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public PostImageInfo uploadPostImage(MultipartFile file) throws FileUploadException{
-        FileInfo fileInfo = uploadImage(file);
-        return FileUtil.toPostImageInfo(fileInfo, 1);
-    }
-
-    @Override
     public List<PostImageInfo> uploadPostImages(List<MultipartFile> files) throws FileUploadException{
         files.stream().forEach(file -> checkImageFile(file));
-
         List<FileInfo> fileInfos = uploadFiles(files);
 
         return fileInfos.stream()

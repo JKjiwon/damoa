@@ -4,6 +4,7 @@ import hello.sns.entity.post.Post;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class PostDto {
     private Long id;
-
+    
     private String title;
 
     private String content;
@@ -35,5 +36,16 @@ public class PostDto {
         this.images = post.getImages().stream()
                 .map(image -> new ImageDto(image))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String toString() {
+        return "PostDto{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", community='" + community + '\'' +
+                ", writer='" + writer + '\'' +
+                '}';
     }
 }

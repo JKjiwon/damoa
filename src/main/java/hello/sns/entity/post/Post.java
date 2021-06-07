@@ -3,10 +3,7 @@ package hello.sns.entity.post;
 import hello.sns.entity.BaseTimeEntity;
 import hello.sns.entity.community.Community;
 import hello.sns.entity.member.Member;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,6 +14,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@EqualsAndHashCode(of = "id")
 public class Post extends BaseTimeEntity {
 
 	@Id
