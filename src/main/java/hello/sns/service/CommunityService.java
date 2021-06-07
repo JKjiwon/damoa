@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface CommunityService {
+
     CommunityDto create(Member currentMember,
                         CreateCommunityDto createCommunityDto,
                         MultipartFile mainImage,

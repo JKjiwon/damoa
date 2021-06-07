@@ -84,30 +84,25 @@ public class CommunityServiceImpl implements CommunityService {
     public void join(Member currentMember, Long communityId) {
 
         // 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던진다.
-        Community community = communityRepository.findById(communityId).orElseThrow(
-                () -> new CommunityNotFoundException("Not found community"));
+        Community community = getCommunity(communityId);
 
         // 이미 가입된 회원이면 CommunityAlreadyJoinException 던진다.
-        Boolean isJoinedMember = communityMemberRepository.existsByMemberAndCommunity(currentMember, community);
-        if (isJoinedMember) {
-            throw new CommunityAlreadyJoinException("Already joined member");
-        }
+        validateMembership(currentMember, community);
 
         // 커뮤니티 가입
         community.joinCommunityMembers(currentMember, MemberGrade.USER);
     }
+
 
     @Transactional
     @Override
     public void withdraw(Member currentMember, Long communityId) {
 
         // 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던진다.
-        Community community = communityRepository.findById(communityId).orElseThrow(
-                () -> new CommunityNotFoundException("Not found community"));
+        Community community = getCommunity(communityId);
 
         // 가입된 회원이 아니라면 CommunityNotJoinException 던진다.
-        CommunityMember communityMember = communityMemberRepository.findByMemberAndCommunity(currentMember, community)
-                .orElseThrow(() -> new CommunityNotJoinException("Not joined member"));
+        CommunityMember communityMember = getCommunityMember(currentMember, community);
 
         // 가입된 회원 등급이 OWNER 라면 AccessDeniedException 던진다.
         if (communityMember.getMemberGrade().equals(MemberGrade.OWNER)) {
@@ -128,12 +123,10 @@ public class CommunityServiceImpl implements CommunityService {
                                MultipartFile mainImage, MultipartFile thumbNailImage) {
 
         // 커뮤니티 확인
-        Community community = communityRepository.findById(communityId).orElseThrow(
-                () -> new CommunityNotFoundException("Not found community"));
+        Community community = getCommunity(communityId);
 
         // 가입된 회원인지 확인
-        CommunityMember communityMember = communityMemberRepository.findByMemberAndCommunity(currentMember, community)
-                .orElseThrow(() -> new CommunityNotJoinException("Not joined member"));
+        CommunityMember communityMember = getCommunityMember(currentMember, community);
 
         // 가입된 회원의 등급이 OWNER 이거나 ADMIN 인지 확인
         MemberGrade memberGrade = communityMember.getMemberGrade();
@@ -161,10 +154,10 @@ public class CommunityServiceImpl implements CommunityService {
         return new CommunityDto(community, true);
     }
 
+
     @Override
     public CommunityDto findById(Long communityId, Member currentMember) {
-        Community community = communityRepository.findById(communityId).orElseThrow(
-                () -> new CommunityNotFoundException("Not found community"));
+        Community community = getCommunity(communityId);
 
         List<CommunityMember> communityMembers = communityMemberRepository.findByMember(currentMember);
         List<Community> joinedCommunities = communityMembers.stream()
@@ -186,6 +179,23 @@ public class CommunityServiceImpl implements CommunityService {
 
         return communities
                 .map(community -> new CommunityDto(community, joinedCommunities.contains(community)));
+    }
+
+    private void validateMembership(Member currentMember, Community community) {
+        Boolean isJoinedMember = communityMemberRepository.existsByMemberAndCommunity(currentMember, community);
+        if (isJoinedMember) {
+            throw new CommunityAlreadyJoinException("Already joined member");
+        }
+    }
+
+    private Community getCommunity(Long communityId) {
+        return communityRepository.findById(communityId).orElseThrow(
+                () -> new CommunityNotFoundException("Not found community"));
+    }
+
+    private CommunityMember getCommunityMember(Member currentMember, Community community) {
+        return communityMemberRepository.findByMemberAndCommunity(currentMember, community)
+                .orElseThrow(() -> new CommunityNotJoinException("Not joined member"));
     }
 }
 

@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface FileService {
+
     FileInfo uploadImage(MultipartFile file) throws FileUploadException;
 
     List<PostImageInfo> uploadPostImages(List<MultipartFile> files) throws FileUploadException;
