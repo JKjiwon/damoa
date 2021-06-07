@@ -9,6 +9,7 @@ import hello.sns.web.dto.community.UpdateCommunityDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/communities")
@@ -84,4 +88,11 @@ public class CommunityController {
         Page<CommunityDto> communityDtos = communityService.findByAll(currentMember, pageable);
         return ResponseEntity.ok(communityDtos);
     }
+
+    @GetMapping("/{name}/exists")
+    public ResponseEntity checkDuplicatedName(@PathVariable String name) {
+        communityService.checkDuplicatedName(name);
+        return ResponseEntity.ok().build();
+    }
+    // 커뮤니티 검색 기능 - QueryDSL ?? -> 커뮤니티명 + 소개글 + 카테고리명??
 }

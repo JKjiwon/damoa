@@ -56,13 +56,13 @@ public class CommunityServiceImpl implements CommunityService {
 
         // update - dirty checking
         if (mainImage != null) {
-            FileInfo mainImageFile = fileService.uploadCommunityImageFile(mainImage, savedCommunity.getId());
+            FileInfo mainImageFile = fileService.uploadCommunityImage(mainImage, savedCommunity.getId());
             savedCommunity.changeMainImage(mainImageFile);
         }
 
         // update - dirty checking
         if (thumbNailImage != null) {
-            FileInfo thumbNailImageFile = fileService.uploadCommunityImageFile(thumbNailImage, savedCommunity.getId());
+            FileInfo thumbNailImageFile = fileService.uploadCommunityImage(thumbNailImage, savedCommunity.getId());
             savedCommunity.changeThumbNailImage(thumbNailImageFile);
         }
 
@@ -140,19 +140,20 @@ public class CommunityServiceImpl implements CommunityService {
         if (!(memberGrade.equals(MemberGrade.OWNER)) && !(memberGrade.equals(MemberGrade.ADMIN))) {
             throw new AccessDeniedException("Not ADMIN or OWNER");
         }
+
         // 커뮤니티 정보 수정
         Category category = categoryService.addCategory(updateCommunityDto.getCategory());
         community.update(updateCommunityDto.getIntroduction(), category);
 
         // 커뮤니티 사진 수정
         if (mainImage != null) {
-            FileInfo mainImageFile = fileService.uploadCommunityImageFile(mainImage, community.getId());
+            FileInfo mainImageFile = fileService.uploadCommunityImage(mainImage, community.getId());
             fileService.deleteFile(community.getMainImagePath());
             community.changeMainImage(mainImageFile);
         }
 
         if (thumbNailImage != null) {
-            FileInfo thumbNailImageFile = fileService.uploadCommunityImageFile(thumbNailImage, community.getId());
+            FileInfo thumbNailImageFile = fileService.uploadCommunityImage(thumbNailImage, community.getId());
             fileService.deleteFile(community.getThumbNailImagePath());
             community.changeThumbNailImage(thumbNailImageFile);
         }

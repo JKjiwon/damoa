@@ -154,14 +154,14 @@ class MemberServiceTest {
 
         // given
         when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(savedMember));
-        when(fileService.uploadMemberImageFile(imageFile, savedMember.getId())).thenReturn(imageFileInfo);
+        when(fileService.uploadMemberImage(imageFile, savedMember.getId())).thenReturn(imageFileInfo);
 
         // when
         memberService.updateProfileImage(savedMember, imageFile);
 
         // then
         verify(fileService).deleteFile(member.getProfileImagePath());
-        verify(fileService).uploadMemberImageFile(imageFile, savedMember.getId());
+        verify(fileService).uploadMemberImage(imageFile, savedMember.getId());
         assertThat(savedMember.getProfileImageName()).isEqualTo(imageFileInfo.getFileName());
         assertThat(savedMember.getProfileImagePath()).isEqualTo(imageFileInfo.getFilePath());
     }
@@ -177,7 +177,7 @@ class MemberServiceTest {
                 "newImage".getBytes());
 
         when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(savedMember));
-        doThrow(FileUploadException.class).when(fileService).uploadMemberImageFile(invalidImage, savedMember.getId());
+        doThrow(FileUploadException.class).when(fileService).uploadMemberImage(invalidImage, savedMember.getId());
 
         // when & then
         assertThrows(FileUploadException.class,

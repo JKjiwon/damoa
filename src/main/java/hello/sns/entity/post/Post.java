@@ -2,13 +2,7 @@ package hello.sns.entity.post;
 
 import static javax.persistence.FetchType.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import hello.sns.entity.BaseTimeEntity;
 import hello.sns.entity.community.Community;
@@ -17,6 +11,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -39,6 +36,9 @@ public class Post extends BaseTimeEntity {
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "community_id")
 	private Community community;
+
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Image> images = new ArrayList<>();
 
 	@Builder
 	public Post(String title, String content, Member writer, Community community) {

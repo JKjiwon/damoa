@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService{
         Member findMember = memberRepository.findById(currentMember.getId()).orElseThrow(
                 () -> new MemberNotFoundException("해당 회원이 존재하지 않습니다."));
 
-        FileInfo fileInfo = fileService.uploadMemberImageFile(profileImage, findMember.getId());
+        FileInfo fileInfo = fileService.uploadMemberImage(profileImage, findMember.getId());
         fileService.deleteFile(findMember.getProfileImagePath());
         findMember.updateProfileImage(fileInfo);
 
