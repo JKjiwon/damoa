@@ -40,4 +40,15 @@ public class PostController {
         PostDto postDto = postService.findById(communityId, postId, currentMember);
         return ResponseEntity.ok(postDto);
     }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity delete(@PathVariable("communityId") Long communityId,
+                                   @PathVariable("postId") Long postId,
+                                   @CurrentMember Member currentMember) {
+        postService.delete(communityId, postId, currentMember);
+
+        return ResponseEntity.ok().build();
+    }
+
+
 }

@@ -13,4 +13,6 @@ public interface PostService {
                    CreatePostDto createPostDto, List<MultipartFile> postImageFiles);
 
     PostDto findById(Long communityId, Long postId, Member currentMember);
+
+    void delete(Long communityId, Long postId, Member currentMember);
 }

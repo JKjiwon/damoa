@@ -12,6 +12,7 @@ import hello.sns.repository.PostRepository;
 import hello.sns.web.dto.post.CreatePostDto;
 import hello.sns.web.dto.post.PostDto;
 import hello.sns.web.dto.post.PostImageInfo;
+import hello.sns.web.exception.AccessDeniedException;
 import hello.sns.web.exception.business.CommunityNotFoundException;
 import hello.sns.web.exception.business.CommunityNotJoinException;
 import hello.sns.web.exception.business.PostNotFoundException;
@@ -60,6 +61,38 @@ public class PostServiceImpl implements PostService {
         }
 
         return new PostDto(savedPost);
+    }
+
+    @Transactional
+    public void delete(Long communityId, Long postId, Member currentMember) {
+        // 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던진다.
+        Community community = getCommunity(communityId);
+
+        CommunityMember communityMember = getCommunityMember(currentMember, community);
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("Not found post"));
+
+        // 게시글 작성자 이거나, Admin, Owner 등급이라면 삭제 가능
+        boolean isWriter = post.getWriter().equals(currentMember);
+        boolean adminOrOwner = communityMember.getMemberGrade() != MemberGrade.USER;
+
+        System.out.println("--------------------------------");
+        System.out.println("post = " + post.getWriter());
+        System.out.println("currentMember = " + currentMember);
+        System.out.println(post.getWriter().equals(currentMember));
+        System.out.println("--------------------------------");
+
+        boolean isAccess = false;
+        // 게시글과 관련된 사진을 모두 삭제하고 게시글 삭제.
+        if (isWriter || adminOrOwner) {
+            post.getImages().stream().map(Image::getPath).forEach(fileService::deleteFile);
+            postRepository.delete(post);
+            isAccess = true;
+        }
+        if (!isAccess) {
+            throw new AccessDeniedException("Delete denied");
+        }
     }
 
     @Override

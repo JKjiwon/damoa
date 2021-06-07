@@ -48,5 +48,13 @@ public class Member extends BaseTimeEntity {
 		this.name = name;
 		this.profileMessage = profileMessage;
 	}
+
+	@Override
+	public String toString() {
+		return "Member{" +
+				"id=" + id +
+				", email='" + email + '\'' +
+				'}';
+	}
 }
 
