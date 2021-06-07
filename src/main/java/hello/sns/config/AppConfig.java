@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
 
-    @Bean
+//    @Bean
     public ApplicationRunner applicationRunner() {
         return new ApplicationRunner() {
             @Autowired

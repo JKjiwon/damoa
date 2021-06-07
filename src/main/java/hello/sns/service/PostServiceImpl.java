@@ -8,6 +8,7 @@ import hello.sns.entity.post.Image;
 import hello.sns.entity.post.Post;
 import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
+import hello.sns.repository.ImageRepository;
 import hello.sns.repository.PostRepository;
 import hello.sns.web.dto.post.CreatePostDto;
 import hello.sns.web.dto.post.PostDto;
@@ -36,6 +37,8 @@ public class PostServiceImpl implements PostService {
     private final CommunityMemberRepository communityMemberRepository;
 
     private final FileService fileService;
+
+    private final ImageRepository imageRepository;
 
     @Transactional
     @Override
@@ -77,32 +80,26 @@ public class PostServiceImpl implements PostService {
         boolean isWriter = post.getWriter().equals(currentMember);
         boolean adminOrOwner = communityMember.getMemberGrade() != MemberGrade.USER;
 
-        System.out.println("--------------------------------");
-        System.out.println("post = " + post.getWriter());
-        System.out.println("currentMember = " + currentMember);
-        System.out.println(post.getWriter().equals(currentMember));
-        System.out.println("--------------------------------");
-
-        boolean isAccess = false;
+        if (!isWriter && !adminOrOwner) {
+            throw new AccessDeniedException("Owner, Admin, 작성자만 삭제 할 수 있습니다.");
+        }
         // 게시글과 관련된 사진을 모두 삭제하고 게시글 삭제.
-        if (isWriter || adminOrOwner) {
-            post.getImages().stream().map(Image::getPath).forEach(fileService::deleteFile);
-            postRepository.delete(post);
-            isAccess = true;
-        }
-        if (!isAccess) {
-            throw new AccessDeniedException("Delete denied");
-        }
+        post.getImages().stream().map(Image::getPath).forEach(fileService::deleteFile);
+
+        // Cascade.ALL로 설정할 시 Post 1개에 여러개의 Image이 있을 때 Post를 삭제하면 Image 개수 만큼 삭제 쿼리가 나간다.
+        // Image 삭제를 벌크 연산으로 쿼리 1번에 해결.
+        imageRepository.deleteByPost(post);
+        postRepository.deleteById(postId);
     }
 
     @Override
     public PostDto findById(Long communityId, Long postId, Member currentMember) {
 
         // 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던진다.
-        Community community = getCommunity(communityId);
+//        Community community = getCommunity(communityId);
 
         // 게시글이 존재하지 않으면 PostNotJoinException 던진다.
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByIdAndCommunityId(postId, communityId)
                 .orElseThrow(() -> new PostNotFoundException("Not found post"));
 
         return new PostDto(post);
