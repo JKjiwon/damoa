@@ -3,7 +3,6 @@ package hello.sns.web.controller;
 import hello.sns.entity.member.Member;
 import hello.sns.service.AuthService;
 import hello.sns.service.MemberService;
-import hello.sns.service.MemberServiceImpl;
 import hello.sns.web.dto.common.CurrentMember;
 import hello.sns.web.dto.member.*;
 import lombok.AllArgsConstructor;
@@ -12,15 +11,20 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@Validated
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
@@ -44,16 +48,25 @@ public class MemberController {
     }
 
     @GetMapping("/{email}/exists")
-    public ResponseEntity checkDuplicatedEmail(@PathVariable String email) {
+    public ResponseEntity checkDuplicatedEmail(@PathVariable @Email String email) {
+
         memberService.checkDuplicatedEmail(email);
 
         EntityModel entityModel = EntityModel.of(
-                new CheckDto(200, email),
+                new CheckDto(HttpStatus.OK.value(), email),
                 linkTo(methodOn(MemberController.class).checkDuplicatedEmail(email)).withSelfRel(),
                 linkTo(methodOn(MemberController.class).join(null)).withRel("join")
         );
         return ResponseEntity.ok(entityModel);
     }
+
+    @Data
+    static class EmailDto {
+        @NotBlank(message = "이메일을 입력해주시기 바랍니다.")
+        @Email
+        String email;
+    }
+
 
     @Data
     @NoArgsConstructor

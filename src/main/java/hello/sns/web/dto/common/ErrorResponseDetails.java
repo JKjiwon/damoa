@@ -1,6 +1,5 @@
 package hello.sns.web.dto.common;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +35,15 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return new ErrorResponse(req, HttpStatus.FORBIDDEN, e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ErrorResponse handlerInvalidEmail(ConstraintViolationException e, HttpServletRequest req) {
+        e.printStackTrace();
+        return new ErrorResponse(req, HttpStatus.BAD_REQUEST, "올바른 형식의 이메일을 입력하세요.");
+    }
+
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
