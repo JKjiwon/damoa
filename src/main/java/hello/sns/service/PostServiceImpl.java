@@ -18,11 +18,13 @@ import hello.sns.web.exception.business.CommunityNotFoundException;
 import hello.sns.web.exception.business.CommunityNotJoinException;
 import hello.sns.web.exception.business.PostNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Transactional(readOnly = true)
@@ -67,6 +69,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Transactional
+    @Override
     public void delete(Long communityId, Long postId, Member currentMember) {
         // 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던진다.
         Community community = getCommunity(communityId);
@@ -92,17 +95,25 @@ public class PostServiceImpl implements PostService {
         postRepository.deleteById(postId);
     }
 
+
     @Override
     public PostDto findById(Long communityId, Long postId, Member currentMember) {
-
-        // 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던진다.
-//        Community community = getCommunity(communityId);
 
         // 게시글이 존재하지 않으면 PostNotJoinException 던진다.
         Post post = postRepository.findByIdAndCommunityId(postId, communityId)
                 .orElseThrow(() -> new PostNotFoundException("Not found post"));
 
+        // 내가 좋아요 한 게시글 표시
         return new PostDto(post);
+    }
+
+    @Override
+    public List<PostDto> findByAll(Long communityId, Member currentMember, Pageable pageable) {
+        List<Post> posts = postRepository.findAllByCommunityId(communityId, pageable);
+
+        return posts.stream()
+                .map(post -> new PostDto(post))
+                .collect(Collectors.toList());
     }
 
     private void validateMembership(Member currentMember, Community community) {

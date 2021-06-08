@@ -6,6 +6,7 @@ import hello.sns.web.dto.common.CurrentMember;
 import hello.sns.web.dto.post.CreatePostDto;
 import hello.sns.web.dto.post.PostDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,16 +36,25 @@ public class PostController {
 
     @GetMapping("/{postId}")
     public ResponseEntity findById(@PathVariable("communityId") Long communityId,
-                            @PathVariable("postId") Long postId,
-                            @CurrentMember Member currentMember) {
+                                   @PathVariable("postId") Long postId,
+                                   @CurrentMember Member currentMember) {
         PostDto postDto = postService.findById(communityId, postId, currentMember);
         return ResponseEntity.ok(postDto);
     }
 
+    @GetMapping
+    public ResponseEntity findAll(@PathVariable("communityId") Long communityId,
+                                  @CurrentMember Member currentMember,
+                                  Pageable pageable) {
+        List<PostDto> postDtos = postService.findByAll(communityId, currentMember, pageable);
+        return ResponseEntity.ok(postDtos);
+    }
+
+
     @DeleteMapping("/{postId}")
     public ResponseEntity delete(@PathVariable("communityId") Long communityId,
-                                   @PathVariable("postId") Long postId,
-                                   @CurrentMember Member currentMember) {
+                                 @PathVariable("postId") Long postId,
+                                 @CurrentMember Member currentMember) {
         postService.delete(communityId, postId, currentMember);
 
         return ResponseEntity.ok().build();
