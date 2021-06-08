@@ -18,13 +18,13 @@ import hello.sns.web.exception.business.CommunityNotFoundException;
 import hello.sns.web.exception.business.CommunityNotJoinException;
 import hello.sns.web.exception.business.PostNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Transactional(readOnly = true)
@@ -91,7 +91,7 @@ public class PostServiceImpl implements PostService {
 
         // Cascade.ALL로 설정할 시 Post 1개에 여러개의 Image이 있을 때 Post를 삭제하면 Image 개수 만큼 삭제 쿼리가 나간다.
         // Image 삭제를 벌크 연산으로 쿼리 1번에 해결.
-        imageRepository.deleteByPost(post);
+        imageRepository.deleteByPost(postId);
         postRepository.deleteById(postId);
     }
 
@@ -108,12 +108,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> findByAll(Long communityId, Member currentMember, Pageable pageable) {
-        List<Post> posts = postRepository.findAllByCommunityId(communityId, pageable);
+    public Page<PostDto> findByAll(Long communityId, Member currentMember, Pageable pageable) {
+        Page<Post> posts = postRepository.findAllByCommunityId(communityId, pageable);
 
-        return posts.stream()
-                .map(post -> new PostDto(post))
-                .collect(Collectors.toList());
+        return posts
+                .map(post -> new PostDto(post));
+
     }
 
     private void validateMembership(Member currentMember, Community community) {

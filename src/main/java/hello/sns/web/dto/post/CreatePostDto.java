@@ -3,21 +3,24 @@ package hello.sns.web.dto.post;
 import hello.sns.entity.community.Community;
 import hello.sns.entity.member.Member;
 import hello.sns.entity.post.Post;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreatePostDto {
 
-    @Length
+    @Length(min = 1, max = 40, message = "최소 {min}자 이상 최대 {max}자 이하로 입력해주시기 바랍니다.")
     @NotBlank(message = "게시글 제목을 입력해주시기 바랍니다.")
     private String title;
 
-    @Length
+    @Length(min = 10, message = "최소 {min}자 이상으로 입력해주시기 바랍니다.")
     @NotBlank(message = "게시글 내용을 입력해주시기 바랍니다.")
     private String content;
 

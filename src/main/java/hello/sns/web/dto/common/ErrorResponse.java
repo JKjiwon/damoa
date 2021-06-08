@@ -1,18 +1,13 @@
 package hello.sns.web.dto.common;
 
+import lombok.*;
+import org.springframework.http.HttpStatus;
+
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import lombok.AccessLevel;
-import org.springframework.http.HttpStatus;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import javax.servlet.http.HttpServletRequest;
-
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ErrorResponse {
@@ -22,6 +17,7 @@ public class ErrorResponse {
     private String message;
     private String path;
 
+    @Builder
     public ErrorResponse(HttpServletRequest req, HttpStatus httpStatus, String message) {
         this.status = httpStatus.value();
         this.error = httpStatus.name();

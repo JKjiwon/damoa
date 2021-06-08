@@ -4,7 +4,6 @@ import hello.sns.entity.member.Member;
 import hello.sns.entity.member.MemberRole;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class JoinMemberDto {
 
     @NotBlank(message = "이메일을 입력해주시기 바랍니다.")

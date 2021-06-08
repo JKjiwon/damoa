@@ -10,7 +10,6 @@ public class MemberDto {
     private Long id;
     private String email;
     private String name;
-    private String profileImageName;
     private String profileImagePath;
     private String profileMessage;
 
@@ -18,7 +17,6 @@ public class MemberDto {
         this.id = member.getId();
         this.email = member.getEmail();
         this.name = member.getName();
-        this.profileImageName = member.getProfileImageName() != null ? member.getProfileImageName() : "";
         this.profileImagePath = member.getProfileImagePath() != null ? member.getProfileImagePath() : "";
         this.profileMessage = member.getProfileMessage();
     }

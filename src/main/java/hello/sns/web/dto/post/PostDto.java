@@ -1,10 +1,10 @@
 package hello.sns.web.dto.post;
 
+import hello.sns.entity.member.Member;
 import hello.sns.entity.post.Post;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +19,7 @@ public class PostDto {
 
     private String community;
 
-    private String writer;
+    private PostWriterDto writer;
 
     private List<ImageDto> images;
 
@@ -31,21 +31,22 @@ public class PostDto {
 
         this.community = post.getCommunity().getName();
 
-        this.writer = post.getWriter().getName();
+        this.writer = new PostWriterDto(post.getWriter());
 
         this.images = post.getImages().stream()
                 .map(image -> new ImageDto(image))
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public String toString() {
-        return "PostDto{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", community='" + community + '\'' +
-                ", writer='" + writer + '\'' +
-                '}';
+    @NoArgsConstructor
+    @Data
+    public static class PostWriterDto {
+        private Long id;
+        private String name;
+
+        public PostWriterDto(Member member) {
+            this.id = member.getId();
+            this.name = member.getName();
+        }
     }
 }

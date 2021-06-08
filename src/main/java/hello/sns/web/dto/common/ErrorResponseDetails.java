@@ -1,16 +1,11 @@
 package hello.sns.web.dto.common;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import lombok.AccessLevel;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @AllArgsConstructor
@@ -23,6 +18,7 @@ public class ErrorResponseDetails<T> {
 	private T errorDetails;
 	private String path;
 
+	@Builder
 	public ErrorResponseDetails(HttpServletRequest req, HttpStatus httpStatus, String message, T errorDetails) {
 		this.status = httpStatus.value();
 		this.error = httpStatus.name();
