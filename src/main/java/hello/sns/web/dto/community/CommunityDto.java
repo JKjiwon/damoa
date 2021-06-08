@@ -1,5 +1,6 @@
 package hello.sns.web.dto.community;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import hello.sns.entity.community.Community;
 import hello.sns.entity.member.Member;
@@ -34,8 +35,8 @@ public class CommunityDto {
     public CommunityDto(Community community, boolean isJoin) {
         this.communityId = community.getId();
         this.name = community.getName();
-        this.thumbNailImagePath = community.getThumbNailImagePath() != null ? community.getThumbNailImagePath() : "";
-        this.mainImagePath = community.getMainImagePath() != null ? community.getMainImagePath() : "";
+        this.thumbNailImagePath = community.getThumbNailImagePath();
+        this.mainImagePath = community.getMainImagePath();
         this.introduction = community.getIntroduction();
         this.owner = new CommunityOwnerDto(community.getOwner());
         this.category = community.getCategory().getName();

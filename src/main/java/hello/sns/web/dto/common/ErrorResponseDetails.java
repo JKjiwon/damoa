@@ -1,5 +1,6 @@
 package hello.sns.web.dto.common;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 
@@ -22,7 +23,7 @@ public class ErrorResponseDetails<T> {
 	public ErrorResponseDetails(HttpServletRequest req, HttpStatus httpStatus, String message, T errorDetails) {
 		this.status = httpStatus.value();
 		this.error = httpStatus.name();
-		this.message = message != null ? message : "";
+		this.message = message;
 		this.errorDetails = errorDetails;
 		this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM_dd hh:mm:ss"));
 		this.path = req.getRequestURI();
