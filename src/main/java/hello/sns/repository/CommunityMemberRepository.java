@@ -19,14 +19,6 @@ public interface CommunityMemberRepository extends JpaRepository<CommunityMember
     Optional<CommunityMember> findByMemberAndCommunity(
             Member member, Community community);
 
-
     @EntityGraph(attributePaths = {"community", "member"})
     List<CommunityMember> findByMember(@Param("member") Member member);
 }
-
-//    @Query("select cm" +
-//            " from CommunityMember cm" +
-//            " where cm.member=:member and cm.community=:community")
-//    Optional<CommunityMember> findByMemberAndCommunity(
-//            @Param("member") Member member, @Param("community") Community community);
-
