@@ -30,7 +30,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public List<PostImageInfo> uploadPostImages(List<MultipartFile> files) throws FileUploadException{
-        files.stream().forEach(file -> checkImageFile(file));
+        files.forEach(this::checkImageFile);
         List<FileInfo> fileInfos = uploadFiles(files);
 
         return fileInfos.stream()
@@ -62,9 +62,7 @@ public class FileServiceImpl implements FileService {
     }
 
     private void createDirectory() {
-
         StringBuilder dirPath = getDirectory();
-
         File directory = new File(String.valueOf(dirPath));
 
         if (!directory.exists()) {
@@ -85,7 +83,7 @@ public class FileServiceImpl implements FileService {
             file.transferTo(new File(String.valueOf(filePath)));
             return new FileInfo(newFileName, String.valueOf(filePath));
         } catch (IOException e) {
-            throw new FileUploadException("Fail to create file", e);
+            throw new FileUploadException("Fail to create file");
         }
     }
 
