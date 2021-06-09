@@ -12,7 +12,7 @@ import hello.sns.web.dto.post.CreatePostDto;
 import hello.sns.web.dto.post.PostDto;
 import hello.sns.web.dto.post.PostImageInfo;
 import hello.sns.web.exception.business.CommunityNotFoundException;
-import hello.sns.web.exception.business.CommunityNotJoinException;
+import hello.sns.web.exception.business.CommunityNotJoinedException;
 import hello.sns.web.exception.business.FileUploadException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -173,7 +173,7 @@ class PostServiceTest {
         when(communityMemberRepository.existsByMemberAndCommunity(any(), any())).thenReturn(false);
 
         // when & then
-        assertThrows(CommunityNotJoinException.class,
+        assertThrows(CommunityNotJoinedException.class,
                 () -> postService.create(community.getId(), member, createPostDto, null));
 
         // then

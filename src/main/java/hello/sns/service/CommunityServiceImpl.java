@@ -12,10 +12,10 @@ import hello.sns.web.dto.community.CommunityDto;
 import hello.sns.web.dto.community.CreateCommunityDto;
 import hello.sns.web.dto.community.UpdateCommunityDto;
 import hello.sns.web.exception.AccessDeniedException;
-import hello.sns.web.exception.business.CommunityAlreadyJoinException;
-import hello.sns.web.exception.business.CommunityNameDuplicateException;
+import hello.sns.web.exception.business.CommunityAlreadyJoinedException;
+import hello.sns.web.exception.business.CommunityNameDuplicatedException;
 import hello.sns.web.exception.business.CommunityNotFoundException;
-import hello.sns.web.exception.business.CommunityNotJoinException;
+import hello.sns.web.exception.business.CommunityNotJoinedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,7 +75,7 @@ public class CommunityServiceImpl implements CommunityService {
         boolean isExistedName = communityRepository.existsByName(name);
 
         if (isExistedName) {
-            throw new CommunityNameDuplicateException("이미 존재하는 커뮤니티 이름 입니다.");
+            throw new CommunityNameDuplicatedException("이미 존재하는 커뮤니티 이름 입니다.");
         }
     }
 
@@ -154,7 +154,6 @@ public class CommunityServiceImpl implements CommunityService {
         return new CommunityDto(community, true);
     }
 
-
     @Override
     public CommunityDto findById(Long communityId, Member currentMember) {
         Community community = getCommunity(communityId);
@@ -184,7 +183,7 @@ public class CommunityServiceImpl implements CommunityService {
     private void validateMembership(Member currentMember, Community community) {
         Boolean isJoinedMember = communityMemberRepository.existsByMemberAndCommunity(currentMember, community);
         if (isJoinedMember) {
-            throw new CommunityAlreadyJoinException("Already joined member");
+            throw new CommunityAlreadyJoinedException("Already joined member");
         }
     }
 
@@ -195,7 +194,7 @@ public class CommunityServiceImpl implements CommunityService {
 
     private CommunityMember getCommunityMember(Member currentMember, Community community) {
         return communityMemberRepository.findByMemberAndCommunity(currentMember, community)
-                .orElseThrow(() -> new CommunityNotJoinException("Not joined member"));
+                .orElseThrow(() -> new CommunityNotJoinedException("Not joined member"));
     }
 }
 

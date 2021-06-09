@@ -156,7 +156,7 @@ class CommunityServiceTest {
         when(communityRepository.existsByName(any())).thenReturn(true);
 
         // when & then
-        assertThrows(CommunityNameDuplicateException.class,
+        assertThrows(CommunityNameDuplicatedException.class,
                 () -> communityService.create(owner, createCommunityDto, null, null));
 
         verify(communityRepository, times(0)).save(any(Community.class));
@@ -224,7 +224,7 @@ class CommunityServiceTest {
         when(communityMemberRepository.existsByMemberAndCommunity(any(), any())).thenReturn(true);
 
         // when & then
-        assertThrows(CommunityAlreadyJoinException.class,
+        assertThrows(CommunityAlreadyJoinedException.class,
                 () -> communityService.join(any(), community.getId()));
 
         // then
@@ -279,7 +279,7 @@ class CommunityServiceTest {
         when(communityMemberRepository.findByMemberAndCommunity(member, community)).thenReturn(Optional.empty());
 
         // when & then
-        assertThrows(CommunityNotJoinException.class,
+        assertThrows(CommunityNotJoinedException.class,
                 () -> communityService.withdraw(member, community.getId()));
 
         // then
@@ -402,7 +402,7 @@ class CommunityServiceTest {
         when(communityMemberRepository.findByMemberAndCommunity(member, community)).thenReturn(Optional.empty());
 
         // when
-        assertThrows(CommunityNotJoinException.class,
+        assertThrows(CommunityNotJoinedException.class,
                 () -> communityService.update(community.getId(), member, updateCommunityDto, imageFile, imageFile));
     }
 

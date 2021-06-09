@@ -1,7 +1,5 @@
 package hello.sns.web.exception.business;
 
-import hello.sns.web.exception.business.BusinessException;
-
 public class FileDeleteException extends BusinessException {
     public FileDeleteException() {
     }

@@ -15,7 +15,7 @@ import hello.sns.web.dto.post.PostDto;
 import hello.sns.web.dto.post.PostImageInfo;
 import hello.sns.web.exception.AccessDeniedException;
 import hello.sns.web.exception.business.CommunityNotFoundException;
-import hello.sns.web.exception.business.CommunityNotJoinException;
+import hello.sns.web.exception.business.CommunityNotJoinedException;
 import hello.sns.web.exception.business.PostNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -119,7 +119,7 @@ public class PostServiceImpl implements PostService {
     private void validateMembership(Member currentMember, Community community) {
         Boolean isJoinedMember = communityMemberRepository.existsByMemberAndCommunity(currentMember, community);
         if (!isJoinedMember) {
-            throw new CommunityNotJoinException("Not joined member");
+            throw new CommunityNotJoinedException("Not joined member");
         }
     }
 
@@ -130,7 +130,7 @@ public class PostServiceImpl implements PostService {
 
     private CommunityMember getCommunityMember(Member currentMember, Community community) {
         CommunityMember communityMember = communityMemberRepository.findByMemberAndCommunity(currentMember, community)
-                .orElseThrow(() -> new CommunityNotJoinException("Not joined member"));
+                .orElseThrow(() -> new CommunityNotJoinedException("Not joined member"));
         return communityMember;
     }
 }

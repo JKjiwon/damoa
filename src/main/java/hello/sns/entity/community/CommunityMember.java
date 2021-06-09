@@ -1,12 +1,15 @@
 package hello.sns.entity.community;
 
-import static javax.persistence.FetchType.*;
+import hello.sns.entity.BaseTimeEntity;
+import hello.sns.entity.member.Member;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-import hello.sns.entity.BaseTimeEntity;
-import hello.sns.entity.member.Member;
-import lombok.*;
+import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -38,5 +41,9 @@ public class CommunityMember extends BaseTimeEntity {
 
 	public void changeMemberGrade(MemberGrade memberGrade) {
 		this.memberGrade = memberGrade;
+	}
+
+	public boolean isOwnerOrAdmin() {
+		return this.memberGrade.equals(MemberGrade.OWNER) || this.memberGrade.equals(MemberGrade.ADMIN);
 	}
 }

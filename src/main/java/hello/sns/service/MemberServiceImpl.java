@@ -6,7 +6,7 @@ import hello.sns.web.dto.common.FileInfo;
 import hello.sns.web.dto.member.JoinMemberDto;
 import hello.sns.web.dto.member.MemberDto;
 import hello.sns.web.dto.member.UpdateMemberDto;
-import hello.sns.web.exception.business.EmailDuplicateException;
+import hello.sns.web.exception.business.EmailDuplicatedException;
 import hello.sns.web.exception.business.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,7 +36,7 @@ public class MemberServiceImpl implements MemberService{
         boolean isExistedEmail = memberRepository.existsByEmail(email);
 
         if (isExistedEmail) {
-            throw new EmailDuplicateException("이미 존재하는 이메일 입니다.");
+            throw new EmailDuplicatedException("이미 존재하는 이메일 입니다.");
         }
     }
 

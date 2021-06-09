@@ -61,14 +61,6 @@ public class MemberController {
     }
 
     @Data
-    static class EmailDto {
-        @NotBlank(message = "이메일을 입력해주시기 바랍니다.")
-        @Email
-        String email;
-    }
-
-
-    @Data
     @NoArgsConstructor
     @AllArgsConstructor
     static class CheckDto {
