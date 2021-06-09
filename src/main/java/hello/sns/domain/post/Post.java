@@ -48,4 +48,8 @@ public class Post extends BaseTimeEntity {
 		this.writer = writer;
 		this.community = community;
 	}
+
+	public boolean writtenBy(Member member) {
+		return writer.equals(member);
+	}
 }

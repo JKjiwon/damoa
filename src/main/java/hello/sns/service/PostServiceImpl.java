@@ -2,7 +2,6 @@ package hello.sns.service;
 
 import hello.sns.domain.community.Community;
 import hello.sns.domain.community.CommunityMember;
-import hello.sns.domain.community.MemberGrade;
 import hello.sns.domain.member.Member;
 import hello.sns.domain.post.Image;
 import hello.sns.domain.post.Post;
@@ -47,13 +46,9 @@ public class PostServiceImpl implements PostService {
     public PostDto create(Long communityId, Member currentMember,
                           CreatePostDto createPostDto, List<MultipartFile> postImageFiles) {
 
-        // 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던진다.
         Community community = getCommunity(communityId);
-
-        // 가입된 회원이 아니라면 CommunityNotJoinException 던진다.
         validateMembership(currentMember, community);
 
-        // 게시글 생성
         Post post = createPostDto.toEntity(currentMember, community);
         Post savedPost = postRepository.save(post);
 
@@ -62,7 +57,7 @@ public class PostServiceImpl implements PostService {
             List<PostImageInfo> postImageInfos = fileService.uploadPostImages(postImageFiles);
             postImageInfos.stream()
                     .map(postImageInfo -> postImageInfo.toEntity(savedPost))
-                    .forEach(image -> savedPost.addImages(image));
+                    .forEach(savedPost::addImages);
         }
 
         return new PostDto(savedPost);
@@ -71,19 +66,13 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Override
     public void delete(Long communityId, Long postId, Member currentMember) {
-        // 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던진다.
+
         Community community = getCommunity(communityId);
-
         CommunityMember communityMember = getCommunityMember(currentMember, community);
-
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("Not found post"));
+                .orElseThrow(PostNotFoundException::new);
 
-        // 게시글 작성자 이거나, Admin, Owner 등급이라면 삭제 가능
-        boolean isWriter = post.getWriter().equals(currentMember);
-        boolean adminOrOwner = communityMember.getMemberGrade() != MemberGrade.USER;
-
-        if (!isWriter && !adminOrOwner) {
+        if (!post.writtenBy(currentMember) && !communityMember.isOwnerOrAdmin()) {
             throw new AccessDeniedException("Owner, Admin, 작성자만 삭제 할 수 있습니다.");
         }
         // 게시글과 관련된 사진을 모두 삭제하고 게시글 삭제.
@@ -98,39 +87,31 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto findById(Long communityId, Long postId, Member currentMember) {
-
-        // 게시글이 존재하지 않으면 PostNotJoinException 던진다.
         Post post = postRepository.findByIdAndCommunityId(postId, communityId)
-                .orElseThrow(() -> new PostNotFoundException("Not found post"));
-
-        // 내가 좋아요 한 게시글 표시
+                .orElseThrow(PostNotFoundException::new);
         return new PostDto(post);
     }
 
     @Override
     public Page<PostDto> findByAll(Long communityId, Member currentMember, Pageable pageable) {
         Page<Post> posts = postRepository.findAllByCommunityId(communityId, pageable);
-
-        return posts
-                .map(post -> new PostDto(post));
-
+        return posts.map(PostDto::new);
     }
 
     private void validateMembership(Member currentMember, Community community) {
         Boolean isJoinedMember = communityMemberRepository.existsByMemberAndCommunity(currentMember, community);
         if (!isJoinedMember) {
-            throw new CommunityNotJoinedException("Not joined member");
+            throw new CommunityNotJoinedException();
         }
     }
 
     private Community getCommunity(Long communityId) {
         return communityRepository.findById(communityId).orElseThrow(
-                () -> new CommunityNotFoundException("Not found community"));
+                CommunityNotFoundException::new);
     }
 
     private CommunityMember getCommunityMember(Member currentMember, Community community) {
-        CommunityMember communityMember = communityMemberRepository.findByMemberAndCommunity(currentMember, community)
-                .orElseThrow(() -> new CommunityNotJoinedException("Not joined member"));
-        return communityMember;
+        return communityMemberRepository.findByMemberAndCommunity(currentMember, community)
+                .orElseThrow(CommunityNotJoinedException::new);
     }
 }
