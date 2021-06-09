@@ -57,7 +57,7 @@ public class PostServiceImpl implements PostService {
         Post post = createPostDto.toEntity(currentMember, community);
         Post savedPost = postRepository.save(post);
 
-        // 사진 업로드 - 게시글과 사진은 생명주가기 같다. -> Cascade.All, orphanremoval = true 로 설정
+        // 사진 업로드 - 게시글과 사진은 생명주가기 같다. -> Cascade.Persist 로 설정
         if (postImageFiles != null && !postImageFiles.isEmpty()) {
             List<PostImageInfo> postImageInfos = fileService.uploadPostImages(postImageFiles);
             postImageInfos.stream()
