@@ -1,6 +1,6 @@
 package hello.sns.service;
 
-import hello.sns.entity.member.Member;
+import hello.sns.domain.member.Member;
 import hello.sns.web.dto.post.CreatePostDto;
 import hello.sns.web.dto.post.PostDto;
 import org.springframework.data.domain.Page;

@@ -1,4 +1,4 @@
-package hello.sns.entity;
+package hello.sns.domain;
 
 import java.time.LocalDateTime;
 

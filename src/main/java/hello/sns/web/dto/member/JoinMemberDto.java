@@ -1,13 +1,12 @@
 package hello.sns.web.dto.member;
 
-import hello.sns.entity.member.Member;
-import hello.sns.entity.member.MemberRole;
+import hello.sns.domain.member.Member;
+import hello.sns.domain.member.MemberRole;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
 
 @Data

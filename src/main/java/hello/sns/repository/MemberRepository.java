@@ -1,6 +1,6 @@
 package hello.sns.repository;
 
-import hello.sns.entity.member.Member;
+import hello.sns.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

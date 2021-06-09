@@ -1,6 +1,6 @@
 package hello.sns.web.controller;
 
-import hello.sns.entity.member.Member;
+import hello.sns.domain.member.Member;
 import hello.sns.service.CommentService;
 import hello.sns.web.dto.common.CurrentMember;
 import hello.sns.web.dto.post.CreateCommentDto;

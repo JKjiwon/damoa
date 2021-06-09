@@ -1,6 +1,6 @@
 package hello.sns.service;
 
-import hello.sns.entity.member.Member;
+import hello.sns.domain.member.Member;
 import hello.sns.web.dto.member.JoinMemberDto;
 import hello.sns.web.dto.member.MemberDto;
 import hello.sns.web.dto.member.UpdateMemberDto;

@@ -1,5 +1,8 @@
 package hello.sns.web.dto.community;
 
+import hello.sns.domain.category.Category;
+import hello.sns.domain.community.Community;
+import hello.sns.domain.member.Member;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -21,4 +24,14 @@ public class CreateCommunityDto {
 
     @NotBlank(message = "카테고리를 입력해주시기 바랍니다.")
     private String category;
+
+    public Community toEntity(Member member, Category category) {
+        return Community.builder()
+                .name(name)
+                .introduction(introduction)
+                .owner(member)
+                .category(category)
+                .build();
+    }
 }
+

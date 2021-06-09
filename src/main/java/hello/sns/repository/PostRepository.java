@@ -1,6 +1,6 @@
 package hello.sns.repository;
 
-import hello.sns.entity.post.Post;
+import hello.sns.domain.post.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;

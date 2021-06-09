@@ -1,6 +1,6 @@
 package hello.sns.service;
 
-import hello.sns.entity.category.Category;
+import hello.sns.domain.category.Category;
 import hello.sns.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

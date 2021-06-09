@@ -1,4 +1,4 @@
-package hello.sns.entity.community;
+package hello.sns.domain.community;
 
 public enum MemberGrade {
     OWNER, ADMIN, USER

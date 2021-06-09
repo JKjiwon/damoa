@@ -1,6 +1,6 @@
 package hello.sns.security;
 
-import hello.sns.entity.member.Member;
+import hello.sns.domain.member.Member;
 import hello.sns.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

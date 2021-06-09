@@ -1,11 +1,11 @@
 package hello.sns.service;
 
-import hello.sns.entity.community.Community;
-import hello.sns.entity.community.CommunityMember;
-import hello.sns.entity.community.MemberGrade;
-import hello.sns.entity.member.Member;
-import hello.sns.entity.post.Image;
-import hello.sns.entity.post.Post;
+import hello.sns.domain.community.Community;
+import hello.sns.domain.community.CommunityMember;
+import hello.sns.domain.community.MemberGrade;
+import hello.sns.domain.member.Member;
+import hello.sns.domain.post.Image;
+import hello.sns.domain.post.Post;
 import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
 import hello.sns.repository.ImageRepository;

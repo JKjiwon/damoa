@@ -1,6 +1,6 @@
 package hello.sns.web.controller;
 
-import hello.sns.entity.member.Member;
+import hello.sns.domain.member.Member;
 import hello.sns.service.CommunityServiceImpl;
 import hello.sns.web.dto.common.CurrentMember;
 import hello.sns.web.dto.community.CommunityDto;
@@ -9,7 +9,6 @@ import hello.sns.web.dto.community.UpdateCommunityDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/communities")

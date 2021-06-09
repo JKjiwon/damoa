@@ -1,4 +1,4 @@
-package hello.sns.entity.post;
+package hello.sns.domain.post;
 
 import static javax.persistence.FetchType.*;
 
@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import hello.sns.entity.member.Member;
+import hello.sns.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

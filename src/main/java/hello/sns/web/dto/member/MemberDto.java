@@ -1,6 +1,6 @@
 package hello.sns.web.dto.member;
 
-import hello.sns.entity.member.Member;
+import hello.sns.domain.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package hello.sns.entity.category;
+package hello.sns.domain.category;
 
 import static javax.persistence.FetchType.*;
 
@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import hello.sns.entity.member.Member;
+import hello.sns.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

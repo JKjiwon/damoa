@@ -1,9 +1,9 @@
 package hello.sns.service;
 
-import hello.sns.entity.community.CommunityMember;
-import hello.sns.entity.member.Member;
-import hello.sns.entity.post.Comment;
-import hello.sns.entity.post.Post;
+import hello.sns.domain.community.CommunityMember;
+import hello.sns.domain.member.Member;
+import hello.sns.domain.post.Comment;
+import hello.sns.domain.post.Post;
 import hello.sns.repository.CommentRepository;
 import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.PostRepository;

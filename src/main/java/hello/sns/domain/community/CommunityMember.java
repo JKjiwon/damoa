@@ -1,7 +1,7 @@
-package hello.sns.entity.community;
+package hello.sns.domain.community;
 
-import hello.sns.entity.BaseTimeEntity;
-import hello.sns.entity.member.Member;
+import hello.sns.domain.BaseTimeEntity;
+import hello.sns.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -45,5 +45,9 @@ public class CommunityMember extends BaseTimeEntity {
 
 	public boolean isOwnerOrAdmin() {
 		return this.memberGrade.equals(MemberGrade.OWNER) || this.memberGrade.equals(MemberGrade.ADMIN);
+	}
+
+	public boolean isOwner() {
+		return this.memberGrade.equals(MemberGrade.OWNER);
 	}
 }

@@ -1,10 +1,10 @@
 package hello.sns.service;
 
-import hello.sns.entity.category.Category;
-import hello.sns.entity.community.Community;
-import hello.sns.entity.community.CommunityMember;
-import hello.sns.entity.community.MemberGrade;
-import hello.sns.entity.member.Member;
+import hello.sns.domain.category.Category;
+import hello.sns.domain.community.Community;
+import hello.sns.domain.community.CommunityMember;
+import hello.sns.domain.community.MemberGrade;
+import hello.sns.domain.member.Member;
 import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
 import hello.sns.web.dto.common.FileInfo;
@@ -114,7 +114,7 @@ class CommunityServiceTest {
     public void createCommunityTest_Success() {
 
         // given
-        community.joinCommunityMembers(owner, MemberGrade.OWNER);
+        community.join(owner, MemberGrade.OWNER);
 
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
@@ -134,7 +134,7 @@ class CommunityServiceTest {
     public void createCommunityWithImageTest_Success() {
 
         // given
-        community.joinCommunityMembers(owner, MemberGrade.OWNER);
+        community.join(owner, MemberGrade.OWNER);
 
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
@@ -185,7 +185,7 @@ class CommunityServiceTest {
 
         // given
         // 현재 communityMember 에 owner 이 포함
-        community.joinCommunityMembers(owner, MemberGrade.OWNER);
+        community.join(owner, MemberGrade.OWNER);
 
         when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
         when(communityMemberRepository.existsByMemberAndCommunity(member, community)).thenReturn(false);
@@ -238,8 +238,8 @@ class CommunityServiceTest {
 
         // given
         // 현재 communityMember 에 owner, member 이 포함
-        community.joinCommunityMembers(owner, MemberGrade.OWNER);
-        community.joinCommunityMembers(member, MemberGrade.USER);
+        community.join(owner, MemberGrade.OWNER);
+        community.join(member, MemberGrade.USER);
 
         when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
         when(communityMemberRepository.findByMemberAndCommunity(member, community))
@@ -292,7 +292,7 @@ class CommunityServiceTest {
     public void withdrawCommunityWithOwnerMember_Fail(){
 
         // given
-        community.joinCommunityMembers(owner, MemberGrade.OWNER);
+        community.join(owner, MemberGrade.OWNER);
 
         when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
         when(communityMemberRepository.findByMemberAndCommunity(owner, community)).thenReturn(Optional.of(community.getCommunityMembers().get(0)));
@@ -316,7 +316,7 @@ class CommunityServiceTest {
                 .category("친목")
                 .introduction("같이 떠들어 봅시다.!!")
                 .build();
-        community.joinCommunityMembers(owner, MemberGrade.OWNER);
+        community.join(owner, MemberGrade.OWNER);
 
         when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
         when(communityMemberRepository.findByMemberAndCommunity(owner, community))
@@ -342,7 +342,7 @@ class CommunityServiceTest {
     @DisplayName("이미지(Thumbnail, Main)가 2개 있고, 필수 입력값(introduction, category)이 주어졌을 경우 커뮤니티 수정 성공")
     public void updateCommunityWithImage_Success() {
         // given
-        community.joinCommunityMembers(owner, MemberGrade.OWNER);
+        community.join(owner, MemberGrade.OWNER);
 
         when(fileService.uploadImage(imageFile)).thenReturn(imageFileInfo);
         when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
@@ -364,7 +364,7 @@ class CommunityServiceTest {
     public void updateCommunityWithFileUploadFail_Fail() {
 
         // given
-        community.joinCommunityMembers(owner, MemberGrade.OWNER);
+        community.join(owner, MemberGrade.OWNER);
 
         when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
         when(communityMemberRepository.findByMemberAndCommunity(owner, community))
@@ -411,8 +411,8 @@ class CommunityServiceTest {
     public void updateCommunityWithAccessDeniedMember_Fail() {
 
         // given
-        community.joinCommunityMembers(owner, MemberGrade.OWNER);
-        community.joinCommunityMembers(member, MemberGrade.USER);
+        community.join(owner, MemberGrade.OWNER);
+        community.join(member, MemberGrade.USER);
         when(communityRepository.findById(community.getId())).thenReturn(Optional.ofNullable(community));
         when(communityMemberRepository.findByMemberAndCommunity(member, community)).thenReturn(Optional.ofNullable(community.getCommunityMembers().get(1)));
 

@@ -1,8 +1,8 @@
-package hello.sns.entity.post;
+package hello.sns.domain.post;
 
-import hello.sns.entity.BaseTimeEntity;
-import hello.sns.entity.community.Community;
-import hello.sns.entity.member.Member;
+import hello.sns.domain.BaseTimeEntity;
+import hello.sns.domain.community.Community;
+import hello.sns.domain.member.Member;
 import lombok.*;
 
 import javax.persistence.*;

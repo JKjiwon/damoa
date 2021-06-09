@@ -1,4 +1,4 @@
-package hello.sns.entity.member;
+package hello.sns.domain.member;
 
 public enum Sex {
 	MALE, FEMALE

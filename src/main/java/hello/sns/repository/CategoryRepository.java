@@ -1,6 +1,6 @@
 package hello.sns.repository;
 
-import hello.sns.entity.category.Category;
+import hello.sns.domain.category.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

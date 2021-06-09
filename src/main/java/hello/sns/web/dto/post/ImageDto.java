@@ -1,6 +1,6 @@
 package hello.sns.web.dto.post;
 
-import hello.sns.entity.post.Image;
+import hello.sns.domain.post.Image;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

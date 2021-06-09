@@ -1,4 +1,4 @@
-package hello.sns.entity.post;
+package hello.sns.domain.post;
 
 import lombok.*;
 

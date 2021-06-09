@@ -1,9 +1,8 @@
 package hello.sns.web.dto.community;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import hello.sns.entity.community.Community;
-import hello.sns.entity.member.Member;
+import hello.sns.domain.community.Community;
+import hello.sns.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

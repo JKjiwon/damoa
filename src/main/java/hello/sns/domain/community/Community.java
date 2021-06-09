@@ -1,8 +1,8 @@
-package hello.sns.entity.community;
+package hello.sns.domain.community;
 
-import hello.sns.entity.BaseTimeEntity;
-import hello.sns.entity.category.Category;
-import hello.sns.entity.member.Member;
+import hello.sns.domain.BaseTimeEntity;
+import hello.sns.domain.category.Category;
+import hello.sns.domain.member.Member;
 import hello.sns.web.dto.common.FileInfo;
 import lombok.*;
 
@@ -47,12 +47,12 @@ public class Community extends BaseTimeEntity {
 	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true)
 	private final List<CommunityMember> communityMembers = new ArrayList<>();
 
-	public void joinCommunityMembers(Member member, MemberGrade memberGrade) {
+	public void join(Member member, MemberGrade memberGrade) {
 		CommunityMember communityMember = new CommunityMember(this, member, memberGrade);
 		getCommunityMembers().add(communityMember);
 	}
 
-	public void withdrawCommunityMembers(CommunityMember communityMember) {
+	public void withdraw(CommunityMember communityMember) {
 		getCommunityMembers().remove(communityMember);
 	}
 

@@ -1,7 +1,7 @@
-package hello.sns.entity.member;
+package hello.sns.domain.member;
 
-import hello.sns.entity.BaseTimeEntity;
-import hello.sns.entity.community.CommunityMember;
+import hello.sns.domain.BaseTimeEntity;
+import hello.sns.domain.community.CommunityMember;
 import hello.sns.web.dto.common.FileInfo;
 import lombok.*;
 

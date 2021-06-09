@@ -1,10 +1,10 @@
 package hello.sns.service;
 
-import hello.sns.entity.category.Category;
-import hello.sns.entity.community.Community;
-import hello.sns.entity.community.CommunityMember;
-import hello.sns.entity.community.MemberGrade;
-import hello.sns.entity.member.Member;
+import hello.sns.domain.category.Category;
+import hello.sns.domain.community.Community;
+import hello.sns.domain.community.CommunityMember;
+import hello.sns.domain.community.MemberGrade;
+import hello.sns.domain.member.Member;
 import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
 import hello.sns.web.dto.common.FileInfo;
@@ -41,32 +41,22 @@ public class CommunityServiceImpl implements CommunityService {
     public CommunityDto create(Member currentMember,
                                CreateCommunityDto createCommunityDto,
                                MultipartFile mainImage, MultipartFile thumbNailImage) {
+
         checkDuplicatedName(createCommunityDto.getName());
 
         Category category = categoryService.addCategory(createCommunityDto.getCategory());
-        Community community = Community.builder()
-                .name(createCommunityDto.getName())
-                .introduction(createCommunityDto.getName())
-                .owner(currentMember)
-                .category(category)
-                .build();
-
-        // community 영속화
+        Community community = createCommunityDto.toEntity(currentMember, category);
         Community savedCommunity = communityRepository.save(community);
 
-        // update - dirty checking
         if (mainImage != null) {
             FileInfo mainImageFile = fileService.uploadImage(mainImage);
             savedCommunity.changeMainImage(mainImageFile);
         }
-
-        // update - dirty checking
         if (thumbNailImage != null) {
             FileInfo thumbNailImageFile = fileService.uploadImage(thumbNailImage);
             savedCommunity.changeThumbNailImage(thumbNailImageFile);
         }
-
-        savedCommunity.joinCommunityMembers(currentMember, MemberGrade.OWNER);
+        savedCommunity.join(currentMember, MemberGrade.OWNER);
         return new CommunityDto(savedCommunity, true);
     }
 
@@ -75,42 +65,28 @@ public class CommunityServiceImpl implements CommunityService {
         boolean isExistedName = communityRepository.existsByName(name);
 
         if (isExistedName) {
-            throw new CommunityNameDuplicatedException("이미 존재하는 커뮤니티 이름 입니다.");
+            throw new CommunityNameDuplicatedException();
         }
     }
 
     @Transactional
     @Override
     public void join(Member currentMember, Long communityId) {
-
-        // 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던진다.
         Community community = getCommunity(communityId);
-
-        // 이미 가입된 회원이면 CommunityAlreadyJoinException 던진다.
         validateMembership(currentMember, community);
-
-        // 커뮤니티 가입
-        community.joinCommunityMembers(currentMember, MemberGrade.USER);
+        community.join(currentMember, MemberGrade.USER);
     }
-
 
     @Transactional
     @Override
     public void withdraw(Member currentMember, Long communityId) {
-
-        // 커뮤니티가 존재하지 않으면 CommunityNotFoundException 던진다.
         Community community = getCommunity(communityId);
-
-        // 가입된 회원이 아니라면 CommunityNotJoinException 던진다.
-        CommunityMember communityMember = getCommunityMember(currentMember, community);
-
-        // 가입된 회원 등급이 OWNER 라면 AccessDeniedException 던진다.
-        if (communityMember.getMemberGrade().equals(MemberGrade.OWNER)) {
+        CommunityMember communityMember = getMembership(currentMember, community);
+        if (communityMember.isOwner()) {
             throw new AccessDeniedException("Your grade is OWNER. Hand over the community to someone else");
         }
 
-        // 커뮤니티 탈퇴
-        community.withdrawCommunityMembers(communityMember);
+        community.withdraw(communityMember);
 
         // currentMember 의 게시물, 사진 삭제 로직
     }
@@ -122,29 +98,20 @@ public class CommunityServiceImpl implements CommunityService {
                                UpdateCommunityDto updateCommunityDto,
                                MultipartFile mainImage, MultipartFile thumbNailImage) {
 
-        // 커뮤니티 확인
         Community community = getCommunity(communityId);
-
-        // 가입된 회원인지 확인
-        CommunityMember communityMember = getCommunityMember(currentMember, community);
-
-        // 가입된 회원의 등급이 OWNER 이거나 ADMIN 인지 확인
-        MemberGrade memberGrade = communityMember.getMemberGrade();
-        if (!(memberGrade.equals(MemberGrade.OWNER)) && !(memberGrade.equals(MemberGrade.ADMIN))) {
+        CommunityMember communityMember = getMembership(currentMember, community);
+        if (!communityMember.isOwnerOrAdmin()) {
             throw new AccessDeniedException("Not ADMIN or OWNER");
         }
 
-        // 커뮤니티 정보 수정
         Category category = categoryService.addCategory(updateCommunityDto.getCategory());
         community.update(updateCommunityDto.getIntroduction(), category);
 
-        // 커뮤니티 사진 수정
         if (mainImage != null) {
             FileInfo mainImageFile = fileService.uploadImage(mainImage);
             fileService.deleteFile(community.getMainImagePath());
             community.changeMainImage(mainImageFile);
         }
-
         if (thumbNailImage != null) {
             FileInfo thumbNailImageFile = fileService.uploadImage(thumbNailImage);
             fileService.deleteFile(community.getThumbNailImagePath());
@@ -157,11 +124,8 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public CommunityDto findById(Long communityId, Member currentMember) {
         Community community = getCommunity(communityId);
-
         List<CommunityMember> communityMembers = communityMemberRepository.findByMember(currentMember);
-        List<Community> joinedCommunities = communityMembers.stream()
-                .map(CommunityMember::getCommunity)
-                .collect(Collectors.toList());
+        List<Community> joinedCommunities = getJoinedCommunities(communityMembers);
 
         return new CommunityDto(community, joinedCommunities.contains(community));
     }
@@ -169,12 +133,8 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public Page<CommunityDto> findByAll(Member currentMember, Pageable pageable) {
         Page<Community> communities = communityRepository.findAll(pageable);
-
         List<CommunityMember> communityMembers = communityMemberRepository.findByMember(currentMember);
-
-        List<Community> joinedCommunities = communityMembers.stream()
-                .map(CommunityMember::getCommunity)
-                .collect(Collectors.toList());
+        List<Community> joinedCommunities = getJoinedCommunities(communityMembers);
 
         return communities
                 .map(community -> new CommunityDto(community, joinedCommunities.contains(community)));
@@ -183,18 +143,24 @@ public class CommunityServiceImpl implements CommunityService {
     private void validateMembership(Member currentMember, Community community) {
         Boolean isJoinedMember = communityMemberRepository.existsByMemberAndCommunity(currentMember, community);
         if (isJoinedMember) {
-            throw new CommunityAlreadyJoinedException("Already joined member");
+            throw new CommunityAlreadyJoinedException();
         }
     }
 
     private Community getCommunity(Long communityId) {
         return communityRepository.findById(communityId).orElseThrow(
-                () -> new CommunityNotFoundException("Not found community"));
+                CommunityNotFoundException::new);
     }
 
-    private CommunityMember getCommunityMember(Member currentMember, Community community) {
+    private CommunityMember getMembership(Member currentMember, Community community) {
         return communityMemberRepository.findByMemberAndCommunity(currentMember, community)
-                .orElseThrow(() -> new CommunityNotJoinedException("Not joined member"));
+                .orElseThrow(CommunityNotJoinedException::new);
+    }
+
+    private List<Community> getJoinedCommunities(List<CommunityMember> communityMembers) {
+        return communityMembers.stream()
+                .map(CommunityMember::getCommunity)
+                .collect(Collectors.toList());
     }
 }
 
