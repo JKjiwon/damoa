@@ -14,10 +14,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping("/api/communities")
@@ -28,6 +27,7 @@ public class CommunityController {
 
     @PostMapping
     public ResponseEntity createCommunity(
+            HttpServletRequest httpServletRequest,
             @Validated CreateCommunityDto createCommunityDto,
             @RequestPart(value = "mainImage", required = false) MultipartFile mainImage,
             @RequestPart(value = "thumbNailImage", required = false) MultipartFile thumbNailImage,
@@ -36,7 +36,7 @@ public class CommunityController {
         CommunityDto communityDto = communityService.create(currentMember, createCommunityDto,
                 mainImage, thumbNailImage);
 
-        URI uri = new URI("/api/communities/" + communityDto.getCommunityId());
+        URI uri = new URI(httpServletRequest.getRequestURI() + "/" + communityDto.getCommunityId());
         return ResponseEntity.created(uri).body(communityDto);
     }
 

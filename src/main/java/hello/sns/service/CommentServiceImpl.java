@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void create(Long communityId, CreateCommentDto dto, Member currentMember) {
+    public Long create(Long communityId, CreateCommentDto dto, Member currentMember) {
 
         // 커뮤니티에 가입된 회원인지 확인
         validateJoinedMember(communityId, currentMember);
@@ -44,7 +44,7 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = dto.toEntity(post, parent, currentMember);
 
-        commentRepository.save(comment);
+        return commentRepository.save(comment).getId();
     }
 
     @Override

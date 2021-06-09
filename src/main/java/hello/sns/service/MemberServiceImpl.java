@@ -23,11 +23,11 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public MemberDto join(JoinMemberDto joinMemberDto) {
+    public Long join(JoinMemberDto joinMemberDto) {
         checkDuplicatedEmail(joinMemberDto.getEmail());
         Member member = joinMemberDto.toEntity();
-        memberRepository.save(member);
-        return new MemberDto(member);
+        Member savedMember = memberRepository.save(member);
+        return savedMember.getId();
     }
 
     public void checkDuplicatedEmail(String email) {

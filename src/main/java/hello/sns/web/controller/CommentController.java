@@ -9,6 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 @RequiredArgsConstructor
 @RequestMapping("/api/communities/{communityId}/comments")
 @RestController
@@ -17,13 +21,15 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity create(@PathVariable Long communityId,
+    public ResponseEntity create(HttpServletRequest httpServletRequest,
+                                 @PathVariable Long communityId,
                                  @Validated @RequestBody CreateCommentDto createCommentDto,
-                                 @CurrentMember Member currentMember) {
+                                 @CurrentMember Member currentMember) throws URISyntaxException {
 
-        commentService.create(communityId, createCommentDto, currentMember);
+        Long commentId = commentService.create(communityId, createCommentDto, currentMember);
 
-        return ResponseEntity.ok().build();
+        URI uri = new URI(httpServletRequest.getRequestURI() + "/" + commentId);
+        return ResponseEntity.created(uri).build();
     }
 
     @DeleteMapping("/{commentId}")

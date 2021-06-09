@@ -18,7 +18,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Email;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -33,64 +37,28 @@ public class MemberController {
     private final AuthService authService;
 
     @PostMapping
-    public ResponseEntity join(@RequestBody @Validated JoinMemberDto joinMemberDto) {
-        MemberDto memberDto = memberService.join(joinMemberDto);
-
-        WebMvcLinkBuilder selfLinkBuilder = linkTo(MemberController.class);
-        EntityModel<MemberDto> entityModel = EntityModel.of(
-                memberDto,
-                selfLinkBuilder.withSelfRel(),
-                linkTo(methodOn(MemberController.class).login(null)).withRel("login")
-        );
-
-        return ResponseEntity.created(selfLinkBuilder.slash("me").toUri()).body(entityModel); // 나중에 created 로 변경
+    public ResponseEntity join(HttpServletRequest httpServletRequest,
+            @RequestBody @Validated JoinMemberDto joinMemberDto) throws URISyntaxException {
+        Long memberId = memberService.join(joinMemberDto);
+        URI uri = new URI(httpServletRequest.getRequestURI() + "/" + memberId);
+        return ResponseEntity.created(uri).build();
     }
 
     @GetMapping("/{email}/exists")
     public ResponseEntity checkDuplicatedEmail(@PathVariable @Email String email) {
-
         memberService.checkDuplicatedEmail(email);
-
-        EntityModel entityModel = EntityModel.of(
-                new CheckDto(HttpStatus.OK.value(), email),
-                linkTo(methodOn(MemberController.class).checkDuplicatedEmail(email)).withSelfRel(),
-                linkTo(methodOn(MemberController.class).join(null)).withRel("join")
-        );
-        return ResponseEntity.ok(entityModel);
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    static class CheckDto {
-        int status;
-        String email;
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Validated LoginMemberDto loginMemberDto) {
-
         String jwtToken = authService.login(loginMemberDto);
-
-        EntityModel<JwtTokenDto> entityModel = EntityModel.of(
-                new JwtTokenDto(jwtToken),
-                linkTo(methodOn(MemberController.class).login(null)).withSelfRel()
-        );
-
-        return ResponseEntity.ok(entityModel);
+        return ResponseEntity.ok(new JwtTokenDto(jwtToken));
     }
 
     @GetMapping("/me")
-    @Secured("ROLE_USER")
     public ResponseEntity getCurrentUser(@CurrentMember Member currentMember) {
-        EntityModel<MemberDto> entityModel = EntityModel.of(
-                new MemberDto(currentMember),
-                linkTo(methodOn(MemberController.class).getCurrentUser(null)).withSelfRel(),
-                linkTo(MemberController.class).withRel("update"),
-                linkTo(methodOn(MemberController.class).updateProfileImage(null, null)).withRel("updateProfile")
-        );
-
-        return ResponseEntity.ok(entityModel);
+        return ResponseEntity.ok(new MemberDto(currentMember));
     }
 
     @PutMapping("/profile-image")
@@ -98,14 +66,7 @@ public class MemberController {
             @RequestPart("profileImage") MultipartFile profileImage,
             @CurrentMember Member currentMember) {
         MemberDto memberDto = memberService.updateProfileImage(currentMember, profileImage);
-
-        EntityModel<MemberDto> entityModel = EntityModel.of(memberDto,
-                linkTo(methodOn(MemberController.class).updateProfileImage(null, null)).withSelfRel(),
-                linkTo(methodOn(MemberController.class).getCurrentUser(null)).withRel("query"),
-                linkTo(MemberController.class).withRel("update")
-        );
-
-        return ResponseEntity.ok(entityModel);
+        return ResponseEntity.ok(memberDto);
     }
 
     @PatchMapping
@@ -113,12 +74,7 @@ public class MemberController {
                                                   @RequestBody UpdateMemberDto updateMemberDto) {
 
         MemberDto memberDto = memberService.updateMember(currentMember, updateMemberDto);
-        EntityModel<MemberDto> entityModel = EntityModel.of(memberDto,
-                linkTo(methodOn(MemberController.class).updateProfileImage(null, null)).withSelfRel(),
-                linkTo(methodOn(MemberController.class).getCurrentUser(null)).withRel("query"),
-                linkTo(MemberController.class).withRel("update")
-        );
 
-        return ResponseEntity.ok(entityModel);
+        return ResponseEntity.ok(memberDto);
     }
 }

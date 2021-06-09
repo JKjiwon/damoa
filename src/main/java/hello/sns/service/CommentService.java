@@ -5,7 +5,7 @@ import hello.sns.web.dto.post.CreateCommentDto;
 
 public interface CommentService {
 
-    void create(Long communityId, CreateCommentDto createCommentDto, Member currentMember);
+    Long create(Long communityId, CreateCommentDto createCommentDto, Member currentMember);
 
     void delete(Long communityId, Long commentId, Member currentMember);
 

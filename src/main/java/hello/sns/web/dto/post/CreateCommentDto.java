@@ -16,10 +16,10 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateCommentDto {
 
-    @NotBlank
+    @NotBlank(message = "댓글 내용 입력해주시기 바랍니다.")
     private String content;
 
-    @NotNull
+    @NotNull(message = "게시글 번호를 입력해주시기 바랍니다.")
     private Long postId;
 
     private Long parentCommentId;
