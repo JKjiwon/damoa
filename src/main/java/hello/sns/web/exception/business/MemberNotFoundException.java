@@ -1,20 +1,9 @@
 package hello.sns.web.exception.business;
 
-import hello.sns.web.exception.business.BusinessException;
+import org.springframework.http.HttpStatus;
 
 public class MemberNotFoundException extends BusinessException {
     public MemberNotFoundException() {
-    }
-
-    public MemberNotFoundException(String message) {
-        super(message);
-    }
-
-    public MemberNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public MemberNotFoundException(Throwable cause) {
-        super(cause);
+        super(HttpStatus.NOT_FOUND, "Member is Not found.");
     }
 }

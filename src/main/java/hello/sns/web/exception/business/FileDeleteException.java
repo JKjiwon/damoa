@@ -1,18 +1,9 @@
 package hello.sns.web.exception.business;
 
+import org.springframework.http.HttpStatus;
+
 public class FileDeleteException extends BusinessException {
     public FileDeleteException() {
-    }
-
-    public FileDeleteException(String message) {
-        super(message);
-    }
-
-    public FileDeleteException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public FileDeleteException(Throwable cause) {
-        super(cause);
+        super(HttpStatus.INTERNAL_SERVER_ERROR, "File is not deleted");
     }
 }

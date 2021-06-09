@@ -1,21 +1,10 @@
 package hello.sns.web.exception.business;
 
-import hello.sns.web.exception.business.BusinessException;
+import org.springframework.http.HttpStatus;
 
 public class CommunityNotFoundException extends BusinessException {
     public CommunityNotFoundException() {
-    }
-
-    public CommunityNotFoundException(String message) {
-        super(message);
-    }
-
-    public CommunityNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public CommunityNotFoundException(Throwable cause) {
-        super(cause);
+        super(HttpStatus.NOT_FOUND, "Community is not found.");
     }
 }
 

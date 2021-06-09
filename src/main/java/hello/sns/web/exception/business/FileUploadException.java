@@ -1,20 +1,12 @@
 package hello.sns.web.exception.business;
 
-import hello.sns.web.exception.business.BusinessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 public class FileUploadException extends BusinessException {
-    public FileUploadException() {
-    }
 
     public FileUploadException(String message) {
-        super(message);
-    }
-
-    public FileUploadException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public FileUploadException(Throwable cause) {
-        super(cause);
+        super(HttpStatus.BAD_REQUEST, message);
     }
 }

@@ -1,19 +1,11 @@
 package hello.sns.web.exception.business;
 
-public class PostNotFoundException extends BusinessException{
+import org.springframework.http.HttpStatus;
+
+public class PostNotFoundException extends BusinessException {
 
     public PostNotFoundException() {
+        super(HttpStatus.NOT_FOUND, "Post is not found.");
     }
 
-    public PostNotFoundException(String message) {
-        super(message);
-    }
-
-    public PostNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public PostNotFoundException(Throwable cause) {
-        super(cause);
-    }
 }

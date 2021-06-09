@@ -63,7 +63,7 @@ public class CommentServiceImpl implements CommentService {
 
         // 삭제 가능한 회원인지 확인
         if (!comment.writtenBy(currentMember) && !communityMember.isOwnerOrAdmin()) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException("Not allowed");
         }
 
         // 자식댓글이 있으면 숨김 처리, 자식 댓글이 없으면 삭제

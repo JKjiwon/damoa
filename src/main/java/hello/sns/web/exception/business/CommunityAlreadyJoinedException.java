@@ -1,18 +1,9 @@
 package hello.sns.web.exception.business;
 
+import org.springframework.http.HttpStatus;
+
 public class CommunityAlreadyJoinedException extends BusinessException {
     public CommunityAlreadyJoinedException() {
-    }
-
-    public CommunityAlreadyJoinedException(String message) {
-        super(message);
-    }
-
-    public CommunityAlreadyJoinedException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public CommunityAlreadyJoinedException(Throwable cause) {
-        super(cause);
+        super(HttpStatus.BAD_REQUEST, "Member has already joined this community.");
     }
 }

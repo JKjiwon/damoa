@@ -1,18 +1,9 @@
 package hello.sns.web.exception.business;
 
+import org.springframework.http.HttpStatus;
+
 public class CommentNotFoundException extends BusinessException{
     public CommentNotFoundException() {
-    }
-
-    public CommentNotFoundException(String message) {
-        super(message);
-    }
-
-    public CommentNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public CommentNotFoundException(Throwable cause) {
-        super(cause);
+        super(HttpStatus.NOT_FOUND,"Comment is not found.");
     }
 }

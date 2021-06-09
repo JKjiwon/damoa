@@ -1,18 +1,15 @@
 package hello.sns.web.exception.business;
 
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+
+@Getter
 public class BusinessException extends RuntimeException {
 
-    public BusinessException() {
-    }
-    public BusinessException(String message) {
+    HttpStatus httpStatus;
+
+    public BusinessException(HttpStatus httpStatus, String message) {
         super(message);
-    }
-
-    public BusinessException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public BusinessException(Throwable cause) {
-        super(cause);
+        this.httpStatus = httpStatus;
     }
 }

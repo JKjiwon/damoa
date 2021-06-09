@@ -1,10 +1,10 @@
 package hello.sns.web.exception;
 
 import hello.sns.web.dto.common.ErrorResponse;
-import hello.sns.web.dto.common.ErrorResponseDetails;
 import hello.sns.web.exception.business.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -22,52 +22,51 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BusinessException.class)
-    public ErrorResponse handlerBusinessException(BusinessException e, HttpServletRequest req) {
-        e.printStackTrace();
-        return new ErrorResponse(req, HttpStatus.BAD_REQUEST, e.getMessage());
+    public ResponseEntity handlerBusinessException(BusinessException e, HttpServletRequest req) {
+        log.error("handleBusinessException", e);
+        ErrorResponse response = ErrorResponse.of(req, e.getHttpStatus(), e.getMessage());
+        return new ResponseEntity(response, e.getHttpStatus());
     }
 
-    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AccessDeniedException.class)
-    public ErrorResponse handlerAccessDeniedException(AccessDeniedException e, HttpServletRequest req) {
-        e.printStackTrace();
-        return new ErrorResponse(req, HttpStatus.FORBIDDEN, e.getMessage());
+    public ResponseEntity handlerAccessDeniedException(AccessDeniedException e, HttpServletRequest req) {
+        log.error("handlerAccessDeniedException", e);
+        ErrorResponse response = ErrorResponse.of(req, e.getHttpStatus(), e.getMessage());
+        return new ResponseEntity(response, e.getHttpStatus());
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+
     @ExceptionHandler(ConstraintViolationException.class)
-    public ErrorResponse handlerInvalidEmail(ConstraintViolationException e, HttpServletRequest req) {
-        e.printStackTrace();
-        return new ErrorResponse(req, HttpStatus.BAD_REQUEST, "올바른 형식의 이메일을 입력하세요.");
+    public ResponseEntity handlerInvalidEmail(ConstraintViolationException e, HttpServletRequest req) {
+        log.error("handlerInvalidEmail", e);
+        ErrorResponse response = ErrorResponse.of(req, HttpStatus.BAD_REQUEST, "Invalid Email");
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
-
-
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    public ErrorResponseDetails handlerBindException(BindException e,
-                                                     HttpServletRequest req) {
-        e.printStackTrace();
-        return getErrorResponseByBindingResult(req, e.getBindingResult(), HttpStatus.BAD_REQUEST, "유효하지 않은 값이 있습니다.");
+    public ErrorResponse handlerBindException(BindException e,
+                                              HttpServletRequest req) {
+        log.error("handlerBindException", e);
+        return getErrorResponseByBindingResult(req, e.getBindingResult(), HttpStatus.BAD_REQUEST, "Invalid value");
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ErrorResponseDetails handlerMethodArgumentNotValidException(MethodArgumentNotValidException e,
-                                                                       HttpServletRequest req) {
+    public ErrorResponse handlerMethodArgumentNotValidException(MethodArgumentNotValidException e,
+                                                                HttpServletRequest req) {
         e.printStackTrace();
-        return getErrorResponseByBindingResult(req, e.getBindingResult(), HttpStatus.BAD_REQUEST, "유효하지 않은 값이 있습니다.");
+        return getErrorResponseByBindingResult(req, e.getBindingResult(), HttpStatus.BAD_REQUEST, "Invalid values");
     }
 
-    private ErrorResponseDetails getErrorResponseByBindingResult(HttpServletRequest req, BindingResult bindingResult, HttpStatus httpStatus, String message) {
+    private ErrorResponse getErrorResponseByBindingResult(HttpServletRequest req, BindingResult bindingResult, HttpStatus httpStatus, String message) {
 
         Map<String, String> errMap = new HashMap<>();
         for (FieldError error : bindingResult.getFieldErrors()) {
             errMap.put(error.getField(), error.getDefaultMessage());
         }
 
-        return new ErrorResponseDetails(req, httpStatus, message, errMap);
+        return new ErrorResponse(req, httpStatus, message, errMap);
     }
 }
