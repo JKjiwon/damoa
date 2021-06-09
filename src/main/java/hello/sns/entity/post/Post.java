@@ -3,6 +3,8 @@ package hello.sns.entity.post;
 import hello.sns.entity.BaseTimeEntity;
 import hello.sns.entity.community.Community;
 import hello.sns.entity.member.Member;
+import hello.sns.service.FileService;
+import hello.sns.service.ImageService;
 import lombok.*;
 
 import javax.persistence.*;
@@ -47,5 +49,17 @@ public class Post extends BaseTimeEntity {
 		this.content = content;
 		this.writer = writer;
 		this.community = community;
+	}
+
+	public boolean writtenBy(Member member) {
+		return this.writer.equals(member);
+	}
+
+	public void deleteImages(FileService fileService, ImageService imageService) {
+		images.stream()
+				.map(Image::getPath)
+				.forEach(fileService::deleteFile);
+
+		imageService.deletePostAllImages(this.id);
 	}
 }

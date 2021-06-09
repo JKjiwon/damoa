@@ -105,7 +105,7 @@ public class CommunityServiceImpl implements CommunityService {
         CommunityMember communityMember = getCommunityMember(currentMember, community);
 
         // 가입된 회원 등급이 OWNER 라면 AccessDeniedException 던진다.
-        if (communityMember.getMemberGrade().equals(MemberGrade.OWNER)) {
+        if (communityMember.isOwner()) {
             throw new AccessDeniedException("Your grade is OWNER. Hand over the community to someone else");
         }
 
@@ -129,8 +129,7 @@ public class CommunityServiceImpl implements CommunityService {
         CommunityMember communityMember = getCommunityMember(currentMember, community);
 
         // 가입된 회원의 등급이 OWNER 이거나 ADMIN 인지 확인
-        MemberGrade memberGrade = communityMember.getMemberGrade();
-        if (!(memberGrade.equals(MemberGrade.OWNER)) && !(memberGrade.equals(MemberGrade.ADMIN))) {
+        if (!communityMember.isOwnerOrAdmin()) {
             throw new AccessDeniedException("Not ADMIN or OWNER");
         }
 
@@ -183,18 +182,18 @@ public class CommunityServiceImpl implements CommunityService {
     private void validateMembership(Member currentMember, Community community) {
         Boolean isJoinedMember = communityMemberRepository.existsByMemberAndCommunity(currentMember, community);
         if (isJoinedMember) {
-            throw new CommunityAlreadyJoinedException("Already joined member");
+            throw new CommunityAlreadyJoinedException();
         }
     }
 
     private Community getCommunity(Long communityId) {
         return communityRepository.findById(communityId).orElseThrow(
-                () -> new CommunityNotFoundException("Not found community"));
+                CommunityNotFoundException::new);
     }
 
     private CommunityMember getCommunityMember(Member currentMember, Community community) {
         return communityMemberRepository.findByMemberAndCommunity(currentMember, community)
-                .orElseThrow(() -> new CommunityNotJoinedException("Not joined member"));
+                .orElseThrow(CommunityNotJoinedException::new);
     }
 }
 

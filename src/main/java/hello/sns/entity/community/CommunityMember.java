@@ -46,4 +46,8 @@ public class CommunityMember extends BaseTimeEntity {
 	public boolean isOwnerOrAdmin() {
 		return this.memberGrade.equals(MemberGrade.OWNER) || this.memberGrade.equals(MemberGrade.ADMIN);
 	}
+
+	public boolean isOwner() {
+		return this.memberGrade.equals(MemberGrade.OWNER);
+	}
 }
