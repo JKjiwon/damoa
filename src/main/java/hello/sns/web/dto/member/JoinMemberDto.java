@@ -4,6 +4,7 @@ import hello.sns.domain.member.Member;
 import hello.sns.domain.member.MemberRole;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -28,6 +29,7 @@ public class JoinMemberDto {
     private String name;
 
     public Member toEntity() {
+        password = new BCryptPasswordEncoder().encode(password);
         return Member.builder()
                 .email(email)
                 .name(name)
