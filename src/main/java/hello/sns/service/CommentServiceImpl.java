@@ -20,9 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -34,15 +31,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public Long create(Long communityId, CreateCommentDto dto, Member currentMember) {
+    public Long create(Long communityId, Long postId, CreateCommentDto dto, Member currentMember) {
 
         // 커뮤니티에 가입된 회원인지 확인
         validateJoinedMember(communityId, currentMember);
 
-        Post post = postRepository.findById(dto.getPostId())
+        Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
 
-        Comment parent = dto.existsParentCommentId() ? commentRepository.findById(dto.getParentCommentId())
+        Comment parent = dto.existsParentCommentId() ? commentRepository.findOneWithParent(dto.getParentCommentId())
                 .orElseThrow(CommentNotFoundException::new) : null;
 
         // 최상위 parent
@@ -59,12 +56,16 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void delete(Long communityId, Long commentId, Member currentMember) {
+    public void delete(Long communityId, Long postId, Long commentId, Member currentMember){
 
         // 커뮤니티에 가입된 회원인지 확인
         CommunityMember communityMember = getCommunityMember(communityId, currentMember.getId());
 
-        Comment comment = commentRepository.findById(commentId)
+        System.out.println("========================");
+        System.out.println("postId = " + postId);
+        System.out.println("commentId = " + commentId);
+        System.out.println("========================");
+        Comment comment = commentRepository.findOneWithWriterAndChild(postId, commentId)
                 .orElseThrow(CommentNotFoundException::new);
 
         // 삭제 가능한 회원인지 확인
@@ -80,8 +81,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto findById(Long commentId, Member currentMember) {
-        Comment comment = commentRepository.findById(commentId)
+    public CommentDto findAllByPostId(Long postId, Long commentId, Member currentMember) {
+        Comment comment = commentRepository.findOneWithAll(postId, commentId)
                 .orElseThrow(CommentNotFoundException::new);
         return new CommentDto(comment);
     }

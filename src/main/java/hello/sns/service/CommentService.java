@@ -9,11 +9,11 @@ import org.springframework.data.domain.Pageable;
 
 public interface CommentService {
 
-    Long create(Long communityId, CreateCommentDto createCommentDto, Member currentMember);
+    Long create(Long communityId, Long postId, CreateCommentDto createCommentDto, Member currentMember);
 
-    void delete(Long communityId, Long commentId, Member currentMember);
+    void delete(Long communityId, Long postId, Long commentId, Member currentMember);
 
-    CommentDto findById(Long commentId, Member currentMember);
+    CommentDto findAllByPostId(Long postId, Long commentId, Member currentMember);
 
     Page<CommentDto> findAll(Long commentId, Member currentMember, Pageable pageable);
 

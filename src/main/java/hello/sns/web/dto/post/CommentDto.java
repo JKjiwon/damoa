@@ -18,6 +18,8 @@ public class CommentDto {
 
     private String content;
 
+    private Long postId;
+
     private CommentWriterDto writer;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -31,6 +33,7 @@ public class CommentDto {
     public CommentDto(Comment comment) {
         this.id = comment.getId();
         this.content = comment.getContent();
+        this.postId = comment.getPost().getId();
         this.writer = new CommentWriterDto(comment.getWriter());
         this.parentId = comment.getParent() != null ? comment.getParent().getId() : null;
         this.subComments = comment.getChild().stream()

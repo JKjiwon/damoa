@@ -15,7 +15,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/communities/{communityId}/comments")
+@RequestMapping("/api/communities/{communityId}/posts/{postId}/comments")
 @RestController
 public class CommentController {
 
@@ -24,10 +24,11 @@ public class CommentController {
     @PostMapping
     public ResponseEntity create(HttpServletRequest httpServletRequest,
                                  @PathVariable Long communityId,
+                                 @PathVariable Long postId,
                                  @Validated @RequestBody CreateCommentDto createCommentDto,
                                  @CurrentMember Member currentMember) throws URISyntaxException {
 
-        Long commentId = commentService.create(communityId, createCommentDto, currentMember);
+        Long commentId = commentService.create(communityId, postId, createCommentDto, currentMember);
 
         URI uri = new URI(httpServletRequest.getRequestURI() + "/" + commentId);
         return ResponseEntity.created(uri).build();
@@ -35,20 +36,22 @@ public class CommentController {
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity delete(@PathVariable Long communityId,
+                                 @PathVariable Long postId,
                                  @PathVariable Long commentId,
                                  @CurrentMember Member currentMember) {
 
-        commentService.delete(communityId, commentId, currentMember);
+        commentService.delete(communityId, postId, commentId, currentMember);
 
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{commentId}")
-    public ResponseEntity findById(@PathVariable Long communityId,
-                                   @PathVariable Long commentId,
-                                   @CurrentMember Member currentMember) {
+    public ResponseEntity findAllByPostId(@PathVariable Long communityId,
+                                          @PathVariable Long postId,
+                                          @PathVariable Long commentId,
+                                          @CurrentMember Member currentMember) {
 
-        CommentDto commentDto = commentService.findById(commentId, currentMember);
+        CommentDto commentDto = commentService.findAllByPostId(postId, commentId, currentMember);
         return ResponseEntity.ok(commentDto);
     }
 }

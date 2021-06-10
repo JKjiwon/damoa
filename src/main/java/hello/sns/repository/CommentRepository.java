@@ -14,15 +14,41 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
-    @Query("delete from Comment c" +
+    @Query("delete" +
+            " from Comment c" +
             " where c.parent.id = :id")
     void deleteByParentId(@Param("id") Long id);
 
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
-    @Query("delete from Comment c where c.id = :id")
+    @Query("delete" +
+            " from Comment c" +
+            " where c.id = :id")
     void deleteById(@Param("id") Long id);
 
-    @EntityGraph(attributePaths = {"child", "parent", "writer"})
-    Optional<Comment> findById(Long commentId);
+    @Query("select c" +
+            " from Comment c" +
+            " join fetch c.parent" +
+            " where c.id = :commentId")
+    Optional<Comment> findOneWithParent(@Param("commentId") Long commentId);
+
+    @Query("select c" +
+            " from Comment c" +
+            " join fetch c.writer" +
+            " join fetch c.child" +
+            " where c.id = :commentId and c.post.id = :postId")
+    Optional<Comment> findOneWithWriterAndChild(
+            @Param("postId") Long postId,
+            @Param("commentId") Long commentId);
+
+    @Query("select c" +
+            " from Comment c" +
+            " join fetch c.writer" +
+            " join fetch c.child" +
+            " join fetch c.parent " +
+            " join fetch c.post" +
+            " where c.id = :commentId and c.post.id = :postId")
+    Optional<Comment>findOneWithAll(
+            @Param("postId") Long postId,
+            @Param("commentId") Long commentId);
 }

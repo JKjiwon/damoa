@@ -14,7 +14,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id", callSuper = false)
 public class Comment extends BaseTimeEntity {
 
 	@Id
