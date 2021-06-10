@@ -36,11 +36,8 @@ public class CommentServiceImpl implements CommentService {
         Post post = postRepository.findById(dto.getPostId())
                 .orElseThrow(PostNotFoundException::new);
 
-        Comment parent = null;
-        if (dto.existsParentCommentId()) {
-            parent = commentRepository.findById(dto.getParentCommentId())
-                    .orElseThrow(CommentNotFoundException::new);
-        }
+        Comment parent = dto.existsParentCommentId() ? commentRepository.findById(dto.getParentCommentId())
+                .orElseThrow(CommentNotFoundException::new) : null;
 
         Comment comment = dto.toEntity(post, parent, currentMember);
 
@@ -73,6 +70,8 @@ public class CommentServiceImpl implements CommentService {
             commentRepository.delete(comment);
         }
     }
+
+    
 
     private void validateJoinedMember(Long communityId, Member currentMember) {
         boolean isJoinedMember = communityMemberRepository

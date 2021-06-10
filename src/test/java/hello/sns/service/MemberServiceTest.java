@@ -104,15 +104,13 @@ class MemberServiceTest {
         // given
         Member member = joinMemberDto.toEntity();
         when(memberRepository.save(any())).thenReturn(member);
-        when(passwordEncoder.encode(any())).thenReturn(any());
 
         // when
-        MemberDto memberDto = memberService.join(joinMemberDto);
+        Long memberId = memberService.join(joinMemberDto);
 
         // then
         verify(memberRepository).save(any(Member.class));
-        assertThat(memberDto.getEmail()).isEqualTo(joinMemberDto.getEmail());
-        assertThat(memberDto.getName()).isEqualTo(joinMemberDto.getName());
+        assertThat(memberId).isEqualTo(member.getId());
     }
 
     @DisplayName("회원 생성시 중복된 이메일이 있을 경우 DuplicatedEmailException을 던지며 회원가입 실패")

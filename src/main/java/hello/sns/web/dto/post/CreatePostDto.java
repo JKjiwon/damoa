@@ -16,10 +16,6 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreatePostDto {
 
-    @Length(min = 1, max = 40, message = "최소 {min}자 이상 최대 {max}자 이하로 입력해주시기 바랍니다.")
-    @NotBlank(message = "게시글 제목을 입력해주시기 바랍니다.")
-    private String title;
-
     @Length(min = 10, message = "최소 {min}자 이상으로 입력해주시기 바랍니다.")
     @NotBlank(message = "게시글 내용을 입력해주시기 바랍니다.")
     private String content;
@@ -29,7 +25,6 @@ public class CreatePostDto {
         return Post.builder()
                 .writer(writer)
                 .community(community)
-                .title(title)
                 .content(content)
                 .build();
     }

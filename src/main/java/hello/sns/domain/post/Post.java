@@ -22,8 +22,6 @@ public class Post extends BaseTimeEntity {
 	@Column(name = "post_id")
 	private Long id;
 
-	private String title;
-
 	private String content;
 
 	@ManyToOne(fetch = LAZY)
@@ -42,8 +40,7 @@ public class Post extends BaseTimeEntity {
 	}
 
 	@Builder
-	public Post(String title, String content, Member writer, Community community) {
-		this.title = title;
+	public Post(String content, Member writer, Community community) {
 		this.content = content;
 		this.writer = writer;
 		this.community = community;

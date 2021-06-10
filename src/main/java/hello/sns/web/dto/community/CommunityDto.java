@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Data
 @AllArgsConstructor
@@ -31,7 +33,7 @@ public class CommunityDto {
     @JsonProperty("isJoin")
     private boolean isJoin;
 
-    public CommunityDto(Community community, boolean isJoin) {
+    public CommunityDto(Community community, List<Community> joinedCommunities) {
         this.communityId = community.getId();
         this.name = community.getName();
         this.thumbNailImagePath = community.getThumbNailImagePath();
@@ -39,7 +41,18 @@ public class CommunityDto {
         this.introduction = community.getIntroduction();
         this.owner = new CommunityOwnerDto(community.getOwner());
         this.category = community.getCategory().getName();
-        this.isJoin = isJoin;
+        this.isJoin = joinedCommunities.contains(community);
+    }
+
+    public CommunityDto(Community community) {
+        this.communityId = community.getId();
+        this.name = community.getName();
+        this.thumbNailImagePath = community.getThumbNailImagePath();
+        this.mainImagePath = community.getMainImagePath();
+        this.introduction = community.getIntroduction();
+        this.owner = new CommunityOwnerDto(community.getOwner());
+        this.category = community.getCategory().getName();
+        this.isJoin = true;
     }
 
     @Data

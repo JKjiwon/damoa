@@ -9,6 +9,7 @@ import hello.sns.web.dto.member.UpdateMemberDto;
 import hello.sns.web.exception.business.EmailDuplicatedException;
 import hello.sns.web.exception.business.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,7 @@ public class MemberServiceImpl implements MemberService {
     private final FileService fileService;
 
     private final MemberRepository memberRepository;
+
 
     @Transactional
     public Long join(JoinMemberDto joinMemberDto) {

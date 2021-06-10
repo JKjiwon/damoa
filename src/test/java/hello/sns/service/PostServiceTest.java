@@ -96,7 +96,7 @@ class PostServiceTest {
         community.join(owner, MemberGrade.OWNER);
         community.join(member, MemberGrade.USER);
 
-        createPostDto = new CreatePostDto("배영 기록", "50m 1분 달성");
+        createPostDto = new CreatePostDto("배영 기록");
 
         image = new MockMultipartFile(
                 "newImage",

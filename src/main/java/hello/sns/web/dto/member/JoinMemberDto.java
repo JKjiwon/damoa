@@ -37,4 +37,8 @@ public class JoinMemberDto {
                 .role(MemberRole.USER)
                 .build();
     }
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
 }

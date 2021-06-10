@@ -57,7 +57,7 @@ public class CommunityServiceImpl implements CommunityService {
             savedCommunity.changeThumbNailImage(thumbNailImageFile);
         }
         savedCommunity.join(currentMember, MemberGrade.OWNER);
-        return new CommunityDto(savedCommunity, true);
+        return new CommunityDto(savedCommunity);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class CommunityServiceImpl implements CommunityService {
             community.changeThumbNailImage(thumbNailImageFile);
         }
 
-        return new CommunityDto(community, true);
+        return new CommunityDto(community);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class CommunityServiceImpl implements CommunityService {
         List<CommunityMember> communityMembers = communityMemberRepository.findByMember(currentMember);
         List<Community> joinedCommunities = getJoinedCommunities(communityMembers);
 
-        return new CommunityDto(community, joinedCommunities.contains(community));
+        return new CommunityDto(community, joinedCommunities);
     }
 
     @Override
@@ -137,7 +137,7 @@ public class CommunityServiceImpl implements CommunityService {
         List<Community> joinedCommunities = getJoinedCommunities(communityMembers);
 
         return communities
-                .map(community -> new CommunityDto(community, joinedCommunities.contains(community)));
+                .map(community -> new CommunityDto(community, joinedCommunities));
     }
 
     private void validateMembership(Member currentMember, Community community) {
