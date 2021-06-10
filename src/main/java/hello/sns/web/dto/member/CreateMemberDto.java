@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class JoinMemberDto {
+public class CreateMemberDto {
 
     @NotBlank(message = "이메일을 입력해주시기 바랍니다.")
     @Email

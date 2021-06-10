@@ -3,13 +3,12 @@ package hello.sns.service;
 import hello.sns.domain.member.Member;
 import hello.sns.repository.MemberRepository;
 import hello.sns.web.dto.common.FileInfo;
-import hello.sns.web.dto.member.JoinMemberDto;
+import hello.sns.web.dto.member.CreateMemberDto;
 import hello.sns.web.dto.member.MemberDto;
 import hello.sns.web.dto.member.UpdateMemberDto;
 import hello.sns.web.exception.business.EmailDuplicatedException;
 import hello.sns.web.exception.business.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,9 +24,9 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Transactional
-    public Long join(JoinMemberDto joinMemberDto) {
-        checkDuplicatedEmail(joinMemberDto.getEmail());
-        Member member = joinMemberDto.toEntity();
+    public Long join(CreateMemberDto createMemberDto) {
+        checkDuplicatedEmail(createMemberDto.getEmail());
+        Member member = createMemberDto.toEntity();
         Member savedMember = memberRepository.save(member);
         return savedMember.getId();
     }

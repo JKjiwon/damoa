@@ -32,7 +32,7 @@ public class PostDto {
         this.writer = new PostWriterDto(post.getWriter());
 
         this.images = post.getImages().stream()
-                .map(image -> new ImageDto(image))
+                .map(ImageDto::new)
                 .collect(Collectors.toList());
     }
 

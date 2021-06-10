@@ -3,7 +3,7 @@ package hello.sns.service;
 import hello.sns.domain.member.Member;
 import hello.sns.repository.MemberRepository;
 import hello.sns.web.dto.common.FileInfo;
-import hello.sns.web.dto.member.JoinMemberDto;
+import hello.sns.web.dto.member.CreateMemberDto;
 import hello.sns.web.dto.member.MemberDto;
 import hello.sns.web.dto.member.UpdateMemberDto;
 import hello.sns.web.exception.business.FileUploadException;
@@ -45,7 +45,7 @@ class MemberServiceTest {
 
     Member savedMember;
 
-    JoinMemberDto joinMemberDto;
+    CreateMemberDto createMemberDto;
 
     UpdateMemberDto updateMemberDto;
 
@@ -76,7 +76,7 @@ class MemberServiceTest {
                 .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
                 .build();
 
-        joinMemberDto = JoinMemberDto.builder()
+        createMemberDto = CreateMemberDto.builder()
                 .email("user2@email.com")
                 .password("12341234")
                 .name("Jiwon")
@@ -102,11 +102,11 @@ class MemberServiceTest {
     public void joinMemberTest_Success() {
 
         // given
-        Member member = joinMemberDto.toEntity();
+        Member member = createMemberDto.toEntity();
         when(memberRepository.save(any())).thenReturn(member);
 
         // when
-        Long memberId = memberService.join(joinMemberDto);
+        Long memberId = memberService.join(createMemberDto);
 
         // then
         verify(memberRepository).save(any(Member.class));
@@ -118,7 +118,7 @@ class MemberServiceTest {
     public void createMemberTestWithDuplicatedEmail_Fail() {
 
         // given
-        String email = joinMemberDto.getEmail();
+        String email = createMemberDto.getEmail();
         when(memberRepository.existsByEmail(email)).thenReturn(false);
 
         // when & then

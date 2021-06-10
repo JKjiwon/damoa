@@ -5,15 +5,8 @@ import hello.sns.service.AuthService;
 import hello.sns.service.MemberService;
 import hello.sns.web.dto.common.CurrentMember;
 import hello.sns.web.dto.member.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +18,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Validated
 @RestController
@@ -38,8 +30,8 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity join(HttpServletRequest httpServletRequest,
-            @RequestBody @Validated JoinMemberDto joinMemberDto) throws URISyntaxException {
-        Long memberId = memberService.join(joinMemberDto);
+            @RequestBody @Validated CreateMemberDto createMemberDto) throws URISyntaxException {
+        Long memberId = memberService.join(createMemberDto);
         URI uri = new URI(httpServletRequest.getRequestURI() + "/" + memberId);
         return ResponseEntity.created(uri).build();
     }

@@ -3,7 +3,7 @@ package hello.sns.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.sns.repository.MemberRepository;
 import hello.sns.service.MemberServiceImpl;
-import hello.sns.web.dto.member.JoinMemberDto;
+import hello.sns.web.dto.member.CreateMemberDto;
 import hello.sns.web.dto.member.JwtTokenDto;
 import hello.sns.web.dto.member.LoginMemberDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,12 +68,12 @@ class MemberControllerTest{
     }
 
     private void joinMember(String name, String email, String password) {
-        JoinMemberDto joinMemberDto = JoinMemberDto.builder()
+        CreateMemberDto createMemberDto = CreateMemberDto.builder()
                 .name(name)
                 .email(email)
                 .password(password)
                 .build();
-        memberService.join(joinMemberDto);
+        memberService.join(createMemberDto);
     }
 
     private String getAccessToken(String email, String password) throws Exception {
