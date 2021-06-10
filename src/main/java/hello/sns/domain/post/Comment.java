@@ -32,14 +32,16 @@ public class Comment extends BaseTimeEntity {
 	@JoinColumn(name = "post_id")
 	private Post post;
 
-	private boolean isHidden;
-
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "parent_id")
 	private Comment parent;
 
-	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Comment> children = new ArrayList<>();
+	@OneToMany(mappedBy = "parent", cascade = CascadeType.PERSIST)
+	private List<Comment> child = new ArrayList<>();
+
+	public void setParent(Comment parent) {
+		this.parent = parent;
+	}
 
 	@Builder
 	public Comment(String content, Member writer, Post post, Comment parent) {
@@ -47,22 +49,21 @@ public class Comment extends BaseTimeEntity {
 		this.writer = writer;
 		this.post = post;
 		this.parent = parent;
-		this.isHidden = false;
-	}
-
-	public void setHidden(boolean hidden) {
-		isHidden = hidden;
 	}
 
 	public boolean writtenBy(Member member) {
 		return this.writer.equals(member);
 	}
 
-	public boolean existsChildren() {
-		return !children.isEmpty();
+	public boolean existsChild() {
+		return !child.isEmpty();
 	}
 
 	public void addComment(Comment comment) {
-		this.children.add(comment);
+		this.child.add(comment);
+	}
+
+	public void update(String content) {
+		this.content = content;
 	}
 }

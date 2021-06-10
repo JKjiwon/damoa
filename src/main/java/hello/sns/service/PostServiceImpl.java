@@ -69,7 +69,7 @@ public class PostServiceImpl implements PostService {
 
         Community community = getCommunity(communityId);
         CommunityMember communityMember = getCommunityMember(currentMember, community);
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByIdWithAll(postId)
                 .orElseThrow(PostNotFoundException::new);
 
         if (!post.writtenBy(currentMember) && !communityMember.isOwnerOrAdmin()) {
@@ -80,21 +80,23 @@ public class PostServiceImpl implements PostService {
 
         // Cascade.ALL로 설정할 시 Post 1개에 여러개의 Image이 있을 때 Post를 삭제하면 Image 개수 만큼 삭제 쿼리가 나간다.
         // Image 삭제를 벌크 연산으로 쿼리 1번에 해결.
-        imageRepository.deleteByPost(postId);
+        imageRepository.deleteByPostId(postId);
         postRepository.deleteById(postId);
     }
-
 
     @Override
     public PostDto findById(Long communityId, Long postId, Member currentMember) {
         Post post = postRepository.findByIdAndCommunityId(postId, communityId)
                 .orElseThrow(PostNotFoundException::new);
+
+        System.out.println("post.getCreatedAt() = " + post.getCreatedAt());
         return new PostDto(post);
     }
 
     @Override
     public Page<PostDto> findByAll(Long communityId, Member currentMember, Pageable pageable) {
         Page<Post> posts = postRepository.findAllByCommunityId(communityId, pageable);
+
         return posts.map(PostDto::new);
     }
 

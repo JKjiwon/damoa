@@ -5,6 +5,8 @@ import hello.sns.domain.post.Post;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +23,8 @@ public class PostDto {
 
     private List<ImageDto> images;
 
+    private String createAt;
+
     public PostDto(Post post) {
 
         this.id = post.getId();
@@ -34,6 +38,9 @@ public class PostDto {
         this.images = post.getImages().stream()
                 .map(ImageDto::new)
                 .collect(Collectors.toList());
+
+        this.createAt = post.getCreatedAt()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM_dd hh:mm:ss"));
     }
 
     @NoArgsConstructor

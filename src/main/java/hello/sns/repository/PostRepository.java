@@ -13,11 +13,21 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    @EntityGraph(attributePaths = {"writer", "community", "images"})
-    Optional<Post> findById(Long id);
+    @Query("select p" +
+            " from Post p" +
+            " join fetch p.writer" +
+            " join fetch p.community c" +
+            " join fetch p.images" +
+            " where p.id = :postId")
+    Optional<Post> findByIdWithAll(@Param("postId") Long postId);
 
-    @EntityGraph(attributePaths = {"writer", "community", "images"})
-    Optional<Post> findByIdAndCommunityId(Long postId, Long communityId);
+    @Query("select p" +
+            " from Post p" +
+            " join fetch p.writer" +
+            " join fetch p.community c" +
+            " join fetch p.images" +
+            " where p.id = :postId and c.id = :communityId")
+    Optional<Post> findByIdAndCommunityId(@Param("postId") Long postId, @Param("communityId") Long communityId);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("delete from Post p where p.id = :id")

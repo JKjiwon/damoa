@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -57,7 +58,7 @@ public class JwtTokenProvider {
         return Long.parseLong(claims.getSubject());
     }
 
-    public boolean validateToken(String authToken) {
+    public boolean validateToken(String authToken){
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken);
             return true;

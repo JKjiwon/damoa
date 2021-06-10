@@ -10,5 +10,5 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("delete from Image i where i.post.id = :id")
-    void deleteByPost(@Param("id") Long id);
+    void deleteByPostId(@Param("id") Long id);
 }

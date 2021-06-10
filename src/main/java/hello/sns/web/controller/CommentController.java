@@ -3,6 +3,7 @@ package hello.sns.web.controller;
 import hello.sns.domain.member.Member;
 import hello.sns.service.CommentService;
 import hello.sns.web.dto.common.CurrentMember;
+import hello.sns.web.dto.post.CommentDto;
 import hello.sns.web.dto.post.CreateCommentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,5 +43,12 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/{commentId}")
+    public ResponseEntity findById(@PathVariable Long communityId,
+                                   @PathVariable Long commentId,
+                                   @CurrentMember Member currentMember) {
 
+        CommentDto commentDto = commentService.findById(commentId, currentMember);
+        return ResponseEntity.ok(commentDto);
+    }
 }
