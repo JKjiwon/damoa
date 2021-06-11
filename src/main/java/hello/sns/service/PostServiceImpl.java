@@ -1,19 +1,16 @@
 package hello.sns.service;
 
-import hello.sns.domain.community.Community;
 import hello.sns.domain.community.CommunityMember;
 import hello.sns.domain.member.Member;
 import hello.sns.domain.post.Image;
 import hello.sns.domain.post.Post;
 import hello.sns.repository.CommunityMemberRepository;
-import hello.sns.repository.CommunityRepository;
 import hello.sns.repository.ImageRepository;
 import hello.sns.repository.PostRepository;
 import hello.sns.web.dto.post.CreatePostDto;
 import hello.sns.web.dto.post.PostDto;
 import hello.sns.web.dto.post.PostImageInfo;
 import hello.sns.web.exception.AccessDeniedException;
-import hello.sns.web.exception.business.CommunityNotFoundException;
 import hello.sns.web.exception.business.CommunityNotJoinedException;
 import hello.sns.web.exception.business.PostNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +30,6 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
 
-    private final CommunityRepository communityRepository;
-
     private final CommunityMemberRepository communityMemberRepository;
 
     private final FileService fileService;
@@ -43,13 +38,13 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public PostDto create(Long communityId, Member currentMember,
+    public Long create(Long communityId, Member currentMember,
                           CreatePostDto createPostDto, List<MultipartFile> postImageFiles) {
 
-        Community community = getCommunity(communityId);
-        validateMembership(currentMember, community);
+        CommunityMember writer = getMembership(currentMember, communityId);
 
-        Post post = createPostDto.toEntity(currentMember, community);
+        Post post = createPostDto.toEntity(currentMember, writer.getCommunity());
+
         Post savedPost = postRepository.save(post);
 
         // 사진 업로드 - 게시글과 사진은 생명주가기 같다. -> Cascade.Persist 로 설정
@@ -59,20 +54,19 @@ public class PostServiceImpl implements PostService {
                     .map(postImageInfo -> postImageInfo.toEntity(savedPost))
                     .forEach(savedPost::addImages);
         }
-
-        return new PostDto(savedPost);
+        return savedPost.getId();
     }
 
     @Transactional
     @Override
     public void delete(Long communityId, Long postId, Member currentMember) {
 
-        Community community = getCommunity(communityId);
-        CommunityMember communityMember = getCommunityMember(currentMember, community);
+        CommunityMember actor = getMembership(currentMember, communityId);
+
         Post post = postRepository.findByIdWithAll(postId)
                 .orElseThrow(PostNotFoundException::new);
 
-        if (!post.writtenBy(currentMember) && !communityMember.isOwnerOrAdmin()) {
+        if (!post.writtenBy(currentMember) && !actor.isOwnerOrAdmin()) {
             throw new AccessDeniedException("Owner, Admin, 작성자만 삭제 할 수 있습니다.");
         }
         // 게시글과 관련된 사진을 모두 삭제하고 게시글 삭제.
@@ -100,20 +94,8 @@ public class PostServiceImpl implements PostService {
         return posts.map(PostDto::new);
     }
 
-    private void validateMembership(Member currentMember, Community community) {
-        Boolean isJoinedMember = communityMemberRepository.existsByMemberAndCommunity(currentMember, community);
-        if (!isJoinedMember) {
-            throw new CommunityNotJoinedException();
-        }
-    }
-
-    private Community getCommunity(Long communityId) {
-        return communityRepository.findById(communityId).orElseThrow(
-                CommunityNotFoundException::new);
-    }
-
-    private CommunityMember getCommunityMember(Member currentMember, Community community) {
-        return communityMemberRepository.findByMemberAndCommunity(currentMember, community)
+    private CommunityMember getMembership(Member currentMember, Long communityId) {
+        return communityMemberRepository.findByMemberAndCommunityId(currentMember, communityId)
                 .orElseThrow(CommunityNotJoinedException::new);
     }
 }

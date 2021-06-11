@@ -30,9 +30,9 @@ public class PostController {
                                  CreatePostDto createPostDto,
                                  @RequestPart(value = "image", required = false) List<MultipartFile> images) throws URISyntaxException {
 
-            PostDto postDto = postService.create(communityId, currentMember, createPostDto, images);
-        URI uri = new URI(String.format("/api/communities/%d/posts/%d", communityId, postDto.getId()));
-        return ResponseEntity.created(uri).body(postDto);
+        Long postId = postService.create(communityId, currentMember, createPostDto, images);
+        URI uri = new URI(String.format("/api/communities/%d/posts/%d", communityId, postId));
+        return ResponseEntity.created(uri).build();
     }
 
     @GetMapping("/{postId}")

@@ -13,11 +13,11 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    @Query("select p" +
+    @Query("select distinct p" +
             " from Post p" +
             " join fetch p.writer" +
             " join fetch p.community c" +
-            " join fetch p.images" +
+            " left outer join fetch p.images" +
             " where p.id = :postId")
     Optional<Post> findByIdWithAll(@Param("postId") Long postId);
 
@@ -25,7 +25,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             " from Post p" +
             " join fetch p.writer" +
             " join fetch p.community c" +
-            " join fetch p.images" +
+            " left outer join fetch p.images" +
             " where p.id = :postId and c.id = :communityId")
     Optional<Post> findByIdAndCommunityId(@Param("postId") Long postId, @Param("communityId") Long communityId);
 

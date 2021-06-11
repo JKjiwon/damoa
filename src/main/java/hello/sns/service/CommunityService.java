@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface CommunityService {
 
-    CommunityDto create(Member currentMember,
+    Long create(Member currentMember,
                         CreateCommunityDto createCommunityDto,
                         MultipartFile mainImage,
                         MultipartFile thumbNailImage);

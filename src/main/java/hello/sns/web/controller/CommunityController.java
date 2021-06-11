@@ -33,11 +33,11 @@ public class CommunityController {
             @RequestPart(value = "thumbNailImage", required = false) MultipartFile thumbNailImage,
             @CurrentMember Member currentMember) throws URISyntaxException {
 
-        CommunityDto communityDto = communityService.create(currentMember, createCommunityDto,
+        Long communityId = communityService.create(currentMember, createCommunityDto,
                 mainImage, thumbNailImage);
 
-        URI uri = new URI(httpServletRequest.getRequestURI() + "/" + communityDto.getCommunityId());
-        return ResponseEntity.created(uri).body(communityDto);
+        URI uri = new URI(httpServletRequest.getRequestURI() + "/" + communityId);
+        return ResponseEntity.created(uri).build();
     }
 
     @PostMapping("/{communityId}/join")

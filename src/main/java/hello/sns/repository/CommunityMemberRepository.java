@@ -14,16 +14,14 @@ import java.util.Optional;
 @Repository
 public interface CommunityMemberRepository extends JpaRepository<CommunityMember, Long> {
 
-    Boolean existsByMemberAndCommunity(Member member, Community community);
+    boolean existsByMemberAndCommunityId(Member member, Long communityId);
 
-    Optional<CommunityMember> findByMemberAndCommunity(
-            Member member, Community community);
+    @EntityGraph(attributePaths = {"community", "member"})
+    Optional<CommunityMember> findByMemberAndCommunityId(
+            Member member, Long communityId);
 
     Optional<CommunityMember> findByMemberIdAndCommunityId(
-            Long memberId, Long communityId);
-
-    boolean existsByMemberIdAndCommunityId(
-            Long memberId, Long communityId);
+            Long communityId, Long memberId);
 
     @EntityGraph(attributePaths = {"community", "member"})
     List<CommunityMember> findByMember(@Param("member") Member member);

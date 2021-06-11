@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,9 +39,9 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Transactional
     @Override
-    public CommunityDto create(Member currentMember,
-                               CreateCommunityDto createCommunityDto,
-                               MultipartFile mainImage, MultipartFile thumbNailImage) {
+    public Long create(Member currentMember,
+                       CreateCommunityDto createCommunityDto,
+                       MultipartFile mainImage, MultipartFile thumbNailImage) {
 
         checkDuplicatedName(createCommunityDto.getName());
 
@@ -57,7 +58,7 @@ public class CommunityServiceImpl implements CommunityService {
             savedCommunity.changeThumbNailImage(thumbNailImageFile);
         }
         savedCommunity.join(currentMember, MemberGrade.OWNER);
-        return new CommunityDto(savedCommunity);
+        return savedCommunity.getId();
     }
 
     @Override
@@ -72,22 +73,21 @@ public class CommunityServiceImpl implements CommunityService {
     @Transactional
     @Override
     public void join(Member currentMember, Long communityId) {
+        checkJoinedMember(currentMember, communityId);
         Community community = getCommunity(communityId);
-        validateMembership(currentMember, community);
         community.join(currentMember, MemberGrade.USER);
     }
 
     @Transactional
     @Override
     public void withdraw(Member currentMember, Long communityId) {
-        Community community = getCommunity(communityId);
-        CommunityMember communityMember = getMembership(currentMember, community);
-        if (communityMember.isOwner()) {
+        CommunityMember actor = getMembership(currentMember, communityId);
+        if (actor.isOwner()) {
             throw new AccessDeniedException("Your grade is OWNER. Hand over the community to someone else");
         }
 
-        community.withdraw(communityMember);
-
+        Community community = actor.getCommunity();
+        community.withdraw(actor);
         // currentMember 의 게시물, 사진 삭제 로직
     }
 
@@ -98,12 +98,13 @@ public class CommunityServiceImpl implements CommunityService {
                                UpdateCommunityDto updateCommunityDto,
                                MultipartFile mainImage, MultipartFile thumbNailImage) {
 
-        Community community = getCommunity(communityId);
-        CommunityMember communityMember = getMembership(currentMember, community);
-        if (!communityMember.isOwnerOrAdmin()) {
+
+        CommunityMember actor = getMembership(currentMember, communityId);
+        if (!actor.isOwnerOrAdmin()) {
             throw new AccessDeniedException("Not ADMIN or OWNER");
         }
 
+        Community community = actor.getCommunity();
         Category category = categoryService.addCategory(updateCommunityDto.getCategory());
         community.update(updateCommunityDto.getIntroduction(), category);
 
@@ -140,20 +141,13 @@ public class CommunityServiceImpl implements CommunityService {
                 .map(community -> new CommunityDto(community, joinedCommunities));
     }
 
-    private void validateMembership(Member currentMember, Community community) {
-        Boolean isJoinedMember = communityMemberRepository.existsByMemberAndCommunity(currentMember, community);
-        if (isJoinedMember) {
-            throw new CommunityAlreadyJoinedException();
-        }
-    }
-
     private Community getCommunity(Long communityId) {
         return communityRepository.findById(communityId).orElseThrow(
                 CommunityNotFoundException::new);
     }
 
-    private CommunityMember getMembership(Member currentMember, Community community) {
-        return communityMemberRepository.findByMemberAndCommunity(currentMember, community)
+    private CommunityMember getMembership(Member currentMember, Long communityId) {
+        return communityMemberRepository.findByMemberAndCommunityId(currentMember, communityId)
                 .orElseThrow(CommunityNotJoinedException::new);
     }
 
@@ -161,6 +155,14 @@ public class CommunityServiceImpl implements CommunityService {
         return communityMembers.stream()
                 .map(CommunityMember::getCommunity)
                 .collect(Collectors.toList());
+    }
+
+    private void checkJoinedMember(Member member, Long communityId) {
+        boolean isJoinedMember = communityMemberRepository
+                .existsByMemberAndCommunityId(member, communityId);
+        if (isJoinedMember) {
+            throw new CommunityAlreadyJoinedException();
+        }
     }
 }
 

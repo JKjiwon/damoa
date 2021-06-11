@@ -35,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
     public Long create(Long communityId, Long postId, CreateCommentDto dto, Member currentMember) {
 
         // 커뮤니티에 가입된 회원인지 확인
-        validateJoinedMember(communityId, currentMember);
+        checkJoinedMember(currentMember, communityId);
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
@@ -60,13 +60,13 @@ public class CommentServiceImpl implements CommentService {
     public void delete(Long communityId, Long postId, Long commentId, Member currentMember){
 
         // 커뮤니티에 가입된 회원인지 확인
-        CommunityMember communityMember = getCommunityMember(communityId, currentMember.getId());
+        CommunityMember actor = getMembership(currentMember.getId(), communityId);
 
         Comment comment = commentRepository.findOneWithWriterAndChild(commentId, postId)
                 .orElseThrow(CommentNotFoundException::new);
 
         // 삭제 가능한 회원인지 확인
-        if (!comment.writtenBy(currentMember) && !communityMember.isOwnerOrAdmin()) {
+        if (!comment.writtenBy(currentMember) && !actor.isOwnerOrAdmin()) {
             throw new AccessDeniedException("Not allowed");
         }
 
@@ -79,13 +79,13 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void update(Long communityId, Long commentId, UpdateCommentDto updateCommentDto, Member currentMember) {
         // 커뮤니티에 가입된 회원인지 확인
-        CommunityMember communityMember = getCommunityMember(communityId, currentMember.getId());
+        CommunityMember actor = getMembership(currentMember.getId(), communityId);
 
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFoundException::new);
 
         // 삭제 가능한 회원인지 확인
-        if (!comment.writtenBy(currentMember) && !communityMember.isOwnerOrAdmin()) {
+        if (!comment.writtenBy(currentMember) && !actor.isOwnerOrAdmin()) {
             throw new AccessDeniedException("Not allowed");
         }
         comment.update(updateCommentDto.getContent());
@@ -105,15 +105,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
 
-    private void validateJoinedMember(Long communityId, Member currentMember) {
+    private void checkJoinedMember(Member member, Long communityId) {
         boolean isJoinedMember = communityMemberRepository
-                .existsByMemberIdAndCommunityId(currentMember.getId(), communityId);
+                .existsByMemberAndCommunityId(member, communityId);
         if (!isJoinedMember) {
             throw new CommunityNotJoinedException();
         }
     }
 
-    private CommunityMember getCommunityMember(Long communityId, Long memberId) {
+    private CommunityMember getMembership(Long memberId, Long communityId) {
         return communityMemberRepository
                 .findByMemberIdAndCommunityId(memberId, communityId)
                 .orElseThrow(CommunityNotJoinedException::new);
