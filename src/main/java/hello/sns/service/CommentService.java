@@ -18,5 +18,5 @@ public interface CommentService {
 
     Page<CommentListDto> findAllByPostId(Long postId, Member currentMember, Pageable pageable);
 
-    CommentDto findOneWithAll(Long postId, Long commentId, Member currentMember);
+    CommentDto findOneWithAllSubComment(Long postId, Long commentId, Member currentMember);
 }

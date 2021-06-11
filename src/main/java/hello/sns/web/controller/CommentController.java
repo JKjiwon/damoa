@@ -65,7 +65,7 @@ public class CommentController {
                                   @PathVariable Long commentId,
                                   @CurrentMember Member currentMember) {
 
-        CommentDto comment = commentService.findOneWithAll(postId, commentId, currentMember);
+        CommentDto comment = commentService.findOneWithAllSubComment(postId, commentId, currentMember);
         return ResponseEntity.ok(comment);
     }
 

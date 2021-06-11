@@ -98,7 +98,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto findOneWithAll(Long postId, Long commentId, Member currentMember) {
+    public CommentDto findOneWithAllSubComment(Long postId, Long commentId, Member currentMember) {
         Comment comment = commentRepository.findOneWithAll(postId, commentId)
                 .orElseThrow(CommentNotFoundException::new);
         return new CommentDto(comment);
