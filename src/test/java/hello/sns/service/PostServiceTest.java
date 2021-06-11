@@ -2,6 +2,7 @@ package hello.sns.service;
 
 import hello.sns.domain.category.Category;
 import hello.sns.domain.community.Community;
+import hello.sns.domain.community.CommunityMember;
 import hello.sns.domain.community.MemberGrade;
 import hello.sns.domain.member.Member;
 import hello.sns.domain.post.Post;
@@ -9,9 +10,7 @@ import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
 import hello.sns.repository.PostRepository;
 import hello.sns.web.dto.post.CreatePostDto;
-import hello.sns.web.dto.post.PostDto;
 import hello.sns.web.dto.post.PostImageInfo;
-import hello.sns.web.exception.business.CommunityNotFoundException;
 import hello.sns.web.exception.business.CommunityNotJoinedException;
 import hello.sns.web.exception.business.FileUploadException;
 import org.assertj.core.api.Assertions;
@@ -55,6 +54,7 @@ class PostServiceTest {
     Member member;
     Category category;
     Community community;
+    CommunityMember membership;
     CreatePostDto createPostDto;
     MockMultipartFile image;
     PostImageInfo postImageInfo;
@@ -96,6 +96,8 @@ class PostServiceTest {
         community.join(owner, MemberGrade.OWNER);
         community.join(member, MemberGrade.USER);
 
+        membership = new CommunityMember(community, member, MemberGrade.USER);
+
         createPostDto = new CreatePostDto("배영 기록");
 
         image = new MockMultipartFile(
@@ -107,6 +109,7 @@ class PostServiceTest {
         post = createPostDto.toEntity(member, community);
 
         postImageInfo = new PostImageInfo("hello", "2021/06/07/hello", 1);
+
     }
 
     @Test
@@ -114,16 +117,18 @@ class PostServiceTest {
     public void createPostWithoutImage_Success() {
 
         // given
-        when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
-        when(communityMemberRepository.existsByMemberAndCommunity(any(), any())).thenReturn(true);
+        when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
+                .thenReturn(Optional.ofNullable(membership));
         when(postRepository.save(any())).thenReturn(post);
 
         // when
-        PostDto postDto = postService.create(community.getId(), member, createPostDto, null);
+        postService.create(community.getId(), member, createPostDto, null);
 
         // then
         verify(postRepository).save(any());
-        Assertions.assertThat(postDto.getImages().size()).isEqualTo(0);
+        verify(communityMemberRepository).findByMemberAndCommunityId(member, community.getId());
+        verify(fileService, times(0)).uploadPostImages(any());
+
     }
 
     @Test
@@ -134,34 +139,18 @@ class PostServiceTest {
         List<MultipartFile> imageFiles = List.of(image, image);
         List<PostImageInfo> postImageInfos = List.of(postImageInfo, postImageInfo);
 
-        when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
-        when(communityMemberRepository.existsByMemberAndCommunity(any(), any())).thenReturn(true);
+        when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
+                .thenReturn(Optional.ofNullable(membership));
         when(postRepository.save(any())).thenReturn(post);
         when(fileService.uploadPostImages(imageFiles)).thenReturn(postImageInfos);
 
         // when
-        PostDto postDto = postService.create(community.getId(), member, createPostDto, imageFiles);
+        postService.create(community.getId(), member, createPostDto, imageFiles);
 
         // then
-        verify(fileService).uploadPostImages(any());
         verify(postRepository).save(any());
-        Assertions.assertThat(postDto.getImages().size()).isEqualTo(2);
-    }
-
-
-    @Test
-    @DisplayName("해당 커뮤니티가 존재하지 않으면 CommunityNotFoundException를 던지며 게시글 등록 실패")
-    public void createPostWithNotFoundCommunity_Fail() {
-
-        // given
-        when(communityRepository.findById(any())).thenReturn(Optional.empty());
-
-        // when & then
-        assertThrows(CommunityNotFoundException.class,
-                () -> postService.create(community.getId(), member, createPostDto, null));
-
-        // then
-        verify(postRepository, times(0)).save(any());
+        verify(communityMemberRepository).findByMemberAndCommunityId(member, community.getId());
+        verify(fileService, times(1)).uploadPostImages(imageFiles);
     }
 
     @Test
@@ -169,8 +158,8 @@ class PostServiceTest {
     public void createCommunityWithNotJoinedMember_Fail() {
 
         // given
-        when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
-        when(communityMemberRepository.existsByMemberAndCommunity(any(), any())).thenReturn(false);
+        when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
+                .thenReturn(Optional.empty());
 
         // when & then
         assertThrows(CommunityNotJoinedException.class,
@@ -186,8 +175,8 @@ class PostServiceTest {
 
         // given
         List<MultipartFile> imageFiles = List.of(this.image, image);
-        when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
-        when(communityMemberRepository.existsByMemberAndCommunity(any(), any())).thenReturn(true);
+        when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
+                .thenReturn(Optional.ofNullable(membership));
         when(postRepository.save(any())).thenReturn(post);
 
         // when & then

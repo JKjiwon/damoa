@@ -73,8 +73,8 @@ public class CommunityServiceImpl implements CommunityService {
     @Transactional
     @Override
     public void join(Member currentMember, Long communityId) {
-        checkJoinedMember(currentMember, communityId);
         Community community = getCommunity(communityId);
+        checkJoinedMember(currentMember, communityId);
         community.join(currentMember, MemberGrade.USER);
     }
 
