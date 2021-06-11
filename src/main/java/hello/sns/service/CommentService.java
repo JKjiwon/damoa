@@ -2,6 +2,7 @@ package hello.sns.service;
 
 import hello.sns.domain.member.Member;
 import hello.sns.web.dto.post.CommentDto;
+import hello.sns.web.dto.post.CommentListDto;
 import hello.sns.web.dto.post.CreateCommentDto;
 import hello.sns.web.dto.post.UpdateCommentDto;
 import org.springframework.data.domain.Page;
@@ -13,9 +14,7 @@ public interface CommentService {
 
     void delete(Long communityId, Long postId, Long commentId, Member currentMember);
 
-    CommentDto findAllByPostId(Long postId, Long commentId, Member currentMember);
-
-    Page<CommentDto> findAll(Long commentId, Member currentMember, Pageable pageable);
-
     void Update(Long communityId, Long commentId, UpdateCommentDto updateCommentDto, Member currentMember);
+
+    Page<CommentListDto> findAllByPostId(Long postId, Member currentMember, Pageable pageable);
 }

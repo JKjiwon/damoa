@@ -8,6 +8,7 @@ import hello.sns.repository.CommentRepository;
 import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.PostRepository;
 import hello.sns.web.dto.post.CommentDto;
+import hello.sns.web.dto.post.CommentListDto;
 import hello.sns.web.dto.post.CreateCommentDto;
 import hello.sns.web.dto.post.UpdateCommentDto;
 import hello.sns.web.exception.AccessDeniedException;
@@ -61,11 +62,7 @@ public class CommentServiceImpl implements CommentService {
         // 커뮤니티에 가입된 회원인지 확인
         CommunityMember communityMember = getCommunityMember(communityId, currentMember.getId());
 
-        System.out.println("========================");
-        System.out.println("postId = " + postId);
-        System.out.println("commentId = " + commentId);
-        System.out.println("========================");
-        Comment comment = commentRepository.findOneWithWriterAndChild(postId, commentId)
+        Comment comment = commentRepository.findOneWithWriterAndChild(commentId, postId)
                 .orElseThrow(CommentNotFoundException::new);
 
         // 삭제 가능한 회원인지 확인
@@ -74,17 +71,8 @@ public class CommentServiceImpl implements CommentService {
         }
 
         // 자식댓글이 있으면 자식 댓글까지 삭제
-        if (comment.existsChild()) {
-            commentRepository.deleteByParentId(commentId);
-        }
+        commentRepository.deleteByParentId(commentId);
         commentRepository.deleteById(commentId);
-    }
-
-    @Override
-    public CommentDto findAllByPostId(Long postId, Long commentId, Member currentMember) {
-        Comment comment = commentRepository.findOneWithAll(postId, commentId)
-                .orElseThrow(CommentNotFoundException::new);
-        return new CommentDto(comment);
     }
 
     @Transactional
@@ -104,9 +92,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Page<CommentDto> findAll(Long commentId, Member currentMember, Pageable pageable) {
-        Page<Comment> comments = commentRepository.findAll(pageable);
-        return comments.map(CommentDto::new);
+    public Page<CommentListDto> findAllByPostId(Long postId, Member currentMember, Pageable pageable) {
+        Page<Comment> comments = commentRepository.findByPostIdOrderByIdDesc(postId, pageable);
+        return comments.map(CommentListDto::new);
     }
 
     private void validateJoinedMember(Long communityId, Member currentMember) {

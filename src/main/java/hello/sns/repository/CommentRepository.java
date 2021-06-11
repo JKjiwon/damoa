@@ -1,6 +1,8 @@
 package hello.sns.repository;
 
 import hello.sns.domain.post.Comment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,28 +29,29 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     void deleteById(@Param("id") Long id);
 
     @Query("select c" +
-            " from Comment c" +
-            " join fetch c.parent" +
-            " where c.id = :commentId")
-    Optional<Comment> findOneWithParent(@Param("commentId") Long commentId);
+            " from Comment c"+
+            " left outer join fetch c.parent" +
+            " where c.id = :id")
+    Optional<Comment> findOneWithParent(@Param("id") Long commentId);
 
     @Query("select c" +
             " from Comment c" +
-            " join fetch c.writer" +
-            " join fetch c.child" +
+            " left outer join fetch c.writer" +
             " where c.id = :commentId and c.post.id = :postId")
     Optional<Comment> findOneWithWriterAndChild(
-            @Param("postId") Long postId,
-            @Param("commentId") Long commentId);
+            @Param("commentId") Long commentId,
+            @Param("postId") Long postId);
 
-    @Query("select c" +
-            " from Comment c" +
-            " join fetch c.writer" +
-            " join fetch c.child" +
-            " join fetch c.parent " +
-            " join fetch c.post" +
-            " where c.id = :commentId and c.post.id = :postId")
-    Optional<Comment>findOneWithAll(
-            @Param("postId") Long postId,
-            @Param("commentId") Long commentId);
+
+
+    @EntityGraph(attributePaths = {"writer", "parent", "post"})
+    Page<Comment> findByPostIdOrderByIdDesc(Long postId, Pageable pageable);
+
+
+//    @Query("select c" +
+//            " from Comment c" +
+//            " left outer join fetch c.writer" +
+//            " left outer join fetch c.parent " +
+//            " left outer join fetch c.post" +
+//            " where c.post.id = :postId")
 }

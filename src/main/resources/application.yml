@@ -22,7 +22,7 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug
-#  org.hibernate.type: trace
+  org.hibernate.type: trace
 
 app:
   jwtSecret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2ImlsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK

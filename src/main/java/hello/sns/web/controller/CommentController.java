@@ -4,8 +4,11 @@ import hello.sns.domain.member.Member;
 import hello.sns.service.CommentService;
 import hello.sns.web.dto.common.CurrentMember;
 import hello.sns.web.dto.post.CommentDto;
+import hello.sns.web.dto.post.CommentListDto;
 import hello.sns.web.dto.post.CreateCommentDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -45,13 +48,13 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{commentId}")
+    @GetMapping
     public ResponseEntity findAllByPostId(@PathVariable Long communityId,
                                           @PathVariable Long postId,
-                                          @PathVariable Long commentId,
-                                          @CurrentMember Member currentMember) {
+                                          @CurrentMember Member currentMember,
+                                          Pageable pageable) {
 
-        CommentDto commentDto = commentService.findAllByPostId(postId, commentId, currentMember);
-        return ResponseEntity.ok(commentDto);
+        Page<CommentListDto> comments = commentService.findAllByPostId(postId,currentMember, pageable);
+        return ResponseEntity.ok(comments);
     }
 }
