@@ -47,10 +47,14 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Page<Comment> findByPostIdAndLevelOrderByIdDesc(Long postId, Integer level, Pageable pageable);
 
 
-//    @Query("select c" +
-//            " from Comment c" +
-//            " left outer join fetch c.writer" +
-//            " left outer join fetch c.parent " +
-//            " left outer join fetch c.post" +
-//            " where c.post.id = :postId")
+    @Query("select distinct c" +
+            " from Comment c" +
+            " left join fetch c.writer" +
+            " left join fetch c.parent " +
+            " left join fetch c.child " +
+            " left join fetch c.post" +
+            " where c.id = :commentId and c.post.id = :postId")
+    Optional<Comment> findOneWithAll(
+            @Param("postId") Long postId,
+            @Param("commentId") Long commentId);
 }

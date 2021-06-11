@@ -7,6 +7,7 @@ import hello.sns.domain.post.Post;
 import hello.sns.repository.CommentRepository;
 import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.PostRepository;
+import hello.sns.web.dto.post.CommentDto;
 import hello.sns.web.dto.post.CommentListDto;
 import hello.sns.web.dto.post.CreateCommentDto;
 import hello.sns.web.dto.post.UpdateCommentDto;
@@ -95,6 +96,14 @@ public class CommentServiceImpl implements CommentService {
         Page<Comment> comments = commentRepository.findByPostIdAndLevelOrderByIdDesc(postId, 1, pageable);
         return comments.map(CommentListDto::new);
     }
+
+    @Override
+    public CommentDto findOneWithAll(Long postId, Long commentId, Member currentMember) {
+        Comment comment = commentRepository.findOneWithAll(postId, commentId)
+                .orElseThrow(CommentNotFoundException::new);
+        return new CommentDto(comment);
+    }
+
 
     private void validateJoinedMember(Long communityId, Member currentMember) {
         boolean isJoinedMember = communityMemberRepository

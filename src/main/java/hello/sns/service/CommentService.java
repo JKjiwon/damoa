@@ -17,4 +17,6 @@ public interface CommentService {
     void Update(Long communityId, Long commentId, UpdateCommentDto updateCommentDto, Member currentMember);
 
     Page<CommentListDto> findAllByPostId(Long postId, Member currentMember, Pageable pageable);
+
+    CommentDto findOneWithAll(Long postId, Long commentId, Member currentMember);
 }

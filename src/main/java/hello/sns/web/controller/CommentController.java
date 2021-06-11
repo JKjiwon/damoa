@@ -54,7 +54,17 @@ public class CommentController {
                                           @CurrentMember Member currentMember,
                                           Pageable pageable) {
 
-        Page<CommentListDto> comments = commentService.findAllByPostId(postId,currentMember, pageable);
+        Page<CommentListDto> comments = commentService.findAllByPostId(postId, currentMember, pageable);
         return ResponseEntity.ok(comments);
+    }
+
+    @GetMapping("/{commentId}")
+    public ResponseEntity findOne(@PathVariable Long communityId,
+                                  @PathVariable Long postId,
+                                  @PathVariable Long commentId,
+                                  @CurrentMember Member currentMember) {
+
+        CommentDto comment = commentService.findOneWithAll(postId, commentId, currentMember);
+        return ResponseEntity.ok(comment);
     }
 }
