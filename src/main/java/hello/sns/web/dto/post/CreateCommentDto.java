@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
@@ -32,6 +31,9 @@ public class CreateCommentDto {
 
         if (parent != null) {
             parent.addComment(comment);
+            comment.setLevel(2);
+        } else {
+            comment.setLevel(1);
         }
 
         return comment;

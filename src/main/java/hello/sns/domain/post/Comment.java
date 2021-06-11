@@ -24,6 +24,8 @@ public class Comment extends BaseTimeEntity {
 
 	private String content;
 
+	private Integer level;
+
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "member_id")
 	private Member writer;
@@ -44,11 +46,12 @@ public class Comment extends BaseTimeEntity {
 	}
 
 	@Builder
-	public Comment(String content, Member writer, Post post, Comment parent) {
+	public Comment(String content, Member writer, Post post, Comment parent, Integer level) {
 		this.content = content;
 		this.writer = writer;
 		this.post = post;
 		this.parent = parent;
+		this.level = level;
 	}
 
 	public boolean writtenBy(Member member) {
@@ -65,5 +68,9 @@ public class Comment extends BaseTimeEntity {
 
 	public void update(String content) {
 		this.content = content;
+	}
+
+	public void setLevel(Integer level) {
+		this.level = level;
 	}
 }

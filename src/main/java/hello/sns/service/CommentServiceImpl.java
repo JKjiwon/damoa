@@ -7,7 +7,6 @@ import hello.sns.domain.post.Post;
 import hello.sns.repository.CommentRepository;
 import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.PostRepository;
-import hello.sns.web.dto.post.CommentDto;
 import hello.sns.web.dto.post.CommentListDto;
 import hello.sns.web.dto.post.CreateCommentDto;
 import hello.sns.web.dto.post.UpdateCommentDto;
@@ -93,7 +92,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Page<CommentListDto> findAllByPostId(Long postId, Member currentMember, Pageable pageable) {
-        Page<Comment> comments = commentRepository.findByPostIdOrderByIdDesc(postId, pageable);
+        Page<Comment> comments = commentRepository.findByPostIdAndLevelOrderByIdDesc(postId, 1, pageable);
         return comments.map(CommentListDto::new);
     }
 

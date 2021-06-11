@@ -43,9 +43,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             @Param("postId") Long postId);
 
 
-
     @EntityGraph(attributePaths = {"writer", "parent", "post"})
-    Page<Comment> findByPostIdOrderByIdDesc(Long postId, Pageable pageable);
+    Page<Comment> findByPostIdAndLevelOrderByIdDesc(Long postId, Integer level, Pageable pageable);
 
 
 //    @Query("select c" +
