@@ -36,7 +36,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query("select c" +
             " from Comment c" +
-            " left outer join fetch c.writer" +
+            " join fetch c.writer" +
             " where c.id = :commentId and c.post.id = :postId")
     Optional<Comment> findOneWithWriterAndChild(
             @Param("commentId") Long commentId,
@@ -49,12 +49,10 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query("select distinct c" +
             " from Comment c" +
-            " left join fetch c.writer" +
-            " left join fetch c.parent " +
-            " left join fetch c.child " +
-            " left join fetch c.post" +
+            " join fetch c.writer" +
+            " join fetch c.post" +
+            " left outer join fetch c.parent " +
+            " left outer join fetch c.child " +
             " where c.id = :commentId and c.post.id = :postId")
-    Optional<Comment> findOneWithAll(
-            @Param("postId") Long postId,
-            @Param("commentId") Long commentId);
+    Optional<Comment> findOneWithAll(@Param("postId") Long postId, @Param("commentId") Long commentId);
 }

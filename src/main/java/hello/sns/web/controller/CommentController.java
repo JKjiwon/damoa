@@ -6,6 +6,7 @@ import hello.sns.web.dto.common.CurrentMember;
 import hello.sns.web.dto.post.CommentDto;
 import hello.sns.web.dto.post.CommentListDto;
 import hello.sns.web.dto.post.CreateCommentDto;
+import hello.sns.web.dto.post.UpdateCommentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -66,5 +67,15 @@ public class CommentController {
 
         CommentDto comment = commentService.findOneWithAll(postId, commentId, currentMember);
         return ResponseEntity.ok(comment);
+    }
+
+    @PatchMapping("/{commentId}")
+    public ResponseEntity update(@PathVariable Long communityId,
+                                 @PathVariable Long postId,
+                                 @PathVariable Long commentId,
+                                 @Validated @RequestBody UpdateCommentDto updateCommentDto,
+                                 @CurrentMember Member currentMember) {
+        commentService.update(communityId, commentId, updateCommentDto, currentMember);
+        return ResponseEntity.ok().build();
     }
 }

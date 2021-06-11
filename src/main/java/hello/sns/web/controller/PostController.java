@@ -47,7 +47,7 @@ public class PostController {
     public ResponseEntity findAll(@PathVariable("communityId") Long communityId,
                                   @CurrentMember Member currentMember,
                                   Pageable pageable) {
-        Page<PostDto> postDtos = postService.findByAll(communityId, currentMember, pageable);
+        Page<PostDto> postDtos = postService.findByCommunityId(communityId, currentMember, pageable);
         return ResponseEntity.ok(postDtos);
     }
 
@@ -60,6 +60,4 @@ public class PostController {
 
         return ResponseEntity.ok().build();
     }
-
-
 }

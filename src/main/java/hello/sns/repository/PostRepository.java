@@ -21,7 +21,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             " where p.id = :postId")
     Optional<Post> findByIdWithAll(@Param("postId") Long postId);
 
-    @Query("select p" +
+    @Query("select distinct p" +
             " from Post p" +
             " join fetch p.writer" +
             " join fetch p.community c" +
@@ -30,9 +30,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findByIdAndCommunityId(@Param("postId") Long postId, @Param("communityId") Long communityId);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
-    @Query("delete from Post p where p.id = :id")
+    @Query("delete" +
+            " from Post p" +
+            " where p.id = :id")
     void deleteById(@Param("id") Long id);
 
     @EntityGraph(attributePaths = {"writer", "community"})
-    Page<Post> findAllByCommunityId(Long communityId, Pageable pageable);
+    Page<Post> findAllByCommunityIdOrderByIdDesc(Long communityId, Pageable pageable);
 }

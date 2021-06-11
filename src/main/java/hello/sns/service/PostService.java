@@ -18,5 +18,5 @@ public interface PostService {
 
     PostDto findById(Long communityId, Long postId, Member currentMember);
 
-    Page<PostDto> findByAll(Long communityId, Member currentMember, Pageable pageable);
+    Page<PostDto> findByCommunityId(Long communityId, Member currentMember, Pageable pageable);
 }

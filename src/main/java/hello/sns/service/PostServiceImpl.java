@@ -94,8 +94,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<PostDto> findByAll(Long communityId, Member currentMember, Pageable pageable) {
-        Page<Post> posts = postRepository.findAllByCommunityId(communityId, pageable);
+    public Page<PostDto> findByCommunityId(Long communityId, Member currentMember, Pageable pageable) {
+        Page<Post> posts = postRepository.findAllByCommunityIdOrderByIdDesc(communityId, pageable);
 
         return posts.map(PostDto::new);
     }

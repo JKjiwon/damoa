@@ -77,7 +77,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public void Update(Long communityId, Long commentId, UpdateCommentDto updateCommentDto, Member currentMember) {
+    public void update(Long communityId, Long commentId, UpdateCommentDto updateCommentDto, Member currentMember) {
         // 커뮤니티에 가입된 회원인지 확인
         CommunityMember communityMember = getCommunityMember(communityId, currentMember.getId());
 
