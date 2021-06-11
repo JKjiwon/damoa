@@ -21,7 +21,7 @@ public interface CommunityService {
 
     void withdraw(Member currentMember, Long communityId);
 
-    CommunityDto update(Long communityId,
+    void update(Long communityId,
                         Member currentMember,
                         UpdateCommunityDto updateCommunityDto,
                         MultipartFile mainImage, MultipartFile thumbNailImage);

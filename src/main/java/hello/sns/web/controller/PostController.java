@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -25,13 +26,14 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity create(@PathVariable("communityId") Long communityId,
+    public ResponseEntity create(HttpServletRequest httpServletRequest,
+                                 @PathVariable("communityId") Long communityId,
                                  @CurrentMember Member currentMember,
                                  CreatePostDto createPostDto,
                                  @RequestPart(value = "image", required = false) List<MultipartFile> images) throws URISyntaxException {
 
         Long postId = postService.create(communityId, currentMember, createPostDto, images);
-        URI uri = new URI(String.format("/api/communities/%d/posts/%d", communityId, postId));
+        URI uri = new URI(httpServletRequest.getRequestURI() + "/" + postId);
         return ResponseEntity.created(uri).build();
     }
 

@@ -93,7 +93,7 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Transactional
     @Override
-    public CommunityDto update(Long communityId,
+    public void update(Long communityId,
                                Member currentMember,
                                UpdateCommunityDto updateCommunityDto,
                                MultipartFile mainImage, MultipartFile thumbNailImage) {
@@ -118,8 +118,6 @@ public class CommunityServiceImpl implements CommunityService {
             fileService.deleteFile(community.getThumbNailImagePath());
             community.changeThumbNailImage(thumbNailImageFile);
         }
-
-        return new CommunityDto(community);
     }
 
     @Override

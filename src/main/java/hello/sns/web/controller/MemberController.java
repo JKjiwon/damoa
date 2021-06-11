@@ -13,11 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Email;
-
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @Validated
 @RestController
@@ -31,8 +28,8 @@ public class MemberController {
     @PostMapping
     public ResponseEntity join(HttpServletRequest httpServletRequest,
             @RequestBody @Validated CreateMemberDto createMemberDto) throws URISyntaxException {
-        Long memberId = memberService.join(createMemberDto);
-        URI uri = new URI(httpServletRequest.getRequestURI() + "/" + memberId);
+        memberService.join(createMemberDto);
+        URI uri = new URI(httpServletRequest.getRequestURI() + "/me");
         return ResponseEntity.created(uri).build();
     }
 
@@ -64,9 +61,7 @@ public class MemberController {
     @PatchMapping
     public ResponseEntity updateMember(@CurrentMember Member currentMember,
                                                   @RequestBody UpdateMemberDto updateMemberDto) {
-
         MemberDto memberDto = memberService.updateMember(currentMember, updateMemberDto);
-
         return ResponseEntity.ok(memberDto);
     }
 }

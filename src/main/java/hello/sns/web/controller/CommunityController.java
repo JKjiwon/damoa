@@ -66,9 +66,8 @@ public class CommunityController {
             @RequestPart(value = "mainImage", required = false) MultipartFile mainImage,
             @RequestPart(value = "thumbNailImage", required = false) MultipartFile thumbNailImage) {
 
-        CommunityDto communityDto =
-                communityService.update(communityId, currentMember, updateCommunityDto, mainImage, thumbNailImage);
-        return ResponseEntity.ok(communityDto);
+        communityService.update(communityId, currentMember, updateCommunityDto, mainImage, thumbNailImage);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{communityId}")
