@@ -29,4 +29,6 @@ public interface CommunityService {
     CommunityDto findById(Long communityId, Member currentMember);
 
     Page<CommunityDto> findByAll(Member currentMember, Pageable pageable);
+
+    Page<CommunityDto> findByAllSearch(Member currentMember, Pageable pageable, String keyword);
 }

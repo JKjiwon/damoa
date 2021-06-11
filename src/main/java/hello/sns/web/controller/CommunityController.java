@@ -78,18 +78,27 @@ public class CommunityController {
         return ResponseEntity.ok(communityDto);
     }
 
-    @GetMapping
-    public ResponseEntity findAll(
-            @CurrentMember Member currentMember,
-            Pageable pageable) {
-        Page<CommunityDto> communityDtos = communityService.findByAll(currentMember, pageable);
-        return ResponseEntity.ok(communityDtos);
-    }
-
     @GetMapping("/{name}/exists")
     public ResponseEntity checkDuplicatedName(@PathVariable String name) {
         communityService.checkDuplicatedName(name);
         return ResponseEntity.ok().build();
     }
-    // 커뮤니티 검색 기능 - QueryDSL ?? -> 커뮤니티명 + 소개글 + 카테고리명??
+
+    // 커뮤니티 검색 기능 -> QueryDSL -> 커뮤니티명 or 소개글 or 카테고리명 로 검색
+    @GetMapping
+    public ResponseEntity findAllSearch(
+            @CurrentMember Member currentMember,
+            Pageable pageable,
+            String keyword) {
+        Page<CommunityDto> communityDtos = communityService.findByAllSearch(currentMember, pageable, keyword);
+        return ResponseEntity.ok(communityDtos);
+    }
 }
+
+//    @GetMapping
+//    public ResponseEntity findAll(
+//            @CurrentMember Member currentMember,
+//            Pageable pageable) {
+//        Page<CommunityDto> communityDtos = communityService.findByAll(currentMember, pageable);
+//        return ResponseEntity.ok(communityDtos);
+//    }

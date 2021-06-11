@@ -139,6 +139,16 @@ public class CommunityServiceImpl implements CommunityService {
                 .map(community -> new CommunityDto(community, joinedCommunities));
     }
 
+    @Override
+    public Page<CommunityDto> findByAllSearch(Member currentMember, Pageable pageable, String keyword) {
+        Page<Community> communities = communityRepository.search("nci", keyword, pageable);
+        List<CommunityMember> communityMembers = communityMemberRepository.findByMember(currentMember);
+        List<Community> joinedCommunities = getJoinedCommunities(communityMembers);
+
+        return communities
+                .map(community -> new CommunityDto(community, joinedCommunities));
+    }
+
     private Community getCommunity(Long communityId) {
         return communityRepository.findById(communityId).orElseThrow(
                 CommunityNotFoundException::new);

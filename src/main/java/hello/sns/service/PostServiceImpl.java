@@ -70,7 +70,10 @@ public class PostServiceImpl implements PostService {
             throw new AccessDeniedException("Owner, Admin, 작성자만 삭제 할 수 있습니다.");
         }
         // 게시글과 관련된 사진을 모두 삭제하고 게시글 삭제.
-        post.getImages().stream().map(Image::getPath).forEach(fileService::deleteFile);
+        post.getImages()
+                .stream()
+                .map(Image::getPath)
+                .forEach(fileService::deleteFile);
 
         // Cascade.ALL로 설정할 시 Post 1개에 여러개의 Image이 있을 때 Post를 삭제하면 Image 개수 만큼 삭제 쿼리가 나간다.
         // Image 삭제를 벌크 연산으로 쿼리 1번에 해결.
@@ -82,8 +85,6 @@ public class PostServiceImpl implements PostService {
     public PostDto findById(Long communityId, Long postId, Member currentMember) {
         Post post = postRepository.findByIdAndCommunityId(postId, communityId)
                 .orElseThrow(PostNotFoundException::new);
-
-        System.out.println("post.getCreatedAt() = " + post.getCreatedAt());
         return new PostDto(post);
     }
 
