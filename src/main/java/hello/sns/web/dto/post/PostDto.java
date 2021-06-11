@@ -1,5 +1,6 @@
 package hello.sns.web.dto.post;
 
+import hello.sns.domain.community.Community;
 import hello.sns.domain.member.Member;
 import hello.sns.domain.post.Post;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class PostDto {
 
     private String content;
 
-    private String community;
+    private PostCommunityDto community;
 
     private PostWriterDto writer;
 
@@ -31,7 +32,7 @@ public class PostDto {
 
         this.content = post.getContent();
 
-        this.community = post.getCommunity().getName();
+        this.community = new PostCommunityDto(post.getCommunity());
 
         this.writer = new PostWriterDto(post.getWriter());
 
@@ -52,6 +53,18 @@ public class PostDto {
         public PostWriterDto(Member member) {
             this.id = member.getId();
             this.name = member.getName();
+        }
+    }
+
+    @NoArgsConstructor
+    @Data
+    public static class PostCommunityDto {
+        private Long id;
+        private String name;
+
+        public PostCommunityDto(Community community) {
+            this.id = community.getId();
+            this.name = community.getName();
         }
     }
 }

@@ -1,5 +1,6 @@
 package hello.sns.service;
 
+import hello.sns.domain.community.Community;
 import hello.sns.domain.community.CommunityMember;
 import hello.sns.domain.member.Member;
 import hello.sns.domain.post.Image;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Transactional(readOnly = true)
@@ -91,6 +93,17 @@ public class PostServiceImpl implements PostService {
     @Override
     public Page<PostDto> findByCommunityId(Long communityId, Member currentMember, Pageable pageable) {
         Page<Post> posts = postRepository.findAllByCommunityIdOrderByIdDesc(communityId, pageable);
+
+        return posts.map(PostDto::new);
+    }
+
+    @Override
+    public Page<PostDto> findByMember(Member currentMember, Pageable pageable) {
+        List<CommunityMember> memberships = communityMemberRepository.findByMember(currentMember);
+        List<Community> communities = memberships.stream().map(communityMember -> communityMember.getCommunity())
+                .collect(Collectors.toList());
+
+        Page<Post> posts = postRepository.findByCommunityInOrderByIdDesc(pageable, communities);
 
         return posts.map(PostDto::new);
     }

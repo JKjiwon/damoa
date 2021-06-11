@@ -1,5 +1,6 @@
 package hello.sns.repository;
 
+import hello.sns.domain.community.Community;
 import hello.sns.domain.post.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
@@ -37,4 +39,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @EntityGraph(attributePaths = {"writer", "community"})
     Page<Post> findAllByCommunityIdOrderByIdDesc(Long communityId, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"writer", "community"})
+    Page<Post> findByCommunityInOrderByIdDesc(Pageable pageable, List<Community> communities);
 }

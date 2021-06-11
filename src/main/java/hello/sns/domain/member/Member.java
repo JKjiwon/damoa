@@ -2,8 +2,11 @@ package hello.sns.domain.member;
 
 import hello.sns.domain.BaseTimeEntity;
 import hello.sns.domain.community.CommunityMember;
+import hello.sns.web.dto.common.CurrentMember;
 import hello.sns.web.dto.common.FileInfo;
 import lombok.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;

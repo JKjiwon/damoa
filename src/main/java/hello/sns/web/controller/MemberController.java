@@ -3,9 +3,13 @@ package hello.sns.web.controller;
 import hello.sns.domain.member.Member;
 import hello.sns.service.AuthService;
 import hello.sns.service.MemberService;
+import hello.sns.service.PostService;
 import hello.sns.web.dto.common.CurrentMember;
 import hello.sns.web.dto.member.*;
+import hello.sns.web.dto.post.PostDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +28,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final AuthService authService;
+    private final PostService postService;
 
     @PostMapping
     public ResponseEntity join(HttpServletRequest httpServletRequest,
@@ -63,5 +68,11 @@ public class MemberController {
                                                   @RequestBody UpdateMemberDto updateMemberDto) {
         MemberDto memberDto = memberService.updateMember(currentMember, updateMemberDto);
         return ResponseEntity.ok(memberDto);
+    }
+
+    @GetMapping("/feeds")
+    public ResponseEntity findByCurrentMember(@CurrentMember Member currentMember, Pageable pageable) {
+        Page<PostDto> postDtos = postService.findByMember(currentMember, pageable);
+        return ResponseEntity.ok(postDtos);
     }
 }
