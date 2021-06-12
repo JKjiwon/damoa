@@ -20,6 +20,8 @@ public class CommentListDto {
 
     private String createdAt;
 
+    private Integer countOfSubComments;
+
 
     public CommentListDto(Comment comment) {
         this.id = comment.getId();
@@ -28,6 +30,7 @@ public class CommentListDto {
         this.writer = new CommentWriterDto(comment.getWriter());
         this.createdAt = comment.getCreatedAt()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM_dd hh:mm:ss"));
+        this.countOfSubComments = comment.getChild().size();
     }
 
     @NoArgsConstructor

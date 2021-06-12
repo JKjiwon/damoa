@@ -27,6 +27,8 @@ public class CommentDto {
 
     private String createdAt;
 
+    private Integer countOfSubComments;
+
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<ChildCommentDto> subComments;
 
@@ -36,6 +38,7 @@ public class CommentDto {
         this.postId = comment.getPost().getId();
         this.writer = new CommentWriterDto(comment.getWriter());
         this.parentId = comment.getParent() != null ? comment.getParent().getId() : null;
+        this.countOfSubComments = comment.getChild().size();
         this.subComments = comment.getChild().stream()
                 .map(ChildCommentDto::new)
                 .collect(Collectors.toList());

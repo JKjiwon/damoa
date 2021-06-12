@@ -62,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
         // 커뮤니티에 가입된 회원인지 확인
         CommunityMember actor = getMembership(currentMember.getId(), communityId);
 
-        Comment comment = commentRepository.findOneWithWriterAndChild(commentId, postId)
+        Comment comment = commentRepository.findOneWithWriter(commentId, postId)
                 .orElseThrow(CommentNotFoundException::new);
 
         // 삭제 가능한 회원인지 확인

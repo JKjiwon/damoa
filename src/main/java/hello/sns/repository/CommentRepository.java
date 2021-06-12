@@ -38,7 +38,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             " from Comment c" +
             " join fetch c.writer" +
             " where c.id = :commentId and c.post.id = :postId")
-    Optional<Comment> findOneWithWriterAndChild(
+    Optional<Comment> findOneWithWriter(
             @Param("commentId") Long commentId,
             @Param("postId") Long postId);
 
