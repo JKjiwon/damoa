@@ -8,10 +8,7 @@ import hello.sns.domain.member.Member;
 import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
 import hello.sns.web.dto.common.FileInfo;
-import hello.sns.web.dto.community.CommunityDto;
-import hello.sns.web.dto.community.CommunityMemberDto;
-import hello.sns.web.dto.community.CreateCommunityDto;
-import hello.sns.web.dto.community.UpdateCommunityDto;
+import hello.sns.web.dto.community.*;
 import hello.sns.web.dto.member.MemberDto;
 import hello.sns.web.exception.AccessDeniedException;
 import hello.sns.web.exception.business.CommunityAlreadyJoinedException;
@@ -130,6 +127,7 @@ public class CommunityServiceImpl implements CommunityService {
         return new CommunityDto(community, joinedCommunities);
     }
 
+    @Override
     public Page<CommunityMemberDto> findCommunityMember(Long communityId, Member currentMember, Pageable pageable) {
         CommunityMember actor = getMembership(currentMember, communityId);
 
@@ -150,6 +148,12 @@ public class CommunityServiceImpl implements CommunityService {
 
         return communities
                 .map(community -> new CommunityDto(community, joinedCommunities));
+    }
+
+    @Override
+    public Page<JoinedCommunityDto> findByCurrentMember(Member currentMember, Pageable pageable) {
+        Page<CommunityMember> communityMembers = communityMemberRepository.findByMember(currentMember, pageable);
+        return communityMembers.map(JoinedCommunityDto::new);
     }
 
     private Community getCommunity(Long communityId) {

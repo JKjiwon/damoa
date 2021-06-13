@@ -1,10 +1,13 @@
 package hello.sns.web.controller;
 
+import hello.sns.common.PageableValidator;
 import hello.sns.domain.member.Member;
 import hello.sns.service.AuthService;
+import hello.sns.service.CommunityService;
 import hello.sns.service.MemberService;
 import hello.sns.service.PostService;
 import hello.sns.web.dto.common.CurrentMember;
+import hello.sns.web.dto.community.JoinedCommunityDto;
 import hello.sns.web.dto.member.*;
 import hello.sns.web.dto.post.PostDto;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +32,12 @@ public class MemberController {
     private final MemberService memberService;
     private final AuthService authService;
     private final PostService postService;
+    private final CommunityService communityService;
+    private final PageableValidator pageableValidator;
 
     @PostMapping
     public ResponseEntity join(HttpServletRequest httpServletRequest,
-            @RequestBody @Validated CreateMemberDto createMemberDto) throws URISyntaxException {
+                               @RequestBody @Validated CreateMemberDto createMemberDto) throws URISyntaxException {
         memberService.join(createMemberDto);
         URI uri = new URI(httpServletRequest.getRequestURL() + "/me");
         return ResponseEntity.created(uri).build();
@@ -65,14 +70,22 @@ public class MemberController {
 
     @PatchMapping
     public ResponseEntity updateMember(@CurrentMember Member currentMember,
-                                                  @RequestBody UpdateMemberDto updateMemberDto) {
+                                       @RequestBody UpdateMemberDto updateMemberDto) {
         MemberDto memberDto = memberService.updateMember(currentMember, updateMemberDto);
         return ResponseEntity.ok(memberDto);
     }
 
     @GetMapping("/feeds")
-    public ResponseEntity findByCurrentMember(@CurrentMember Member currentMember, Pageable pageable) {
+    public ResponseEntity getMyFeed(@CurrentMember Member currentMember, Pageable pageable) {
+        pageableValidator.validate(pageable, 50);
         Page<PostDto> postDtos = postService.findByMember(currentMember, pageable);
         return ResponseEntity.ok(postDtos);
+    }
+
+    @GetMapping("/communities")
+    public ResponseEntity getMyCommunities(@CurrentMember Member currentMember, Pageable pageable) {
+        pageableValidator.validate(pageable, 50);
+        Page<JoinedCommunityDto> communities = communityService.findByCurrentMember(currentMember, pageable);
+        return ResponseEntity.ok(communities);
     }
 }

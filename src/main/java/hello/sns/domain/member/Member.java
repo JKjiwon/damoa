@@ -35,9 +35,6 @@ public class Member extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private MemberRole role = MemberRole.USER;
 
-	@OneToMany(mappedBy = "member")
-	private List<CommunityMember> communityMembers = new ArrayList<>();
-
 	private String profileImageName;
 	private String profileImagePath;
 

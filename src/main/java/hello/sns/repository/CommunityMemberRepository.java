@@ -28,6 +28,9 @@ public interface CommunityMemberRepository extends JpaRepository<CommunityMember
     @EntityGraph(attributePaths = {"community"})
     List<CommunityMember> findByMember(Member member);
 
+    @EntityGraph(attributePaths = {"community"})
+    Page<CommunityMember> findByMember(Member member, Pageable pageable);
+
     @EntityGraph(attributePaths = {"member"})
     Page<CommunityMember> findByCommunityId(Long communityId, Pageable pageable);
 }

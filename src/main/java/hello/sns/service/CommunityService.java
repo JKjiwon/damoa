@@ -1,10 +1,7 @@
 package hello.sns.service;
 
 import hello.sns.domain.member.Member;
-import hello.sns.web.dto.community.CommunityDto;
-import hello.sns.web.dto.community.CommunityMemberDto;
-import hello.sns.web.dto.community.CreateCommunityDto;
-import hello.sns.web.dto.community.UpdateCommunityDto;
+import hello.sns.web.dto.community.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,4 +29,6 @@ public interface CommunityService {
     Page<CommunityMemberDto> findCommunityMember(Long communityId, Member currentMember, Pageable pageable);
 
     Page<CommunityDto> findAllSearch(Member currentMember, Pageable pageable, String keyword);
+
+    Page<JoinedCommunityDto> findByCurrentMember(Member currentMember, Pageable pageable);
 }

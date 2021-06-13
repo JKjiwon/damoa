@@ -1,6 +1,7 @@
 package hello.sns.service;
 
 import hello.sns.domain.member.Member;
+import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.MemberRepository;
 import hello.sns.web.dto.common.FileInfo;
 import hello.sns.web.dto.member.CreateMemberDto;
@@ -22,8 +23,8 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
 
-
     @Transactional
+    @Override
     public Long join(CreateMemberDto createMemberDto) {
         checkDuplicatedEmail(createMemberDto.getEmail());
         Member member = createMemberDto.toEntity();
@@ -31,6 +32,7 @@ public class MemberServiceImpl implements MemberService {
         return savedMember.getId();
     }
 
+    @Override
     public void checkDuplicatedEmail(String email) {
         boolean isExistedEmail = memberRepository.existsByEmail(email);
         if (isExistedEmail) {
@@ -39,6 +41,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Transactional
+    @Override
     public MemberDto updateProfileImage(Member currentMember,
                                         MultipartFile profileImage) {
 
@@ -51,6 +54,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Transactional
+    @Override
     public MemberDto updateMember(Member currentMember, UpdateMemberDto updateMemberDto) {
         Member findMember = getMember(currentMember);
         findMember.update(updateMemberDto.getName());
@@ -61,4 +65,5 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findById(currentMember.getId()).orElseThrow(
                 MemberNotFoundException::new);
     }
+
 }
