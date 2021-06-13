@@ -91,14 +91,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<PostDto> findByCommunityId(Long communityId, Member currentMember, Pageable pageable) {
+    public Page<PostDto> findAllByCommunityId(Long communityId, Member currentMember, Pageable pageable) {
         Page<Post> posts = postRepository.findAllByCommunityIdOrderByIdDesc(communityId, pageable);
 
         return posts.map(PostDto::new);
     }
 
     @Override
-    public Page<PostDto> findByMember(Member currentMember, Pageable pageable) {
+    public Page<PostDto> findAllByMember(Member currentMember, Pageable pageable) {
         List<CommunityMember> memberships = communityMemberRepository.findByMember(currentMember);
         List<Community> communities = memberships.stream().map(CommunityMember::getCommunity)
                 .collect(Collectors.toList());

@@ -52,7 +52,7 @@ public class PostController {
                                   @CurrentMember Member currentMember,
                                   Pageable pageable) {
         pageableValidator.validate(pageable, 100);
-        Page<PostDto> postDtos = postService.findByCommunityId(communityId, currentMember, pageable);
+        Page<PostDto> postDtos = postService.findAllByCommunityId(communityId, currentMember, pageable);
         return ResponseEntity.ok(postDtos);
     }
 

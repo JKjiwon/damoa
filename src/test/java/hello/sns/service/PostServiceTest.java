@@ -8,11 +8,15 @@ import hello.sns.domain.member.Member;
 import hello.sns.domain.post.Post;
 import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
+import hello.sns.repository.ImageRepository;
 import hello.sns.repository.PostRepository;
 import hello.sns.web.dto.post.CreatePostDto;
+import hello.sns.web.dto.post.PostDto;
 import hello.sns.web.dto.post.PostImageInfo;
+import hello.sns.web.exception.AccessDeniedException;
 import hello.sns.web.exception.business.CommunityNotJoinedException;
 import hello.sns.web.exception.business.FileUploadException;
+import hello.sns.web.exception.business.PostNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,13 +25,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -50,8 +58,12 @@ class PostServiceTest {
     @Mock
     FileService fileService;
 
+    @Mock
+    ImageRepository imageRepository;
+
     Member owner;
     Member member;
+    Member member2;
     Category category;
     Community community;
     CommunityMember membership;
@@ -65,8 +77,8 @@ class PostServiceTest {
     void init() {
         owner = Member.builder()
                 .id(1L)
-                .name("user")
-                .email("user@email.com")
+                .name("owner")
+                .email("owner@email.com")
                 .password(new BCryptPasswordEncoder().encode("user1234"))
                 .profileImageName("userImage")
                 .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
@@ -74,8 +86,17 @@ class PostServiceTest {
 
         member = Member.builder()
                 .id(2L)
-                .name("user2")
-                .email("user2@email.com")
+                .name("member")
+                .email("member@email.com")
+                .password(new BCryptPasswordEncoder().encode("user1234"))
+                .profileImageName("userImage")
+                .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
+                .build();
+
+        member2 = Member.builder()
+                .id(3L)
+                .name("member2")
+                .email("member2@email.com")
                 .password(new BCryptPasswordEncoder().encode("user1234"))
                 .profileImageName("userImage")
                 .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
@@ -121,6 +142,25 @@ class PostServiceTest {
 
         // when
         postService.create(community.getId(), member, createPostDto, null);
+
+        // then
+        verify(postRepository).save(any());
+        verify(communityMemberRepository).findByMemberAndCommunityId(member, community.getId());
+        verify(fileService, times(0)).uploadPostImages(any());
+
+    }
+
+    @Test
+    @DisplayName("이미지가 비어있고, 필수 입력값(title, content)가 주어졌을 경우 게시글 등록 성공")
+    public void createPostWithEmptyImage_Success() {
+
+        // given
+        when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
+                .thenReturn(Optional.ofNullable(membership));
+        when(postRepository.save(any())).thenReturn(post);
+
+        // when
+        postService.create(community.getId(), member, createPostDto, List.of());
 
         // then
         verify(postRepository).save(any());
@@ -184,17 +224,125 @@ class PostServiceTest {
                 () -> postService.create(community.getId(), member, createPostDto, imageFiles));
 
         // then
-        Assertions.assertThat(post.getImages().size()).isEqualTo(0);
+        assertThat(post.getImages().size()).isEqualTo(0);
     }
-    
+
     @Test
     @DisplayName("게시글을 쓴 본인이 게시글 삭제시 삭제 성공")
-    public void deleteByWriter_Success(){
+    public void deleteByWriter_Success() {
         // given
-        
+        CommunityMember membership = new CommunityMember(community, member, MemberGrade.USER);
+        when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
+                .thenReturn(Optional.ofNullable(membership));
+        when(postRepository.findByIdWithAll(any())).thenReturn(Optional.ofNullable(post));
+        doNothing().when(imageRepository).deleteByPostId(any());
+        doNothing().when(postRepository).deleteById(any());
+
         // when
-        
+        postService.delete(community.getId(), post.getId(), member);
+
         // then
+        verify(imageRepository).deleteByPostId(any());
+        verify(postRepository).deleteById(any());
     }
-    
+
+    @Test
+    @DisplayName("Owner등급의 회원이 게시글 삭제시 삭제 성공")
+    public void deleteByOwner_Success() {
+        // given
+        CommunityMember membership = new CommunityMember(community, owner, MemberGrade.OWNER);
+        when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
+                .thenReturn(Optional.ofNullable(membership));
+        when(postRepository.findByIdWithAll(any())).thenReturn(Optional.ofNullable(post));
+        doNothing().when(imageRepository).deleteByPostId(any());
+        doNothing().when(postRepository).deleteById(any());
+
+        // when
+        postService.delete(community.getId(), post.getId(), owner);
+
+        // then
+        verify(imageRepository).deleteByPostId(any());
+        verify(postRepository).deleteById(any());
+    }
+
+    @Test
+    @DisplayName("가입하지 않은 회원이 게시글 삭제시 CommunityNotJoinedException 를 던지며 삭제 실패 ")
+    public void deleteWithNotJoinedMember_Fail() {
+        // given
+        when(communityMemberRepository.findByMemberAndCommunityId(any(), any())).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(CommunityNotJoinedException.class,
+                () -> postService.delete(any(), any(), member));
+    }
+
+    @Test
+    @DisplayName("삭제 권한이 없는 회원이 게시글 삭제시 AccessDeniedException 를 던지며 삭제 실패 ")
+    public void deleteWithNotMember_Fail() {
+        // given
+        CommunityMember membership = new CommunityMember(community, member2, MemberGrade.USER);
+        when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
+                .thenReturn(Optional.ofNullable(membership));
+        (when(postRepository.findByIdWithAll(any()))).thenReturn(Optional.ofNullable(post));
+
+        // when & then
+        assertThrows(AccessDeniedException.class,
+                () -> postService.delete(any(), any(), member2));
+    }
+
+    @Test
+    @DisplayName("게시글 단건 조회 성공")
+    public void findOneByPostId_Success() {
+        // given
+        when(postRepository.findByIdAndCommunityId(any(), any())).thenReturn(Optional.ofNullable(post));
+        post.setCreatedAt(LocalDateTime.now());
+
+        // when
+        PostDto postDto = postService.findById(any(), any(), member);
+
+        // then
+        assertThat(postDto.getContent()).isEqualTo(post.getContent());
+    }
+
+    @Test
+    @DisplayName("게시글 단건 조회 실패")
+    public void findOneByPostIdWithNotFoundPost_Fail() {
+        // given
+        when(postRepository.findByIdAndCommunityId(any(), any())).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(PostNotFoundException.class,
+                () -> postService.findById(any(), any(), member));
+    }
+
+    @Test
+    @DisplayName("게시글 전체 조회 성공")
+    public void findAllByCommunityId_Success() {
+        // given
+        when(postRepository.findAllByCommunityIdOrderByIdDesc(any(), any()))
+                .thenReturn(new PageImpl<>(List.of(post)));
+        post.setCreatedAt(LocalDateTime.now());
+
+        // when
+        Page<PostDto> postDtos = postService.findAllByCommunityId(any(), member, any());
+
+        // then
+        assertThat(postDtos.getSize()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("회원이 가입한 모든 커뮤니티의 게시글 조회")
+    public void findAllByMember_Success() {
+        // given
+        CommunityMember membership = new CommunityMember(community, member, MemberGrade.USER);
+        when(communityMemberRepository.findByMember(member)).thenReturn(List.of(membership));
+        when(postRepository.findByCommunityInOrderByIdDesc(any(), any())).thenReturn(new PageImpl<>(List.of(post)));
+        post.setCreatedAt(LocalDateTime.now());
+
+        // when
+        Page<PostDto> postDtos = postService.findAllByMember(member, any());
+
+        // then
+        assertThat(postDtos.getSize()).isEqualTo(1);
+    }
 }
