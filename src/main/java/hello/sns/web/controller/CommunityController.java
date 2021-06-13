@@ -36,7 +36,7 @@ public class CommunityController {
         Long communityId = communityService.create(currentMember, createCommunityDto,
                 mainImage, thumbNailImage);
 
-        URI uri = new URI(httpServletRequest.getRequestURI() + "/" + communityId);
+        URI uri = new URI(httpServletRequest.getRequestURL().toString() + communityId);
         return ResponseEntity.created(uri).build();
     }
 

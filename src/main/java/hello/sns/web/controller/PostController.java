@@ -33,7 +33,7 @@ public class PostController {
                                  @RequestPart(value = "image", required = false) List<MultipartFile> images) throws URISyntaxException {
 
         Long postId = postService.create(communityId, currentMember, createPostDto, images);
-        URI uri = new URI(httpServletRequest.getRequestURI() + "/" + postId);
+        URI uri = new URI(httpServletRequest.getRequestURL().toString() + postId);
         return ResponseEntity.created(uri).build();
     }
 

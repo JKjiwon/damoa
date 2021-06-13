@@ -34,7 +34,7 @@ public class CommentController {
 
         Long commentId = commentService.create(communityId, postId, createCommentDto, currentMember);
 
-        URI uri = new URI(httpServletRequest.getRequestURI() + "/" + commentId);
+        URI uri = new URI(httpServletRequest.getRequestURL().toString() + commentId);
         return ResponseEntity.created(uri).build();
     }
 
