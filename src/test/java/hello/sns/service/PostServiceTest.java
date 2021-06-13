@@ -186,4 +186,15 @@ class PostServiceTest {
         // then
         Assertions.assertThat(post.getImages().size()).isEqualTo(0);
     }
+    
+    @Test
+    @DisplayName("게시글을 쓴 본인이 게시글 삭제시 삭제 성공")
+    public void deleteByWriter_Success(){
+        // given
+        
+        // when
+        
+        // then
+    }
+    
 }

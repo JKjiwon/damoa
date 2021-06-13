@@ -1,0 +1,32 @@
+1623574608536|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop table if exists category CASCADE |     drop table if exists category CASCADE 
+1623574608536|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop table if exists category CASCADE |     drop table if exists category CASCADE 
+1623574608538|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop table if exists comment CASCADE |     drop table if exists comment CASCADE 
+1623574608538|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop table if exists comment CASCADE |     drop table if exists comment CASCADE 
+1623574608538|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop table if exists community CASCADE |     drop table if exists community CASCADE 
+1623574608538|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop table if exists community CASCADE |     drop table if exists community CASCADE 
+1623574608538|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop table if exists community_member CASCADE |     drop table if exists community_member CASCADE 
+1623574608538|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop table if exists image CASCADE |     drop table if exists image CASCADE 
+1623574608538|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop table if exists community_member CASCADE |     drop table if exists community_member CASCADE 
+1623574608538|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop table if exists member CASCADE |     drop table if exists member CASCADE 
+1623574608538|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop table if exists image CASCADE |     drop table if exists image CASCADE 
+1623574608538|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop table if exists post CASCADE |     drop table if exists post CASCADE 
+1623574608539|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop table if exists member CASCADE |     drop table if exists member CASCADE 
+1623574608539|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop sequence if exists hibernate_sequence|     drop sequence if exists hibernate_sequence
+1623574608539|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop table if exists post CASCADE |     drop table if exists post CASCADE 
+1623574608539|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop sequence if exists hibernate_sequence|     drop sequence if exists hibernate_sequence
+1623574667338|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop table if exists category CASCADE |     drop table if exists category CASCADE 
+1623574667338|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop table if exists category CASCADE |     drop table if exists category CASCADE 
+1623574667339|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop table if exists comment CASCADE |     drop table if exists comment CASCADE 
+1623574667339|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop table if exists comment CASCADE |     drop table if exists comment CASCADE 
+1623574667339|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop table if exists community CASCADE |     drop table if exists community CASCADE 
+1623574667339|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop table if exists community_member CASCADE |     drop table if exists community_member CASCADE 
+1623574667339|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop table if exists community CASCADE |     drop table if exists community CASCADE 
+1623574667340|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop table if exists image CASCADE |     drop table if exists image CASCADE 
+1623574667340|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop table if exists community_member CASCADE |     drop table if exists community_member CASCADE 
+1623574667340|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop table if exists member CASCADE |     drop table if exists member CASCADE 
+1623574667340|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop table if exists image CASCADE |     drop table if exists image CASCADE 
+1623574667340|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop table if exists post CASCADE |     drop table if exists post CASCADE 
+1623574667340|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop table if exists member CASCADE |     drop table if exists member CASCADE 
+1623574667340|0|statement|connection 12|url jdbc:h2:mem:testdb|     drop sequence if exists hibernate_sequence|     drop sequence if exists hibernate_sequence
+1623574667340|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop table if exists post CASCADE |     drop table if exists post CASCADE 
+1623574667341|0|statement|connection 13|url jdbc:h2:mem:testdb|     drop sequence if exists hibernate_sequence|     drop sequence if exists hibernate_sequence

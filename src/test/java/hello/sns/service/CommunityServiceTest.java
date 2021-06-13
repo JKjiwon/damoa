@@ -8,6 +8,7 @@ import hello.sns.domain.member.Member;
 import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
 import hello.sns.web.dto.common.FileInfo;
+import hello.sns.web.dto.community.CommunityMemberDto;
 import hello.sns.web.dto.community.CreateCommunityDto;
 import hello.sns.web.dto.community.UpdateCommunityDto;
 import hello.sns.web.exception.AccessDeniedException;
@@ -19,10 +20,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -378,5 +383,106 @@ class CommunityServiceTest {
         assertThrows(AccessDeniedException.class,
                 () -> communityService.update(community.getId(), member, updateCommunityDto, imageFile, imageFile));
     }
+
+    @Test
+    @DisplayName("커뮤티니 이름 중복 시 CommunityNameDuplicatedException 던진다. ")
+    public void duplicateCommunityName_Fail() {
+        // given
+        when(communityRepository.existsByName(any())).thenReturn(true);
+
+        // when & then
+        assertThrows(CommunityNameDuplicatedException.class,
+                () -> communityService.checkDuplicatedName(any()));
+    }
+
+    @Test
+    @DisplayName("CommunityId로 단건 조회")
+    public void findCommunityById_Success() {
+        // given
+        when(communityRepository.findById(any())).thenReturn(Optional.ofNullable(community));
+
+        // when
+        communityService.findById(any(), member);
+
+        // then
+        verify(communityRepository).findById(any());
+        verify(communityMemberRepository).findByMember(member);
+    }
+
+    @Test
+    @DisplayName("커뮤니티가 존재하지 않으면 CommunityId로 단건 조회시 CommunityNotFoundException 던지며 실패")
+    public void findCommunityByIdWithNotFoundCommunity_Fail() {
+        // given
+        when(communityRepository.findById(any())).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(CommunityNotFoundException.class,
+                () -> communityService.findById(any(), member));
+
+        // then
+        verify(communityMemberRepository, times(0)).findByMember(member);
+    }
+
+    @Test
+    @DisplayName("회원 등급이 Owner이면 커뮤니티에 가입된 회원 조회 성공")
+    public void findCommunityMemberByOwner_Success() {
+        // given
+        CommunityMember communityMember = new CommunityMember(community, owner, MemberGrade.OWNER);
+        communityMember.setCreatedAt(LocalDateTime.now());
+
+        when(communityMemberRepository.findByMemberAndCommunityId(any(), any())).thenReturn(Optional.of(communityMember));
+        when(communityMemberRepository.findByCommunityId(any(), any())).thenReturn(new PageImpl<>(List.of(communityMember)));
+
+        // when
+        Page<CommunityMemberDto> communityMemberDtos = communityService.findCommunityMember(any(), owner, any());
+
+        // then
+        verify(communityMemberRepository).findByCommunityId(any(), any());
+        assertThat(communityMemberDtos.getSize()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("회원 등급이 Admin이면 커뮤니티에 가입된 회원 조회 성공")
+    public void findCommunityMemberByAdmin_Success() {
+        // given
+        CommunityMember communityMember = new CommunityMember(community, member, MemberGrade.ADMIN);
+        communityMember.setCreatedAt(LocalDateTime.now());
+
+        when(communityMemberRepository.findByMemberAndCommunityId(any(), any())).thenReturn(Optional.of(communityMember));
+        when(communityMemberRepository.findByCommunityId(any(), any())).thenReturn(new PageImpl<>(List.of(communityMember)));
+
+        // when
+        Page<CommunityMemberDto> communityMemberDtos = communityService.findCommunityMember(any(), member, any());
+
+        // then
+        verify(communityMemberRepository).findByCommunityId(any(), any());
+        assertThat(communityMemberDtos.getSize()).isEqualTo(1);
+    }
+
+
+    @Test
+    @DisplayName("회원 등급이 User이면 AccessDeniedException 를 던지며 커뮤니티에 가입된 회원 조회 실패")
+    public void findCommunityMemberByUser_Fail() {
+        // given
+        CommunityMember communityMember = new CommunityMember(community, member, MemberGrade.USER);
+        when(communityMemberRepository.findByMemberAndCommunityId(any(), any())).thenReturn(Optional.of(communityMember));
+
+        // when & then
+        assertThrows(AccessDeniedException.class,
+                () -> communityService.findCommunityMember(any(), owner, any()));
+    }
+
+    @Test
+    @DisplayName("커뮤니티에 가입하지 않는 회원를 조회하면 CommunityNotJoinedException 던지며 조회 실패")
+    public void findCommunityMemberWithNotJoinedMember_Fail() {
+        // given
+        when(communityMemberRepository.findByMemberAndCommunityId(any(), any())).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(CommunityNotJoinedException.class,
+                () -> communityService.findCommunityMember(any(), owner, any()));
+    }
+
+
 }
 

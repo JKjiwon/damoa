@@ -9,7 +9,6 @@ import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
 import hello.sns.web.dto.common.FileInfo;
 import hello.sns.web.dto.community.*;
-import hello.sns.web.dto.member.MemberDto;
 import hello.sns.web.exception.AccessDeniedException;
 import hello.sns.web.exception.business.CommunityAlreadyJoinedException;
 import hello.sns.web.exception.business.CommunityNameDuplicatedException;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

@@ -6,6 +6,8 @@ import hello.sns.web.dto.common.FileInfo;
 import hello.sns.web.dto.member.CreateMemberDto;
 import hello.sns.web.dto.member.MemberDto;
 import hello.sns.web.dto.member.UpdateMemberDto;
+import hello.sns.web.exception.business.CommunityNameDuplicatedException;
+import hello.sns.web.exception.business.EmailDuplicatedException;
 import hello.sns.web.exception.business.FileUploadException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -176,5 +178,16 @@ class MemberServiceTest {
 
         // then
         verify(fileService, times(0)).deleteFile(savedMember.getProfileImagePath());
+    }
+
+    @Test
+    @DisplayName("이메일 중복 CommunityNameDuplicatedException 던진다. ")
+    public void duplicateCommunityName_Fail() {
+        // given
+        when(memberRepository.existsByEmail(any())).thenReturn(true);
+
+        // when & then
+        assertThrows(EmailDuplicatedException.class,
+                () -> memberService.checkDuplicatedEmail(any()));
     }
 }
