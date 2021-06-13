@@ -1,4 +1,4 @@
-package hello.sns.domain.category;
+package hello.sns.domain.community;
 
 import lombok.AccessLevel;
 import lombok.Getter;

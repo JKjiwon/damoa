@@ -1,7 +1,6 @@
 package hello.sns.domain.community;
 
 import hello.sns.domain.BaseTimeEntity;
-import hello.sns.domain.category.Category;
 import hello.sns.domain.member.Member;
 import hello.sns.web.dto.common.FileInfo;
 import lombok.*;

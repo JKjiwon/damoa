@@ -1,6 +1,6 @@
 package hello.sns.web.dto.community;
 
-import hello.sns.domain.category.Category;
+import hello.sns.domain.community.Category;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.member.Member;
 import lombok.*;
