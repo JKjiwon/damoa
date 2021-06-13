@@ -3,6 +3,8 @@ package hello.sns.repository;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.community.CommunityMember;
 import hello.sns.domain.member.Member;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
@@ -24,5 +26,8 @@ public interface CommunityMemberRepository extends JpaRepository<CommunityMember
             Long communityId, Long memberId);
 
     @EntityGraph(attributePaths = {"community"})
-    List<CommunityMember> findByMember(@Param("member") Member member);
+    List<CommunityMember> findByMember(Member member);
+
+    @EntityGraph(attributePaths = {"member"})
+    Page<CommunityMember> findByCommunityId(Long communityId, Pageable pageable);
 }

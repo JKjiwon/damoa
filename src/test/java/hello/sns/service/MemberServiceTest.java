@@ -38,9 +38,6 @@ class MemberServiceTest {
     @Mock
     FileService fileService;
 
-    @Mock
-    PasswordEncoder passwordEncoder;
-
     Member member;
 
     Member savedMember;
@@ -61,7 +58,6 @@ class MemberServiceTest {
                 .name("user")
                 .email("user@email.com")
                 .password("user1234")
-                .profileMessage("오늘도 화이팅")
                 .profileImageName("userImage")
                 .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
                 .build();
@@ -71,7 +67,6 @@ class MemberServiceTest {
                 .name("user")
                 .email("user@email.com")
                 .password(new BCryptPasswordEncoder().encode("user1234"))
-                .profileMessage("오늘도 화이팅")
                 .profileImageName("userImage")
                 .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
                 .build();
@@ -84,7 +79,6 @@ class MemberServiceTest {
 
         updateMemberDto = UpdateMemberDto.builder()
                 .name("user3")
-                .profileMessage("내일도 화이팅")
                 .build();
 
         imageFile = new MockMultipartFile(
@@ -143,7 +137,6 @@ class MemberServiceTest {
 
         // then
         assertThat(memberDto.getName()).isEqualTo(updateMemberDto.getName());
-        assertThat(memberDto.getProfileMessage()).isEqualTo(updateMemberDto.getProfileMessage());
     }
 
     @DisplayName("회원 프로필 이미지가 주어졌을 때 회원 프로필 정보 업데이트 성공")

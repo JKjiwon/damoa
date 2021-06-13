@@ -63,7 +63,6 @@ class CommunityServiceTest {
                 .name("user")
                 .email("user@email.com")
                 .password(new BCryptPasswordEncoder().encode("user1234"))
-                .profileMessage("오늘도 화이팅")
                 .profileImageName("userImage")
                 .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
                 .build();
@@ -73,7 +72,6 @@ class CommunityServiceTest {
                 .name("user2")
                 .email("user2@email.com")
                 .password(new BCryptPasswordEncoder().encode("user1234"))
-                .profileMessage("오늘도 화이팅")
                 .profileImageName("userImage")
                 .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
                 .build();

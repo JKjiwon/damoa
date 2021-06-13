@@ -11,13 +11,11 @@ public class MemberDto {
     private String email;
     private String name;
     private String profileImagePath;
-    private String profileMessage;
 
     public MemberDto(Member member) {
         this.id = member.getId();
         this.email = member.getEmail();
         this.name = member.getName();
-        this.profileImagePath = member.getProfileImagePath() != null ? member.getProfileImagePath() : "";
-        this.profileMessage = member.getProfileMessage();
+        this.profileImagePath = member.getProfileImagePath();
     }
 }

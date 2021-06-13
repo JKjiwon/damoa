@@ -5,8 +5,10 @@ import hello.sns.domain.member.Member;
 import hello.sns.service.CommunityServiceImpl;
 import hello.sns.web.dto.common.CurrentMember;
 import hello.sns.web.dto.community.CommunityDto;
+import hello.sns.web.dto.community.CommunityMemberDto;
 import hello.sns.web.dto.community.CreateCommunityDto;
 import hello.sns.web.dto.community.UpdateCommunityDto;
+import hello.sns.web.dto.member.MemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -96,5 +98,16 @@ public class CommunityController {
         pageableValidator.validate(pageable, 100);
         Page<CommunityDto> communityDtos = communityService.findAllSearch(currentMember, pageable, search);
         return ResponseEntity.ok(communityDtos);
+    }
+
+    @GetMapping("/{communityId}/members")
+    public ResponseEntity findMember(
+            @CurrentMember Member currentMember,
+            @PathVariable("communityId") Long communityId,
+            Pageable pageable) {
+
+        pageableValidator.validate(pageable, 100);
+        Page<CommunityMemberDto> communityMemberDtos = communityService.findCommunityMember(communityId, currentMember, pageable);
+        return ResponseEntity.ok(communityMemberDtos);
     }
 }

@@ -9,8 +9,10 @@ import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
 import hello.sns.web.dto.common.FileInfo;
 import hello.sns.web.dto.community.CommunityDto;
+import hello.sns.web.dto.community.CommunityMemberDto;
 import hello.sns.web.dto.community.CreateCommunityDto;
 import hello.sns.web.dto.community.UpdateCommunityDto;
+import hello.sns.web.dto.member.MemberDto;
 import hello.sns.web.exception.AccessDeniedException;
 import hello.sns.web.exception.business.CommunityAlreadyJoinedException;
 import hello.sns.web.exception.business.CommunityNameDuplicatedException;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -124,23 +127,24 @@ public class CommunityServiceImpl implements CommunityService {
         Community community = getCommunity(communityId);
         List<CommunityMember> communityMembers = communityMemberRepository.findByMember(currentMember);
         List<Community> joinedCommunities = getJoinedCommunities(communityMembers);
-
         return new CommunityDto(community, joinedCommunities);
     }
 
-    @Override
-    public Page<CommunityDto> findByAll(Member currentMember, Pageable pageable) {
-        Page<Community> communities = communityRepository.findAll(pageable);
-        List<CommunityMember> communityMembers = communityMemberRepository.findByMember(currentMember);
-        List<Community> joinedCommunities = getJoinedCommunities(communityMembers);
+    public Page<CommunityMemberDto> findCommunityMember(Long communityId, Member currentMember, Pageable pageable) {
+        CommunityMember actor = getMembership(currentMember, communityId);
 
-        return communities
-                .map(community -> new CommunityDto(community, joinedCommunities));
+        if (!actor.isOwnerOrAdmin()) {
+            throw new AccessDeniedException("Not Owner and Admin");
+        }
+
+        Page<CommunityMember> communityMembers = communityMemberRepository.findByCommunityId(communityId, pageable);
+
+        return communityMembers.map(CommunityMemberDto::new);
     }
 
     @Override
     public Page<CommunityDto> findAllSearch(Member currentMember, Pageable pageable, String keyword) {
-        Page<Community> communities = communityRepository.search("nci", keyword, pageable);
+        Page<Community> communities = communityRepository.findAllSearch("nci", keyword, pageable);
         List<CommunityMember> communityMembers = communityMemberRepository.findByMember(currentMember);
         List<Community> joinedCommunities = getJoinedCommunities(communityMembers);
 

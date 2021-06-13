@@ -53,7 +53,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberDto updateMember(Member currentMember, UpdateMemberDto updateMemberDto) {
         Member findMember = getMember(currentMember);
-        findMember.update(updateMemberDto.getName(), updateMemberDto.getProfileMessage());
+        findMember.update(updateMemberDto.getName());
         return new MemberDto(findMember);
     }
 

@@ -26,7 +26,7 @@ public class SearchCommunityRepositoryImpl extends QuerydslRepositorySupport imp
     }
 
     @Override
-    public Page<Community> search(String type, String keyword, Pageable pageable) {
+    public Page<Community> findAllSearch(String type, String keyword, Pageable pageable) {
 
         keyword = getKeyword(keyword);
 

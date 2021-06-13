@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface SearchCommunityRepository {
 
-    Page<Community> search(String type, String keyword, Pageable pageable);
+    Page<Community> findAllSearch(String type, String keyword, Pageable pageable);
 }

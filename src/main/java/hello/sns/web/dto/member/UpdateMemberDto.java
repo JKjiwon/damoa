@@ -15,13 +15,7 @@ public class UpdateMemberDto {
     @NotBlank(message = "성함을 입력해주시기 바랍니다.")
     private String name;
 
-    private String profileMessage;
-
     private String thumbNailImageName;
 
     private String thumbNailImageUrl;
-
-    private String mainImageName;
-
-    private String mainImageUrl;
 }
