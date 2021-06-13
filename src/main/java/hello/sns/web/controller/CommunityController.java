@@ -1,5 +1,6 @@
 package hello.sns.web.controller;
 
+import hello.sns.common.PageableValidator;
 import hello.sns.domain.member.Member;
 import hello.sns.service.CommunityServiceImpl;
 import hello.sns.web.dto.common.CurrentMember;
@@ -24,6 +25,7 @@ import java.net.URISyntaxException;
 public class CommunityController {
 
     private final CommunityServiceImpl communityService;
+    private final PageableValidator pageableValidator;
 
     @PostMapping
     public ResponseEntity createCommunity(
@@ -89,16 +91,10 @@ public class CommunityController {
     public ResponseEntity findAllSearch(
             @CurrentMember Member currentMember,
             Pageable pageable,
-            String keyword) {
-        Page<CommunityDto> communityDtos = communityService.findByAllSearch(currentMember, pageable, keyword);
+            String search) {
+
+        pageableValidator.validate(pageable, 100);
+        Page<CommunityDto> communityDtos = communityService.findAllSearch(currentMember, pageable, search);
         return ResponseEntity.ok(communityDtos);
     }
 }
-
-//    @GetMapping
-//    public ResponseEntity findAll(
-//            @CurrentMember Member currentMember,
-//            Pageable pageable) {
-//        Page<CommunityDto> communityDtos = communityService.findByAll(currentMember, pageable);
-//        return ResponseEntity.ok(communityDtos);
-//    }

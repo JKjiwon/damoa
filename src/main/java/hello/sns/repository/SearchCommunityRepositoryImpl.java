@@ -5,11 +5,10 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.JPQLQuery;
-import hello.sns.domain.category.QCategory;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.community.QCommunity;
-import hello.sns.domain.member.QMember;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,10 +27,8 @@ public class SearchCommunityRepositoryImpl extends QuerydslRepositorySupport imp
 
     @Override
     public Page<Community> search(String type, String keyword, Pageable pageable) {
-        if (keyword == null) {
-            keyword = "";
-        }
-        keyword = keyword.trim();
+
+        keyword = getKeyword(keyword);
 
         QCommunity community = QCommunity.community;
 
@@ -43,20 +40,20 @@ public class SearchCommunityRepositoryImpl extends QuerydslRepositorySupport imp
         BooleanExpression expression = community.id.gt(0L);
         booleanBuilder.and(expression);
 
-        if (type != null) {
+        if (type != null && !keyword.equals("")) {
             String[] typeArr = type.split("");
             BooleanBuilder conditionBuilder = new BooleanBuilder();
 
             for (String t : typeArr) {
                 switch (t) {
                     case "n":
-                        conditionBuilder.or(community.name.contains(keyword));
+                        conditionBuilder.or(getContains(community.name, keyword));
                         break;
                     case "c":
-                        conditionBuilder.or(community.category.name.contains(keyword));
+                        conditionBuilder.or(getContains(community.category.name, keyword));
                         break;
                     case "i":
-                        conditionBuilder.or(community.introduction.contains(keyword));
+                        conditionBuilder.or(getContains(community.introduction, keyword));
                         break;
                 }
             }
@@ -64,9 +61,8 @@ public class SearchCommunityRepositoryImpl extends QuerydslRepositorySupport imp
         }
         jpqlQuery.where(booleanBuilder);
 
-        // orderBy
+        // Order 처리
         Sort sort = pageable.getSort();
-
         sort.stream().forEach(order -> {
             Order direction = order.isAscending() ? Order.ASC : Order.DESC;
             String prop = order.getProperty();
@@ -74,6 +70,7 @@ public class SearchCommunityRepositoryImpl extends QuerydslRepositorySupport imp
             jpqlQuery.orderBy(new OrderSpecifier(direction, orderByExp.get(prop)));
         });
 
+        // Paging 처리
         jpqlQuery.offset(pageable.getOffset());
         jpqlQuery.limit(pageable.getPageSize());
 
@@ -81,6 +78,20 @@ public class SearchCommunityRepositoryImpl extends QuerydslRepositorySupport imp
         long count = jpqlQuery.fetchCount();
 
         return new PageImpl<Community>(result, pageable, count);
+    }
+
+    private BooleanExpression getContains(StringPath name, String keyword) {
+        return name.toLowerCase().contains(keyword);
+    }
+
+    private String getKeyword(String keyword) {
+        if (keyword == null) {
+            keyword = "";
+        } else {
+            keyword = keyword.trim().toLowerCase();
+        }
+        System.out.println("keyword = " + keyword);
+        return keyword;
     }
 }
 

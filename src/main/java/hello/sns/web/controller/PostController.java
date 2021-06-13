@@ -1,5 +1,6 @@
 package hello.sns.web.controller;
 
+import hello.sns.common.PageableValidator;
 import hello.sns.domain.member.Member;
 import hello.sns.service.PostService;
 import hello.sns.web.dto.common.CurrentMember;
@@ -24,6 +25,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final PageableValidator pageableValidator;
 
     @PostMapping
     public ResponseEntity create(HttpServletRequest httpServletRequest,
@@ -49,6 +51,7 @@ public class PostController {
     public ResponseEntity findAll(@PathVariable("communityId") Long communityId,
                                   @CurrentMember Member currentMember,
                                   Pageable pageable) {
+        pageableValidator.validate(pageable, 100);
         Page<PostDto> postDtos = postService.findByCommunityId(communityId, currentMember, pageable);
         return ResponseEntity.ok(postDtos);
     }

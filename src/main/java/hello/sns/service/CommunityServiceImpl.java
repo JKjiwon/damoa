@@ -140,7 +140,7 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public Page<CommunityDto> findByAllSearch(Member currentMember, Pageable pageable, String keyword) {
+    public Page<CommunityDto> findAllSearch(Member currentMember, Pageable pageable, String keyword) {
         Page<Community> communities = communityRepository.search("nci", keyword, pageable);
         List<CommunityMember> communityMembers = communityMemberRepository.findByMember(currentMember);
         List<Community> joinedCommunities = getJoinedCommunities(communityMembers);

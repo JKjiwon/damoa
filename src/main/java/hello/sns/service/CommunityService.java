@@ -30,5 +30,5 @@ public interface CommunityService {
 
     Page<CommunityDto> findByAll(Member currentMember, Pageable pageable);
 
-    Page<CommunityDto> findByAllSearch(Member currentMember, Pageable pageable, String keyword);
+    Page<CommunityDto> findAllSearch(Member currentMember, Pageable pageable, String keyword);
 }

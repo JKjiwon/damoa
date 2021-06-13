@@ -1,5 +1,6 @@
 package hello.sns.web.controller;
 
+import hello.sns.common.PageableValidator;
 import hello.sns.domain.member.Member;
 import hello.sns.service.CommentService;
 import hello.sns.web.dto.common.CurrentMember;
@@ -24,6 +25,7 @@ import java.net.URISyntaxException;
 public class CommentController {
 
     private final CommentService commentService;
+    private final PageableValidator pageableValidator;
 
     @PostMapping
     public ResponseEntity create(HttpServletRequest httpServletRequest,
@@ -54,7 +56,7 @@ public class CommentController {
                                           @PathVariable Long postId,
                                           @CurrentMember Member currentMember,
                                           Pageable pageable) {
-
+        pageableValidator.validate(pageable, 100);
         Page<CommentListDto> comments = commentService.findAllByPostId(postId, currentMember, pageable);
         return ResponseEntity.ok(comments);
     }

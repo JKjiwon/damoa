@@ -3,6 +3,7 @@ package hello.sns.web.exception;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import hello.sns.web.dto.common.ErrorResponse;
 import hello.sns.web.exception.business.BusinessException;
+import hello.sns.web.exception.validator.PagingBadParameterException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,13 @@ import javax.validation.ConstraintViolationException;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(PagingBadParameterException.class)
+    public ResponseEntity handlerPagingBadParameterException(PagingBadParameterException e, HttpServletRequest req) {
+        log.error("handlerPagingBadParameterException", e);
+        ErrorResponse response = ErrorResponse.of(req, e.getHttpStatus(), e.getMessage());
+        return new ResponseEntity(response, e.getHttpStatus());
+    }
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity handlerBusinessException(BusinessException e, HttpServletRequest req) {
