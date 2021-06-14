@@ -39,17 +39,17 @@ public class MemberController {
     private final PageableValidator pageableValidator;
 
     @PostMapping
-    public ResponseEntity join(HttpServletRequest httpServletRequest,
-                               @RequestBody @Validated CreateMemberDto createMemberDto) throws URISyntaxException {
-        memberService.create(createMemberDto);
+    public ResponseEntity create(HttpServletRequest httpServletRequest,
+                                 @RequestBody @Validated CreateMemberDto createMemberDto) throws URISyntaxException {
+        MemberDto memberDto = memberService.create(createMemberDto);
         URI uri = new URI(httpServletRequest.getRequestURL() + "/me");
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(memberDto);
     }
 
     @GetMapping("/{email}/exists")
     public ResponseEntity checkDuplicatedEmail(@PathVariable @Email String email) {
         memberService.checkDuplicatedEmail(email);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/login")

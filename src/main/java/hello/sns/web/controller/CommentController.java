@@ -48,7 +48,7 @@ public class CommentController {
 
         commentService.delete(communityId, postId, commentId, currentMember);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
@@ -76,6 +76,6 @@ public class CommentController {
                                  @Validated @RequestBody UpdateCommentDto updateCommentDto,
                                  @CurrentMember Member currentMember) {
         commentService.update(communityId, postId, commentId, updateCommentDto, currentMember);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

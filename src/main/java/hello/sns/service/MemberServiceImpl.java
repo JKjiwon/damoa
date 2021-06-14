@@ -25,11 +25,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public Long create(CreateMemberDto createMemberDto) {
+    public MemberDto create(CreateMemberDto createMemberDto) {
         checkDuplicatedEmail(createMemberDto.getEmail());
-        Member member = createMemberDto.toEntity();
-        Member savedMember = memberRepository.save(member);
-        return savedMember.getId();
+        Member member = memberRepository.save(createMemberDto.toEntity());
+        return new MemberDto(member);
     }
 
     @Override

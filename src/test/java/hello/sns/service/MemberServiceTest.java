@@ -84,11 +84,11 @@ class MemberServiceTest {
         when(memberRepository.save(any())).thenReturn(member);
 
         // when
-        Long memberId = memberService.create(createMemberDto);
+        MemberDto memberDto = memberService.create(createMemberDto);
 
         // then
         verify(memberRepository).save(any(Member.class));
-        assertThat(memberId).isEqualTo(member.getId());
+        assertThat(memberDto.getEmail()).isEqualTo(member.getEmail());
     }
 
     @Test
