@@ -12,9 +12,8 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     public Category addCategory(String name) {
-        String categoryName = name.trim().toLowerCase();
-        Category category = categoryRepository.findByName(categoryName).orElseGet(
-                ()-> categoryRepository.save(new Category(categoryName))
+        Category category = categoryRepository.findByName(name).orElseGet(
+                ()-> categoryRepository.save(new Category(name))
         );
         return category;
     }

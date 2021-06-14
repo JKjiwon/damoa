@@ -25,7 +25,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -116,13 +115,13 @@ class CommentServiceTest {
                 .content("함께 운동합시다.")
                 .build();
 
-        member1Comment = new Comment(1L, "hello world", 1, member1, post);
+        member1Comment = new Comment(1L, "저도 동참합니다.", 1, member1, post);
 
-        updateCommentDto = new UpdateCommentDto("good world");
+        updateCommentDto = new UpdateCommentDto("안녕하세요");
     }
 
     @Test
-    @DisplayName("부모 댓글이 없는 댓글 작성")
+    @DisplayName("부모 댓글이 없는 댓글 등록 성공")
     public void createCommentWithoutParent_Success() {
         // given
         CreateCommentDto createCommentDto = new CreateCommentDto("안녕", null);
@@ -141,7 +140,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("부모 댓글이 있는 댓글 작성")
+    @DisplayName("부모 댓글이 있는 댓글 등록 성공")
     public void createCommentWithParent_Success() {
         // given
         Comment parent = new Comment(1L, "hello", 1, member1, post);
@@ -158,12 +157,12 @@ class CommentServiceTest {
 
         // then
         verify(commentRepository).save(any());
-        assertThat(comment.getParent().getId()).isEqualTo(parent.getId());
         assertThat(comment.getLevel()).isEqualTo(2);
+        assertThat(comment.getParent().getId()).isEqualTo(parent.getId());
     }
 
     @Test
-    @DisplayName("부모 댓글이 있는 댓글을 부모로 하여 댓글을 작성할 경우 최상위 부모에 속하게 된다.")
+    @DisplayName("부모 댓글이 있는 댓글을 부모로 하여 댓글을 작성할 경우 등록한 댓글은 최상위 부모에 속하게 된다.")
     public void createCommentWithGrandparent_Success() {
         // given
         Comment grandparent = new Comment(1L, "hello", 1, member1, post);
@@ -183,12 +182,12 @@ class CommentServiceTest {
 
         // then
         verify(commentRepository).save(any());
-        assertThat(comment.getParent().getId()).isEqualTo(grandparent.getId());
         assertThat(comment.getLevel()).isEqualTo(2);
+        assertThat(comment.getParent().getId()).isEqualTo(grandparent.getId());
     }
 
     @Test
-    @DisplayName("해당 커뮤니티에 가입된 회원이 아니라면 CommunityNotJoinedException 던지며 실패")
+    @DisplayName("해당 커뮤니티에 가입된 회원이 아니라면 CommunityNotJoinedException 던지며 등록 실패")
     public void createCommunityWithNotJoinedMember_Fail() {
         // given
         CreateCommentDto createCommentDto = new CreateCommentDto("안녕", null);
@@ -203,7 +202,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("해당 커뮤니티에 게시글이 존재하지 않으면 PostNotFoundException 던지며 실패")
+    @DisplayName("해당 커뮤니티에 게시글이 존재하지 않으면 PostNotFoundException 던지며 등록 실패")
     public void createCommunityWithNotFoundPost_Fail() {
         // given
         CreateCommentDto createCommentDto = new CreateCommentDto("안녕", null);
@@ -235,7 +234,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("커뮤니티 회원 등급이 OWNER이라면 댓글 삭제 성공")
+    @DisplayName("커뮤니티 회원 등급이 OWNER라면 댓글 삭제 성공")
     public void deleteCommentWithOwner_Success() {
         // given
         when(communityMemberRepository.findByMemberIdAndCommunityId(any(), any()))
