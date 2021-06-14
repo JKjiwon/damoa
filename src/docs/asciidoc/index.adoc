@@ -1,0 +1,31 @@
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:operation-http-request-title: Example Request
+:operation-http-response-title: Example Response
+
+[[resources]]
+= Resources
+
+[[resources-members]]
+== 사용자
+
+[[resources-members-create]]
+
+=== 회원 가입
+operation::create-member[snippets='http-request,http-response,request-fields,request-body']
+
+`POST` 요청으로 회원가입을 할 수 있다.
+
+[[resources-members-get]]
+
+=== 현재 사용자 조회
+operation::get-member[snippets='http-request,http-response,response-fields,response-body']
+
+`GET` 요청으로 현재 사용자 조회를 할 수 있다.

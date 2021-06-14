@@ -32,3 +32,11 @@ app:
 sns:
   upload:
     path: /Users/kimjiwon/studyProject/sns/uploads
+
+member:
+  m1-email: member1@email.com
+  m1-password: member1234
+  m1-name: member1
+  m2-email: member2@email.com
+  m2-password: member1234
+  m2-name: member2

@@ -1,5 +1,6 @@
 package hello.sns.config;
 
+import hello.sns.common.MemberProperties;
 import hello.sns.service.MemberService;
 import hello.sns.web.dto.member.CreateMemberDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +17,29 @@ public class AppConfig {
     public MethodValidationPostProcessor methodValidationPostProcessor() {
         return new MethodValidationPostProcessor();
     }
-//    @Bean
+
+    @Bean
     public ApplicationRunner applicationRunner() {
         return new ApplicationRunner() {
             @Autowired
             MemberService memberService;
 
+            @Autowired
+            MemberProperties memberProperties;
+
             @Override
             public void run(ApplicationArguments args) throws Exception {
                 CreateMemberDto createMemberDto = CreateMemberDto.builder()
-                        .name("user")
-                        .email("user@email.com")
-                        .password("user1234")
+                        .name(memberProperties.getM1Name())
+                        .email(memberProperties.getM1Email())
+                        .password(memberProperties.getM1Password())
                         .build();
                 memberService.create(createMemberDto);
 
-
                 CreateMemberDto createMemberDto2 = CreateMemberDto.builder()
-                        .name("user2")
-                        .email("user2@email.com")
-                        .password("user1234")
+                        .name(memberProperties.getM2Name())
+                        .email(memberProperties.getM2Email())
+                        .password(memberProperties.getM2Password())
                         .build();
                 memberService.create(createMemberDto2);
             }

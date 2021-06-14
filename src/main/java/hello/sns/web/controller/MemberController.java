@@ -13,11 +13,14 @@ import hello.sns.web.dto.post.PostDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Email;
 import java.net.URI;
@@ -25,7 +28,7 @@ import java.net.URISyntaxException;
 
 @Validated
 @RestController
-@RequestMapping("/api/members")
+@RequestMapping(value = "/api/members", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class MemberController {
 
