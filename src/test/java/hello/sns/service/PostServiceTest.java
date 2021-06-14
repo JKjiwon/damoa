@@ -66,12 +66,13 @@ class PostServiceTest {
     Member member2;
     Category category;
     Community community;
-    CommunityMember membership;
+    CommunityMember ownerMembership;
+    CommunityMember member1Membership;
+    CommunityMember member2Membership;
     CreatePostDto createPostDto;
     MockMultipartFile image;
     PostImageInfo postImageInfo;
     Post post;
-
 
     @BeforeEach
     void init() {
@@ -112,11 +113,9 @@ class PostServiceTest {
                 .category(category)
                 .build();
 
-        community.join(owner, MemberGrade.OWNER);
-        community.join(member1, MemberGrade.USER);
-        community.join(member2, MemberGrade.USER);
-
-        membership = new CommunityMember(community, member1, MemberGrade.USER);
+        ownerMembership = new CommunityMember(community, owner, MemberGrade.OWNER);
+        member1Membership = new CommunityMember(community, member1, MemberGrade.USER);
+        member2Membership = new CommunityMember(community, member2, MemberGrade.USER);
 
         createPostDto = new CreatePostDto("배영 기록");
 
@@ -134,10 +133,9 @@ class PostServiceTest {
     @Test
     @DisplayName("이미지가 없고, 필수 입력값(title, content)가 주어졌을 경우 게시글 등록 성공")
     public void createPostWithoutImage_Success() {
-
         // given
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
-                .thenReturn(Optional.ofNullable(membership));
+                .thenReturn(Optional.ofNullable(member1Membership));
         when(postRepository.save(any())).thenReturn(post);
 
         // when
@@ -147,16 +145,14 @@ class PostServiceTest {
         verify(postRepository).save(any());
         verify(communityMemberRepository).findByMemberAndCommunityId(member1, community.getId());
         verify(fileService, times(0)).uploadPostImages(any());
-
     }
 
     @Test
     @DisplayName("이미지가 비어있고, 필수 입력값(title, content)가 주어졌을 경우 게시글 등록 성공")
     public void createPostWithEmptyImage_Success() {
-
         // given
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
-                .thenReturn(Optional.ofNullable(membership));
+                .thenReturn(Optional.ofNullable(member1Membership));
         when(postRepository.save(any())).thenReturn(post);
 
         // when
@@ -166,19 +162,17 @@ class PostServiceTest {
         verify(postRepository).save(any());
         verify(communityMemberRepository).findByMemberAndCommunityId(member1, community.getId());
         verify(fileService, times(0)).uploadPostImages(any());
-
     }
 
     @Test
     @DisplayName("이미지가 2개 있고, 필수 입력값(title, content)가 주어졌을 경우 게시글 등록 성공")
     public void createPostWithTwoImages_Success() {
-
         // given
         List<MultipartFile> imageFiles = List.of(image, image);
         List<PostImageInfo> postImageInfos = List.of(postImageInfo, postImageInfo);
 
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
-                .thenReturn(Optional.ofNullable(membership));
+                .thenReturn(Optional.ofNullable(member1Membership));
         when(postRepository.save(any())).thenReturn(post);
         when(fileService.uploadPostImages(imageFiles)).thenReturn(postImageInfos);
 
@@ -194,7 +188,6 @@ class PostServiceTest {
     @Test
     @DisplayName("해당 커뮤니티에 가입된 회원이 아니면 CommunityNotJoinException를 던지며 게시글 등록 실패")
     public void createCommunityWithNotJoinedMember_Fail() {
-
         // given
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
                 .thenReturn(Optional.empty());
@@ -210,11 +203,10 @@ class PostServiceTest {
     @DisplayName("이미지 업로드 실패 시 FileUploadException을 던지며 회원 프로필 이미지 업데이트 실패")
     @Test
     public void createCommunityWithFileUploadFail_Fail() {
-
         // given
         List<MultipartFile> imageFiles = List.of(this.image, image);
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
-                .thenReturn(Optional.ofNullable(membership));
+                .thenReturn(Optional.ofNullable(member1Membership));
         when(postRepository.save(any())).thenReturn(post);
 
         // when & then
@@ -231,9 +223,8 @@ class PostServiceTest {
     @DisplayName("게시글을 쓴 본인이 게시글 삭제시 삭제 성공")
     public void deleteByWriter_Success() {
         // given
-        CommunityMember membership = new CommunityMember(community, member1, MemberGrade.USER);
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
-                .thenReturn(Optional.ofNullable(membership));
+                .thenReturn(Optional.ofNullable(member1Membership));
         when(postRepository.findByIdWithAll(any())).thenReturn(Optional.ofNullable(post));
         Comment comment = Comment.builder().id(1L).content("hello").build();
         when(commentRepository.findByPostIdAndLevel(any(), any())).thenReturn(List.of(comment));
@@ -250,9 +241,8 @@ class PostServiceTest {
     @DisplayName("Owner등급의 회원이 게시글 삭제시 삭제 성공")
     public void deleteByOwner_Success() {
         // given
-        CommunityMember membership = new CommunityMember(community, owner, MemberGrade.OWNER);
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
-                .thenReturn(Optional.ofNullable(membership));
+                .thenReturn(Optional.ofNullable(ownerMembership));
         when(postRepository.findByIdWithAll(any())).thenReturn(Optional.ofNullable(post));
 
         Comment comment = Comment.builder().id(1L).content("hello").build();
@@ -267,7 +257,7 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("가입하지 않은 회원이 게시글 삭제시 CommunityNotJoinedException 를 던지며 삭제 실패 ")
+    @DisplayName("가입하지 않은 회원이 게시글 삭제시 CommunityNotJoinedException 를 던지며 삭제 실패")
     public void deleteWithNotJoinedMember_Fail() {
         // given
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any())).thenReturn(Optional.empty());
@@ -278,13 +268,12 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("삭제 권한이 없는 회원이 게시글 삭제시 AccessDeniedException 를 던지며 삭제 실패 ")
+    @DisplayName("삭제 권한이 없는 회원이 게시글 삭제시 AccessDeniedException 를 던지며 삭제 실패")
     public void deleteWithNotMember_Fail() {
         // given
-        CommunityMember membership = new CommunityMember(community, member2, MemberGrade.USER);
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
-                .thenReturn(Optional.ofNullable(membership));
-        (when(postRepository.findByIdWithAll(any()))).thenReturn(Optional.ofNullable(post));
+                .thenReturn(Optional.ofNullable(member2Membership));
+        when(postRepository.findByIdWithAll(any())).thenReturn(Optional.ofNullable(post));
 
         // when & then
         assertThrows(AccessDeniedException.class,
@@ -306,7 +295,7 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("게시글 단건 조회 실패")
+    @DisplayName("해당 게시글이 없는 경우 PostNotFoundException를 던지며 게시글 단건 조회 실패")
     public void findOneByPostIdWithNotFoundPost_Fail() {
         // given
         when(postRepository.findByIdAndCommunityId(any(), any())).thenReturn(Optional.empty());
@@ -335,8 +324,7 @@ class PostServiceTest {
     @DisplayName("회원이 가입한 모든 커뮤니티의 게시글 조회")
     public void findAllByMember_Success() {
         // given
-        CommunityMember membership = new CommunityMember(community, member1, MemberGrade.USER);
-        when(communityMemberRepository.findByMember(member1)).thenReturn(List.of(membership));
+        when(communityMemberRepository.findByMember(member1)).thenReturn(List.of(member1Membership));
         when(postRepository.findByCommunityInOrderByIdDesc(any(), any())).thenReturn(new PageImpl<>(List.of(post)));
         post.setCreatedAt(LocalDateTime.now());
 
