@@ -54,20 +54,18 @@ public class CommentController {
     @GetMapping
     public ResponseEntity findAllByPostId(@PathVariable Long communityId,
                                           @PathVariable Long postId,
-                                          @CurrentMember Member currentMember,
                                           Pageable pageable) {
         pageableValidator.validate(pageable, 100);
-        Page<CommentListDto> comments = commentService.findAllByPostId(postId, currentMember, pageable);
+        Page<CommentListDto> comments = commentService.findAllByPostId(postId, pageable);
         return ResponseEntity.ok(comments);
     }
 
     @GetMapping("/{commentId}")
     public ResponseEntity findOne(@PathVariable Long communityId,
                                   @PathVariable Long postId,
-                                  @PathVariable Long commentId,
-                                  @CurrentMember Member currentMember) {
+                                  @PathVariable Long commentId) {
 
-        CommentDto comment = commentService.findOneWithAllSubComment(postId, commentId, currentMember);
+        CommentDto comment = commentService.findOneWithAllSubComment(postId, commentId);
         return ResponseEntity.ok(comment);
     }
 
@@ -77,7 +75,7 @@ public class CommentController {
                                  @PathVariable Long commentId,
                                  @Validated @RequestBody UpdateCommentDto updateCommentDto,
                                  @CurrentMember Member currentMember) {
-        commentService.update(communityId, commentId, updateCommentDto, currentMember);
+        commentService.update(communityId, postId, commentId, updateCommentDto, currentMember);
         return ResponseEntity.ok().build();
     }
 }

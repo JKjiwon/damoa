@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -46,6 +47,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @EntityGraph(attributePaths = {"writer", "parent", "post"})
     Page<Comment> findByPostIdAndLevelOrderByIdDesc(Long postId, Integer level, Pageable pageable);
 
+    List<Comment> findByPostIdAndLevel(Long postId, Integer level);
 
     @Query("select distinct c" +
             " from Comment c" +

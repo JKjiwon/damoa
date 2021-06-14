@@ -5,9 +5,10 @@ import hello.sns.domain.community.Community;
 import hello.sns.domain.community.CommunityMember;
 import hello.sns.domain.community.MemberGrade;
 import hello.sns.domain.member.Member;
+import hello.sns.domain.post.Comment;
 import hello.sns.domain.post.Post;
+import hello.sns.repository.CommentRepository;
 import hello.sns.repository.CommunityMemberRepository;
-import hello.sns.repository.CommunityRepository;
 import hello.sns.repository.ImageRepository;
 import hello.sns.repository.PostRepository;
 import hello.sns.web.dto.post.CreatePostDto;
@@ -17,7 +18,6 @@ import hello.sns.web.exception.AccessDeniedException;
 import hello.sns.web.exception.business.CommunityNotJoinedException;
 import hello.sns.web.exception.business.FileUploadException;
 import hello.sns.web.exception.business.PostNotFoundException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,9 +50,6 @@ class PostServiceTest {
     PostRepository postRepository;
 
     @Mock
-    CommunityRepository communityRepository;
-
-    @Mock
     CommunityMemberRepository communityMemberRepository;
 
     @Mock
@@ -61,8 +58,11 @@ class PostServiceTest {
     @Mock
     ImageRepository imageRepository;
 
+    @Mock
+    CommentRepository commentRepository;
+
     Member owner;
-    Member member;
+    Member member1;
     Member member2;
     Category category;
     Community community;
@@ -84,7 +84,7 @@ class PostServiceTest {
                 .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
                 .build();
 
-        member = Member.builder()
+        member1 = Member.builder()
                 .id(2L)
                 .name("member")
                 .email("member@email.com")
@@ -113,9 +113,10 @@ class PostServiceTest {
                 .build();
 
         community.join(owner, MemberGrade.OWNER);
-        community.join(member, MemberGrade.USER);
+        community.join(member1, MemberGrade.USER);
+        community.join(member2, MemberGrade.USER);
 
-        membership = new CommunityMember(community, member, MemberGrade.USER);
+        membership = new CommunityMember(community, member1, MemberGrade.USER);
 
         createPostDto = new CreatePostDto("배영 기록");
 
@@ -125,10 +126,9 @@ class PostServiceTest {
                 "image/jpg",
                 "newImage".getBytes());
 
-        post = createPostDto.toEntity(member, community);
+        post = createPostDto.toEntity(member1, community);
 
         postImageInfo = new PostImageInfo("hello", "2021/06/07/hello", 1);
-
     }
 
     @Test
@@ -141,11 +141,11 @@ class PostServiceTest {
         when(postRepository.save(any())).thenReturn(post);
 
         // when
-        postService.create(community.getId(), member, createPostDto, null);
+        postService.create(community.getId(), member1, createPostDto, null);
 
         // then
         verify(postRepository).save(any());
-        verify(communityMemberRepository).findByMemberAndCommunityId(member, community.getId());
+        verify(communityMemberRepository).findByMemberAndCommunityId(member1, community.getId());
         verify(fileService, times(0)).uploadPostImages(any());
 
     }
@@ -160,11 +160,11 @@ class PostServiceTest {
         when(postRepository.save(any())).thenReturn(post);
 
         // when
-        postService.create(community.getId(), member, createPostDto, List.of());
+        postService.create(community.getId(), member1, createPostDto, List.of());
 
         // then
         verify(postRepository).save(any());
-        verify(communityMemberRepository).findByMemberAndCommunityId(member, community.getId());
+        verify(communityMemberRepository).findByMemberAndCommunityId(member1, community.getId());
         verify(fileService, times(0)).uploadPostImages(any());
 
     }
@@ -183,11 +183,11 @@ class PostServiceTest {
         when(fileService.uploadPostImages(imageFiles)).thenReturn(postImageInfos);
 
         // when
-        postService.create(community.getId(), member, createPostDto, imageFiles);
+        postService.create(community.getId(), member1, createPostDto, imageFiles);
 
         // then
         verify(postRepository).save(any());
-        verify(communityMemberRepository).findByMemberAndCommunityId(member, community.getId());
+        verify(communityMemberRepository).findByMemberAndCommunityId(member1, community.getId());
         verify(fileService, times(1)).uploadPostImages(imageFiles);
     }
 
@@ -201,7 +201,7 @@ class PostServiceTest {
 
         // when & then
         assertThrows(CommunityNotJoinedException.class,
-                () -> postService.create(community.getId(), member, createPostDto, null));
+                () -> postService.create(community.getId(), member1, createPostDto, null));
 
         // then
         verify(postRepository, times(0)).save(any());
@@ -221,7 +221,7 @@ class PostServiceTest {
         doThrow(FileUploadException.class).when(fileService).uploadPostImages(imageFiles);
 
         assertThrows(FileUploadException.class,
-                () -> postService.create(community.getId(), member, createPostDto, imageFiles));
+                () -> postService.create(community.getId(), member1, createPostDto, imageFiles));
 
         // then
         assertThat(post.getImages().size()).isEqualTo(0);
@@ -231,15 +231,15 @@ class PostServiceTest {
     @DisplayName("게시글을 쓴 본인이 게시글 삭제시 삭제 성공")
     public void deleteByWriter_Success() {
         // given
-        CommunityMember membership = new CommunityMember(community, member, MemberGrade.USER);
+        CommunityMember membership = new CommunityMember(community, member1, MemberGrade.USER);
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
                 .thenReturn(Optional.ofNullable(membership));
         when(postRepository.findByIdWithAll(any())).thenReturn(Optional.ofNullable(post));
-        doNothing().when(imageRepository).deleteByPostId(any());
-        doNothing().when(postRepository).deleteById(any());
+        Comment comment = Comment.builder().id(1L).content("hello").build();
+        when(commentRepository.findByPostIdAndLevel(any(), any())).thenReturn(List.of(comment));
 
         // when
-        postService.delete(community.getId(), post.getId(), member);
+        postService.delete(community.getId(), post.getId(), member1);
 
         // then
         verify(imageRepository).deleteByPostId(any());
@@ -254,8 +254,9 @@ class PostServiceTest {
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
                 .thenReturn(Optional.ofNullable(membership));
         when(postRepository.findByIdWithAll(any())).thenReturn(Optional.ofNullable(post));
-        doNothing().when(imageRepository).deleteByPostId(any());
-        doNothing().when(postRepository).deleteById(any());
+
+        Comment comment = Comment.builder().id(1L).content("hello").build();
+        when(commentRepository.findByPostIdAndLevel(any(), any())).thenReturn(List.of(comment));
 
         // when
         postService.delete(community.getId(), post.getId(), owner);
@@ -273,7 +274,7 @@ class PostServiceTest {
 
         // when & then
         assertThrows(CommunityNotJoinedException.class,
-                () -> postService.delete(any(), any(), member));
+                () -> postService.delete(any(), any(), member1));
     }
 
     @Test
@@ -298,7 +299,7 @@ class PostServiceTest {
         post.setCreatedAt(LocalDateTime.now());
 
         // when
-        PostDto postDto = postService.findById(any(), any(), member);
+        PostDto postDto = postService.findById(any(), any(), member1);
 
         // then
         assertThat(postDto.getContent()).isEqualTo(post.getContent());
@@ -312,7 +313,7 @@ class PostServiceTest {
 
         // when & then
         assertThrows(PostNotFoundException.class,
-                () -> postService.findById(any(), any(), member));
+                () -> postService.findById(any(), any(), member1));
     }
 
     @Test
@@ -324,7 +325,7 @@ class PostServiceTest {
         post.setCreatedAt(LocalDateTime.now());
 
         // when
-        Page<PostDto> postDtos = postService.findAllByCommunityId(any(), member, any());
+        Page<PostDto> postDtos = postService.findAllByCommunityId(any(), member1, any());
 
         // then
         assertThat(postDtos.getSize()).isEqualTo(1);
@@ -334,13 +335,13 @@ class PostServiceTest {
     @DisplayName("회원이 가입한 모든 커뮤니티의 게시글 조회")
     public void findAllByMember_Success() {
         // given
-        CommunityMember membership = new CommunityMember(community, member, MemberGrade.USER);
-        when(communityMemberRepository.findByMember(member)).thenReturn(List.of(membership));
+        CommunityMember membership = new CommunityMember(community, member1, MemberGrade.USER);
+        when(communityMemberRepository.findByMember(member1)).thenReturn(List.of(membership));
         when(postRepository.findByCommunityInOrderByIdDesc(any(), any())).thenReturn(new PageImpl<>(List.of(post)));
         post.setCreatedAt(LocalDateTime.now());
 
         // when
-        Page<PostDto> postDtos = postService.findAllByMember(member, any());
+        Page<PostDto> postDtos = postService.findAllByMember(member1, any());
 
         // then
         assertThat(postDtos.getSize()).isEqualTo(1);

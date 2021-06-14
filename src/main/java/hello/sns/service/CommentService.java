@@ -14,9 +14,10 @@ public interface CommentService {
 
     void delete(Long communityId, Long postId, Long commentId, Member currentMember);
 
-    void update(Long communityId, Long commentId, UpdateCommentDto updateCommentDto, Member currentMember);
+    void update(Long communityId, Long postId, Long commentId,
+                UpdateCommentDto updateCommentDto, Member currentMember);
 
-    Page<CommentListDto> findAllByPostId(Long postId, Member currentMember, Pageable pageable);
+    Page<CommentListDto> findAllByPostId(Long postId, Pageable pageable);
 
-    CommentDto findOneWithAllSubComment(Long postId, Long commentId, Member currentMember);
+    CommentDto findOneWithAllSubComment(Long postId, Long commentId);
 }

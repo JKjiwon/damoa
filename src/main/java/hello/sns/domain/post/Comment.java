@@ -12,7 +12,6 @@ import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
 @EqualsAndHashCode(of = "id", callSuper = false)
 public class Comment extends BaseTimeEntity {
@@ -41,29 +40,22 @@ public class Comment extends BaseTimeEntity {
 	@OneToMany(mappedBy = "parent", cascade = CascadeType.PERSIST)
 	private List<Comment> child = new ArrayList<>();
 
-	public void setParent(Comment parent) {
-		this.parent = parent;
-	}
-
 	@Builder
-	public Comment(String content, Member writer, Post post, Comment parent, Integer level) {
+	public Comment(Long id, String content, Integer level, Member writer, Post post) {
+		this.id = id;
 		this.content = content;
+		this.level = level;
 		this.writer = writer;
 		this.post = post;
-		this.parent = parent;
-		this.level = level;
 	}
 
 	public boolean writtenBy(Member member) {
 		return this.writer.equals(member);
 	}
 
-	public boolean existsChild() {
-		return !child.isEmpty();
-	}
-
-	public void addComment(Comment comment) {
-		this.child.add(comment);
+	public void setParent(Comment parent) {
+		this.parent = parent;
+		parent.getChild().add(this);
 	}
 
 	public void update(String content) {

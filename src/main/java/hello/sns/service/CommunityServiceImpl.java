@@ -130,7 +130,7 @@ public class CommunityServiceImpl implements CommunityService {
         CommunityMember actor = getMembership(currentMember, communityId);
 
         if (!actor.isOwnerOrAdmin()) {
-            throw new AccessDeniedException("Not Owner and Admin");
+            throw new AccessDeniedException("Not ADMIN or OWNER");
         }
 
         Page<CommunityMember> communityMembers = communityMemberRepository.findByCommunityId(communityId, pageable);

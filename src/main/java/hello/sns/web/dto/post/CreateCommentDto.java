@@ -25,12 +25,14 @@ public class CreateCommentDto {
         Comment comment = Comment.builder()
                 .content(content)
                 .post(post)
-                .parent(parent)
                 .writer(writer)
                 .build();
 
         if (parent != null) {
-            parent.addComment(comment);
+            while (parent.getParent() != null) {
+                parent = parent.getParent();
+            }
+            comment.setParent(parent);
             comment.setLevel(2);
         } else {
             comment.setLevel(1);

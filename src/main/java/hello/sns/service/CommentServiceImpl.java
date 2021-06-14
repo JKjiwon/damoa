@@ -34,7 +34,6 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public Long create(Long communityId, Long postId, CreateCommentDto dto, Member currentMember) {
 
-        // 커뮤니티에 가입된 회원인지 확인
         checkJoinedMember(currentMember, communityId);
 
         Post post = postRepository.findById(postId)
@@ -42,13 +41,6 @@ public class CommentServiceImpl implements CommentService {
 
         Comment parent = dto.existsParentCommentId() ? commentRepository.findOneWithParent(dto.getParentCommentId())
                 .orElseThrow(CommentNotFoundException::new) : null;
-
-        // 최상위 parent
-        if (parent != null) {
-            while (parent.getParent() != null) {
-                parent = parent.getParent();
-            }
-        }
 
         Comment comment = dto.toEntity(post, parent, currentMember);
 
@@ -67,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
 
         // 삭제 가능한 회원인지 확인
         if (!comment.writtenBy(currentMember) && !actor.isOwnerOrAdmin()) {
-            throw new AccessDeniedException("Not allowed");
+            throw new AccessDeniedException("Not allowed member");
         }
 
         // 자식댓글이 있으면 자식 댓글까지 삭제
@@ -77,28 +69,28 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public void update(Long communityId, Long commentId, UpdateCommentDto updateCommentDto, Member currentMember) {
+    public void update(Long communityId, Long postId, Long commentId, UpdateCommentDto updateCommentDto, Member currentMember) {
         // 커뮤니티에 가입된 회원인지 확인
         CommunityMember actor = getMembership(currentMember.getId(), communityId);
 
-        Comment comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findOneWithWriter(commentId, postId)
                 .orElseThrow(CommentNotFoundException::new);
 
         // 삭제 가능한 회원인지 확인
         if (!comment.writtenBy(currentMember) && !actor.isOwnerOrAdmin()) {
-            throw new AccessDeniedException("Not allowed");
+            throw new AccessDeniedException("Not allowed member");
         }
         comment.update(updateCommentDto.getContent());
     }
 
     @Override
-    public Page<CommentListDto> findAllByPostId(Long postId, Member currentMember, Pageable pageable) {
+    public Page<CommentListDto> findAllByPostId(Long postId, Pageable pageable) {
         Page<Comment> comments = commentRepository.findByPostIdAndLevelOrderByIdDesc(postId, 1, pageable);
         return comments.map(CommentListDto::new);
     }
 
     @Override
-    public CommentDto findOneWithAllSubComment(Long postId, Long commentId, Member currentMember) {
+    public CommentDto findOneWithAllSubComment(Long postId, Long commentId) {
         Comment comment = commentRepository.findOneWithAll(postId, commentId)
                 .orElseThrow(CommentNotFoundException::new);
         return new CommentDto(comment);

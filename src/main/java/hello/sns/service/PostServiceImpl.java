@@ -3,8 +3,10 @@ package hello.sns.service;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.community.CommunityMember;
 import hello.sns.domain.member.Member;
+import hello.sns.domain.post.Comment;
 import hello.sns.domain.post.Image;
 import hello.sns.domain.post.Post;
+import hello.sns.repository.CommentRepository;
 import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.ImageRepository;
 import hello.sns.repository.PostRepository;
@@ -38,6 +40,8 @@ public class PostServiceImpl implements PostService {
 
     private final ImageRepository imageRepository;
 
+    private final CommentRepository commentRepository;
+
     @Transactional
     @Override
     public Long create(Long communityId, Member currentMember,
@@ -69,7 +73,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(PostNotFoundException::new);
 
         if (!post.writtenBy(currentMember) && !actor.isOwnerOrAdmin()) {
-            throw new AccessDeniedException("Owner, Admin, 작성자만 삭제 할 수 있습니다.");
+            throw new AccessDeniedException("Not allowed member");
         }
         // 게시글과 관련된 사진을 모두 삭제하고 게시글 삭제.
         post.getImages()
@@ -80,6 +84,17 @@ public class PostServiceImpl implements PostService {
         // Cascade.ALL로 설정할 시 Post 1개에 여러개의 Image이 있을 때 Post를 삭제하면 Image 개수 만큼 삭제 쿼리가 나간다.
         // Image 삭제를 벌크 연산으로 쿼리 1번에 해결.
         imageRepository.deleteByPostId(postId);
+
+        // 게시글과 관련된 댓글 모두 삭제
+        List<Comment> comments = commentRepository.findByPostIdAndLevel(postId, 1);
+        comments.forEach(
+                comment -> {
+                    Long id = comment.getId();
+                    commentRepository.deleteByParentId(id);
+                    commentRepository.deleteById(id);
+                }
+        );
+
         postRepository.deleteById(postId);
     }
 
