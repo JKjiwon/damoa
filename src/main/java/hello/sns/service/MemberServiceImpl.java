@@ -25,7 +25,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public Long join(CreateMemberDto createMemberDto) {
+    public Long create(CreateMemberDto createMemberDto) {
         checkDuplicatedEmail(createMemberDto.getEmail());
         Member member = createMemberDto.toEntity();
         Member savedMember = memberRepository.save(member);

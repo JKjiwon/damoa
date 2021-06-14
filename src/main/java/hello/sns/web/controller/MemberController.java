@@ -38,7 +38,7 @@ public class MemberController {
     @PostMapping
     public ResponseEntity join(HttpServletRequest httpServletRequest,
                                @RequestBody @Validated CreateMemberDto createMemberDto) throws URISyntaxException {
-        memberService.join(createMemberDto);
+        memberService.create(createMemberDto);
         URI uri = new URI(httpServletRequest.getRequestURL() + "/me");
         return ResponseEntity.created(uri).build();
     }

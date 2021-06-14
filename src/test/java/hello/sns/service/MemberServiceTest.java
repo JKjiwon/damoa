@@ -6,7 +6,6 @@ import hello.sns.web.dto.common.FileInfo;
 import hello.sns.web.dto.member.CreateMemberDto;
 import hello.sns.web.dto.member.MemberDto;
 import hello.sns.web.dto.member.UpdateMemberDto;
-import hello.sns.web.exception.business.CommunityNameDuplicatedException;
 import hello.sns.web.exception.business.EmailDuplicatedException;
 import hello.sns.web.exception.business.FileUploadException;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -42,8 +39,6 @@ class MemberServiceTest {
 
     Member member;
 
-    Member savedMember;
-
     CreateMemberDto createMemberDto;
 
     UpdateMemberDto updateMemberDto;
@@ -54,21 +49,11 @@ class MemberServiceTest {
 
     @BeforeEach
     public void init() {
-
         member = Member.builder()
                 .id(1L)
                 .name("user")
                 .email("user@email.com")
                 .password("user1234")
-                .profileImageName("userImage")
-                .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
-                .build();
-
-        savedMember = Member.builder()
-                .id(1L)
-                .name("user")
-                .email("user@email.com")
-                .password(new BCryptPasswordEncoder().encode("user1234"))
                 .profileImageName("userImage")
                 .profileImagePath("/Users/kimjiwon/studyProject/sns/uploads/1/userImage")
                 .build();
@@ -90,29 +75,25 @@ class MemberServiceTest {
                 "imageFile".getBytes());
 
         imageFileInfo = new FileInfo("imageFile", "/Users/kimjiwon/studyProject/sns/uploads/1/imageFile");
-
     }
 
     @Test
     @DisplayName("필수 입력값(email, password, name)이 주어졌을 경우 회원 가입 성공")
-    public void joinMemberTest_Success() {
-
+    public void createMember_Success() {
         // given
-        Member member = createMemberDto.toEntity();
         when(memberRepository.save(any())).thenReturn(member);
 
         // when
-        Long memberId = memberService.join(createMemberDto);
+        Long memberId = memberService.create(createMemberDto);
 
         // then
         verify(memberRepository).save(any(Member.class));
         assertThat(memberId).isEqualTo(member.getId());
     }
 
-    @DisplayName("회원 생성시 중복된 이메일이 있을 경우 DuplicatedEmailException을 던지며 회원가입 실패")
     @Test
-    public void createMemberTestWithDuplicatedEmail_Fail() {
-
+    @DisplayName("회원 생성시 중복된 이메일이 있을 경우 DuplicatedEmailException을 던지며 회원가입 실패")
+    public void createMemberWithDuplicatedEmail_Fail() {
         // given
         String email = createMemberDto.getEmail();
         when(memberRepository.existsByEmail(email)).thenReturn(false);
@@ -127,36 +108,35 @@ class MemberServiceTest {
         verify(memberRepository,times(0)).save(any(Member.class));
     }
 
-    @DisplayName("필수 입력값(name)이 주어졌을 때 회원 정보 업데이트 성공")
     @Test
+    @DisplayName("필수 입력값(name)이 주어졌을 때 회원 정보 업데이트 성공")
     public void updateMemberTest_Success() {
-
         // given
-        when(memberRepository.findById(savedMember.getId())).thenReturn(Optional.ofNullable(savedMember));
+        when(memberRepository.findById(any())).thenReturn(Optional.ofNullable(member));
 
         // when
-        MemberDto memberDto = memberService.updateMember(savedMember, updateMemberDto);
+        MemberDto memberDto = memberService.updateMember(member, updateMemberDto);
 
         // then
         assertThat(memberDto.getName()).isEqualTo(updateMemberDto.getName());
     }
 
-    @DisplayName("회원 프로필 이미지가 주어졌을 때 회원 프로필 정보 업데이트 성공")
     @Test
+    @DisplayName("회원 프로필 이미지가 주어졌을 때 회원 프로필 정보 업데이트 성공")
     public void updateProfileImage_Success() {
-
         // given
-        when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(savedMember));
+        String originalProfileImagePath = member.getProfileImagePath();
+        when(memberRepository.findById(any())).thenReturn(Optional.ofNullable(member));
         when(fileService.uploadImage(imageFile)).thenReturn(imageFileInfo);
 
         // when
-        memberService.updateProfileImage(savedMember, imageFile);
+        memberService.updateProfileImage(member, imageFile);
 
         // then
-        verify(fileService).deleteFile(member.getProfileImagePath());
+        verify(fileService).deleteFile(originalProfileImagePath);
         verify(fileService).uploadImage(imageFile);
-        assertThat(savedMember.getProfileImageName()).isEqualTo(imageFileInfo.getFileName());
-        assertThat(savedMember.getProfileImagePath()).isEqualTo(imageFileInfo.getFilePath());
+        assertThat(member.getProfileImageName()).isEqualTo(imageFileInfo.getFileName());
+        assertThat(member.getProfileImagePath()).isEqualTo(imageFileInfo.getFilePath());
     }
 
     @DisplayName("이미지 업로드 실패 시 FileUploadException을 던지며 회원 프로필 이미지 업데이트 실패")
@@ -169,15 +149,15 @@ class MemberServiceTest {
                 "audio/mpeg",
                 "newImage".getBytes());
 
-        when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(savedMember));
+        when(memberRepository.findById(any())).thenReturn(Optional.ofNullable(member));
         doThrow(FileUploadException.class).when(fileService).uploadImage(invalidImage);
 
         // when & then
         assertThrows(FileUploadException.class,
-                () -> memberService.updateProfileImage(savedMember, invalidImage));
+                () -> memberService.updateProfileImage(member, invalidImage));
 
         // then
-        verify(fileService, times(0)).deleteFile(savedMember.getProfileImagePath());
+        verify(fileService, times(0)).deleteFile(member.getProfileImagePath());
     }
 
     @Test

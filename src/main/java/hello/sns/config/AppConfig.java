@@ -29,7 +29,7 @@ public class AppConfig {
                         .email("user@email.com")
                         .password("user1234")
                         .build();
-                memberService.join(createMemberDto);
+                memberService.create(createMemberDto);
 
 
                 CreateMemberDto createMemberDto2 = CreateMemberDto.builder()
@@ -37,7 +37,7 @@ public class AppConfig {
                         .email("user2@email.com")
                         .password("user1234")
                         .build();
-                memberService.join(createMemberDto2);
+                memberService.create(createMemberDto2);
             }
         };
     }

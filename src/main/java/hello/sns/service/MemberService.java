@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {
 
-    Long join(CreateMemberDto createMemberDto);
+    Long create(CreateMemberDto createMemberDto);
 
     void checkDuplicatedEmail(String email);
 
