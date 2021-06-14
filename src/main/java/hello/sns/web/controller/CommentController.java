@@ -34,10 +34,10 @@ public class CommentController {
                                  @Validated @RequestBody CreateCommentDto createCommentDto,
                                  @CurrentMember Member currentMember) throws URISyntaxException {
 
-        Long commentId = commentService.create(communityId, postId, createCommentDto, currentMember);
+        CommentDto commentDto = commentService.create(communityId, postId, createCommentDto, currentMember);
 
-        URI uri = new URI(httpServletRequest.getRequestURL().toString() + commentId);
-        return ResponseEntity.created(uri).build();
+        URI uri = new URI(httpServletRequest.getRequestURL().toString() + commentDto.getId());
+        return ResponseEntity.created(uri).body(commentDto);
     }
 
     @DeleteMapping("/{commentId}")
@@ -75,7 +75,7 @@ public class CommentController {
                                  @PathVariable Long commentId,
                                  @Validated @RequestBody UpdateCommentDto updateCommentDto,
                                  @CurrentMember Member currentMember) {
-        commentService.update(communityId, postId, commentId, updateCommentDto, currentMember);
-        return ResponseEntity.noContent().build();
+        CommentDto commentDto = commentService.update(communityId, postId, commentId, updateCommentDto, currentMember);
+        return ResponseEntity.ok().body(commentDto);
     }
 }

@@ -1,5 +1,6 @@
 package hello.sns.web.dto.community;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.member.Member;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -16,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommunityDto {
 
-    private Long communityId;
+    private Long id;
 
     private String name;
 
@@ -33,8 +35,11 @@ public class CommunityDto {
     @JsonProperty("isJoin")
     private boolean isJoin;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime createdAt;
+
     public CommunityDto(Community community, List<Community> joinedCommunities) {
-        this.communityId = community.getId();
+        this.id = community.getId();
         this.name = community.getName();
         this.thumbNailImagePath = community.getThumbNailImagePath();
         this.mainImagePath = community.getMainImagePath();
@@ -42,10 +47,11 @@ public class CommunityDto {
         this.owner = new CommunityOwnerDto(community.getOwner());
         this.category = community.getCategory().getName();
         this.isJoin = joinedCommunities.contains(community);
+        this.createdAt = community.getCreatedAt();
     }
 
     public CommunityDto(Community community) {
-        this.communityId = community.getId();
+        this.id = community.getId();
         this.name = community.getName();
         this.thumbNailImagePath = community.getThumbNailImagePath();
         this.mainImagePath = community.getMainImagePath();
@@ -53,6 +59,7 @@ public class CommunityDto {
         this.owner = new CommunityOwnerDto(community.getOwner());
         this.category = community.getCategory().getName();
         this.isJoin = true;
+        this.createdAt = community.getCreatedAt();
     }
 
     @Data

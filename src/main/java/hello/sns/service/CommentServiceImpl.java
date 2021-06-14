@@ -32,7 +32,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public Long create(Long communityId, Long postId, CreateCommentDto dto, Member currentMember) {
+    public CommentDto create(Long communityId, Long postId, CreateCommentDto dto, Member currentMember) {
 
         checkJoinedMember(currentMember, communityId);
 
@@ -43,8 +43,8 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(CommentNotFoundException::new) : null;
 
         Comment comment = dto.toEntity(post, parent, currentMember);
-
-        return commentRepository.save(comment).getId();
+        Comment savedComment = commentRepository.save(comment);
+        return new CommentDto(savedComment);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public void update(Long communityId, Long postId, Long commentId, UpdateCommentDto updateCommentDto, Member currentMember) {
+    public CommentDto update(Long communityId, Long postId, Long commentId, UpdateCommentDto updateCommentDto, Member currentMember) {
         // 커뮤니티에 가입된 회원인지 확인
         CommunityMember actor = getMembership(currentMember.getId(), communityId);
 
@@ -81,6 +81,7 @@ public class CommentServiceImpl implements CommentService {
             throw new AccessDeniedException("Not allowed member");
         }
         comment.update(updateCommentDto.getContent());
+        return new CommentDto(comment);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package hello.sns.web.dto.common;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ErrorResponse {
-	private String timestamp;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+	private LocalDateTime timestamp;
 	private int status;
 	private String error;
 	private String message;
@@ -33,7 +35,7 @@ public class ErrorResponse {
 		this.error = httpStatus.name();
 		this.message = message;
 		this.errors = errors;
-		this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM_dd hh:mm:ss"));
+		this.timestamp = LocalDateTime.now();
 		this.path = req.getRequestURI();
 	}
 

@@ -1,10 +1,12 @@
 package hello.sns.web.dto.post;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import hello.sns.domain.member.Member;
 import hello.sns.domain.post.Comment;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Data
@@ -18,9 +20,11 @@ public class CommentListDto {
 
     private CommentWriterDto writer;
 
-    private String createdAt;
-
     private Integer countOfSubComments;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime createdAt;
+
 
 
     public CommentListDto(Comment comment) {
@@ -28,8 +32,7 @@ public class CommentListDto {
         this.content = comment.getContent();
         this.postId = comment.getPost().getId();
         this.writer = new CommentWriterDto(comment.getWriter());
-        this.createdAt = comment.getCreatedAt()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM_dd hh:mm:ss"));
+        this.createdAt = comment.getCreatedAt();
         this.countOfSubComments = comment.getChild().size();
     }
 

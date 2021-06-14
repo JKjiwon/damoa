@@ -34,9 +34,9 @@ public class PostController {
                                  CreatePostDto createPostDto,
                                  @RequestPart(value = "image", required = false) List<MultipartFile> images) throws URISyntaxException {
 
-        Long postId = postService.create(communityId, currentMember, createPostDto, images);
-        URI uri = new URI(httpServletRequest.getRequestURL().toString() + postId);
-        return ResponseEntity.created(uri).build();
+        PostDto postDto = postService.create(communityId, currentMember, createPostDto, images);
+        URI uri = new URI(httpServletRequest.getRequestURL().toString() + postDto.getId());
+        return ResponseEntity.created(uri).body(postDto);
     }
 
     @GetMapping("/{postId}")
@@ -62,7 +62,6 @@ public class PostController {
                                  @PathVariable("postId") Long postId,
                                  @CurrentMember Member currentMember) {
         postService.delete(communityId, postId, currentMember);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

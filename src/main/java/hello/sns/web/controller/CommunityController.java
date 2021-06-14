@@ -8,7 +8,6 @@ import hello.sns.web.dto.community.CommunityDto;
 import hello.sns.web.dto.community.CommunityMemberDto;
 import hello.sns.web.dto.community.CreateCommunityDto;
 import hello.sns.web.dto.community.UpdateCommunityDto;
-import hello.sns.web.dto.member.MemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,11 +36,11 @@ public class CommunityController {
             @RequestPart(value = "thumbNailImage", required = false) MultipartFile thumbNailImage,
             @CurrentMember Member currentMember) throws URISyntaxException {
 
-        Long communityId = communityService.create(currentMember, createCommunityDto,
+        CommunityDto communityDto = communityService.create(currentMember, createCommunityDto,
                 mainImage, thumbNailImage);
 
-        URI uri = new URI(httpServletRequest.getRequestURL().toString() + communityId);
-        return ResponseEntity.created(uri).build();
+        URI uri = new URI(httpServletRequest.getRequestURL().toString() + communityDto.getId());
+        return ResponseEntity.created(uri).body(communityDto);
     }
 
     @PostMapping("/{communityId}/join")
@@ -50,7 +49,7 @@ public class CommunityController {
             @CurrentMember Member currentMember) {
         communityService.join(currentMember, communityId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{communityId}/withdraw")
@@ -59,19 +58,20 @@ public class CommunityController {
             @CurrentMember Member currentMember) {
 
         communityService.withdraw(currentMember, communityId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{communityId}")
-    public ResponseEntity updateCommunity(
+    public ResponseEntity update(
             @PathVariable("communityId") Long communityId,
             @CurrentMember Member currentMember,
             @Validated UpdateCommunityDto updateCommunityDto,
             @RequestPart(value = "mainImage", required = false) MultipartFile mainImage,
             @RequestPart(value = "thumbNailImage", required = false) MultipartFile thumbNailImage) {
 
-        communityService.update(communityId, currentMember, updateCommunityDto, mainImage, thumbNailImage);
-        return ResponseEntity.ok().build();
+        CommunityDto communityDto = communityService
+                .update(communityId, currentMember, updateCommunityDto, mainImage, thumbNailImage);
+        return ResponseEntity.ok().body(communityDto);
     }
 
     @GetMapping("/{communityId}")
@@ -85,7 +85,7 @@ public class CommunityController {
     @GetMapping("/{name}/exists")
     public ResponseEntity checkDuplicatedName(@PathVariable String name) {
         communityService.checkDuplicatedName(name);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     // 커뮤니티 검색 기능 -> QueryDSL -> 커뮤니티명 or 소개글 or 카테고리명 로 검색

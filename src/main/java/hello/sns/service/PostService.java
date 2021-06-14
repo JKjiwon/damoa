@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface PostService {
 
-    Long create(Long communityId, Member currentMember,
+    PostDto create(Long communityId, Member currentMember,
                    CreatePostDto createPostDto, List<MultipartFile> postImageFiles);
 
     void delete(Long communityId, Long postId, Member currentMember);

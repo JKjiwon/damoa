@@ -1,6 +1,7 @@
 package hello.sns.config;
 
 import hello.sns.common.MemberProperties;
+import hello.sns.repository.MemberRepository;
 import hello.sns.service.MemberService;
 import hello.sns.web.dto.member.CreateMemberDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class AppConfig {
 
             @Autowired
             MemberProperties memberProperties;
+
+            @Autowired
+            MemberRepository memberRepository;
 
             @Override
             public void run(ApplicationArguments args) throws Exception {

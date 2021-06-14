@@ -1,5 +1,6 @@
 package hello.sns.web.dto.post;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.member.Member;
 import hello.sns.domain.post.Post;
@@ -24,24 +25,22 @@ public class PostDto {
 
     private List<ImageDto> images;
 
-    private String createAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime createdAt;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime modifiedAt;
 
     public PostDto(Post post) {
-
         this.id = post.getId();
-
         this.content = post.getContent();
-
         this.community = new PostCommunityDto(post.getCommunity());
-
         this.writer = new PostWriterDto(post.getWriter());
-
         this.images = post.getImages().stream()
                 .map(ImageDto::new)
                 .collect(Collectors.toList());
-
-        this.createAt = post.getCreatedAt()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM_dd hh:mm:ss"));
+        this.createdAt = post.getCreatedAt();
+        this.modifiedAt = post.getModifiedAt();
     }
 
     @NoArgsConstructor

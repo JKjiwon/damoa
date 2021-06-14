@@ -44,7 +44,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Long create(Long communityId, Member currentMember,
+    public PostDto create(Long communityId, Member currentMember,
                           CreatePostDto createPostDto, List<MultipartFile> postImageFiles) {
 
         CommunityMember writer = getMembership(currentMember, communityId);
@@ -60,7 +60,7 @@ public class PostServiceImpl implements PostService {
                     .map(postImageInfo -> postImageInfo.toEntity(savedPost))
                     .forEach(savedPost::addImages);
         }
-        return savedPost.getId();
+        return new PostDto(savedPost);
     }
 
     @Transactional
@@ -94,7 +94,6 @@ public class PostServiceImpl implements PostService {
                     commentRepository.deleteById(id);
                 }
         );
-
         postRepository.deleteById(postId);
     }
 

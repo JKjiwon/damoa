@@ -54,8 +54,8 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Validated LoginMemberDto loginMemberDto) {
-        String jwtToken = authService.login(loginMemberDto);
-        return ResponseEntity.ok(new JwtTokenDto(jwtToken));
+        JwtTokenDto jwtToken = authService.login(loginMemberDto);
+        return ResponseEntity.ok(jwtToken);
     }
 
     @GetMapping("/me")

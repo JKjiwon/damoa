@@ -36,7 +36,7 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Transactional
     @Override
-    public Long create(Member currentMember,
+    public CommunityDto create(Member currentMember,
                        CreateCommunityDto createCommunityDto,
                        MultipartFile mainImage, MultipartFile thumbNailImage) {
 
@@ -55,7 +55,7 @@ public class CommunityServiceImpl implements CommunityService {
             savedCommunity.changeThumbNailImage(thumbNailImageFile);
         }
         savedCommunity.join(currentMember, MemberGrade.OWNER);
-        return savedCommunity.getId();
+        return new CommunityDto(savedCommunity);
     }
 
     @Override
@@ -85,12 +85,11 @@ public class CommunityServiceImpl implements CommunityService {
 
         Community community = actor.getCommunity();
         community.withdraw(actor);
-        // currentMember 의 게시물, 사진 삭제 로직
     }
 
     @Transactional
     @Override
-    public void update(Long communityId,
+    public CommunityDto update(Long communityId,
                                Member currentMember,
                                UpdateCommunityDto updateCommunityDto,
                                MultipartFile mainImage, MultipartFile thumbNailImage) {
@@ -115,6 +114,7 @@ public class CommunityServiceImpl implements CommunityService {
             fileService.deleteFile(community.getThumbNailImagePath());
             community.changeThumbNailImage(thumbNailImageFile);
         }
+        return new CommunityDto(community);
     }
 
     @Override

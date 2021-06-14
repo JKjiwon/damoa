@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // 토큰 검증 후 인증 요청
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                Long userId = tokenProvider.getUserIdFromJWT(jwt);
+                Long userId = tokenProvider.getMemberIdFromJWT(jwt);
 
                 UserDetails userDetails = principalDetailsService.loadUserById(userId);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

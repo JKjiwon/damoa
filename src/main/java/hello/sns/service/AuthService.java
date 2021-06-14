@@ -1,6 +1,7 @@
 package hello.sns.service;
 
 import hello.sns.security.JwtTokenProvider;
+import hello.sns.web.dto.member.JwtTokenDto;
 import hello.sns.web.dto.member.LoginMemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +20,7 @@ public class AuthService {
     private final JwtTokenProvider tokenProvider;
 
 
-    public String login(LoginMemberDto loginMemberDto) {
+    public JwtTokenDto login(LoginMemberDto loginMemberDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginMemberDto.getEmail(),

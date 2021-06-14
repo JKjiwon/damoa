@@ -1,11 +1,13 @@
 package hello.sns.web.dto.post;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import hello.sns.domain.member.Member;
 import hello.sns.domain.post.Comment;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,12 +27,13 @@ public class CommentDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long parentId;
 
-    private String createdAt;
-
     private Integer countOfSubComments;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<ChildCommentDto> subComments;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime createdAt;
 
     public CommentDto(Comment comment) {
         this.id = comment.getId();
@@ -42,8 +45,7 @@ public class CommentDto {
         this.subComments = comment.getChild().stream()
                 .map(ChildCommentDto::new)
                 .collect(Collectors.toList());
-        this.createdAt = comment.getCreatedAt()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM_dd hh:mm:ss"));
+        this.createdAt = comment.getCreatedAt();
     }
 
     @NoArgsConstructor
@@ -55,14 +57,14 @@ public class CommentDto {
 
         private CommentWriterDto writer;
 
-        private String createdAt;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+        private LocalDateTime createdAt;
 
         public ChildCommentDto(Comment comment) {
             this.id = comment.getId();
             this.content = comment.getContent();
             this.writer = new CommentWriterDto(comment.getWriter());
-            this.createdAt = comment.getCreatedAt()
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM_dd hh:mm:ss"));
+            this.createdAt = comment.getCreatedAt();
         }
     }
 

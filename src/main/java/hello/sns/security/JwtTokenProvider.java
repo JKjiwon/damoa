@@ -1,16 +1,18 @@
 package hello.sns.security;
 
+import ch.qos.logback.classic.pattern.LineOfCallerConverter;
+import hello.sns.web.dto.member.JwtTokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.security.Key;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
@@ -31,29 +33,29 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(Authentication authentication) {
+    public JwtTokenDto generateToken(Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
-        return Jwts.builder()
+        String accessToken = Jwts.builder()
                 .setSubject(Long.toString(principalDetails.getMember().getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
+
+        return new JwtTokenDto(accessToken, expiryDate);
     }
 
-    public Long getUserIdFromJWT(String token) {
+    public Long getMemberIdFromJWT(String token) {
         Claims claims = Jwts
                 .parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-
-        log.debug("member_id={}", Long.parseLong(claims.getSubject()));
 
         return Long.parseLong(claims.getSubject());
     }

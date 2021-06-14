@@ -1,21 +1,31 @@
 package hello.sns.web.dto.community;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import hello.sns.domain.community.CommunityMember;
 import hello.sns.domain.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Data
 @AllArgsConstructor
 public class CommunityMemberDto {
+
     private Long id;
+
     private String email;
+
     private String name;
+
     private String profileImagePath;
+
     private String grade;
-    private String joinedAt;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime joinedAt;
+
 
     public CommunityMemberDto(CommunityMember communityMember) {
         Member member = communityMember.getMember();
@@ -24,6 +34,6 @@ public class CommunityMemberDto {
         this.name = member.getName();
         this.profileImagePath = member.getProfileImagePath();
         this.grade = communityMember.getMemberGrade().name();
-        this.joinedAt = communityMember.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM_dd hh:mm:ss"));
+        this.joinedAt = communityMember.getCreatedAt();
     }
 }

@@ -10,11 +10,11 @@ import org.springframework.data.domain.Pageable;
 
 public interface CommentService {
 
-    Long create(Long communityId, Long postId, CreateCommentDto createCommentDto, Member currentMember);
+    CommentDto create(Long communityId, Long postId, CreateCommentDto createCommentDto, Member currentMember);
 
     void delete(Long communityId, Long postId, Long commentId, Member currentMember);
 
-    void update(Long communityId, Long postId, Long commentId,
+    CommentDto update(Long communityId, Long postId, Long commentId,
                 UpdateCommentDto updateCommentDto, Member currentMember);
 
     Page<CommentListDto> findAllByPostId(Long postId, Pageable pageable);
