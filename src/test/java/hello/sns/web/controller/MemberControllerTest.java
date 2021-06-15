@@ -1,7 +1,6 @@
 package hello.sns.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hello.sns.common.MemberProperties;
 import hello.sns.domain.member.Member;
 import hello.sns.repository.CategoryRepository;
 import hello.sns.repository.CommunityRepository;
@@ -13,10 +12,7 @@ import hello.sns.service.PostService;
 import hello.sns.web.common.RestDocsConfiguration;
 import hello.sns.web.dto.community.CommunityDto;
 import hello.sns.web.dto.community.CreateCommunityDto;
-import hello.sns.web.dto.member.CreateMemberDto;
-import hello.sns.web.dto.member.JwtTokenDto;
-import hello.sns.web.dto.member.LoginMemberDto;
-import hello.sns.web.dto.member.UpdateMemberDto;
+import hello.sns.web.dto.member.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +29,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -80,12 +75,13 @@ class MemberControllerTest {
     @Autowired
     protected PostService postService;
 
-    @Autowired
-    EntityManager entityManager;
+    private Member member1;
+    private String member1Email = "member1@email.com";
+    private String member1Password = "member1234";
 
-    private String name = "member0";
-    private String email = "member0@email.com";
-    private String password = "member1234";
+    private Member member2;
+    private String member2Email = "member2@email.com";
+    private String member2Password = "member1234";
 
     @BeforeEach
     public void setUp() {
@@ -95,11 +91,22 @@ class MemberControllerTest {
 
         CreateMemberDto requestDto = CreateMemberDto
                 .builder()
-                .name(name)
-                .email(email)
-                .password(password)
+                .name("member1")
+                .email(member1Email)
+                .password(member1Password)
                 .build();
-        memberService.create(requestDto);
+        MemberDto dto1 = memberService.create(requestDto);
+        member1 = memberRepository.findById(dto1.getId()).get();
+
+
+        CreateMemberDto requestDto2 = CreateMemberDto
+                .builder()
+                .name("member2")
+                .email(member2Email)
+                .password(member2Password)
+                .build();
+        MemberDto dto2 = memberService.create(requestDto2);
+        member2 = memberRepository.findById(dto2.getId()).get();
     }
 
     @Test
@@ -149,9 +156,9 @@ class MemberControllerTest {
         // given
         CreateMemberDto requestDto = CreateMemberDto
                 .builder()
-                .name(name)
-                .email(email)
-                .password(password)
+                .name("member3")
+                .email(member1Email)
+                .password("member1234")
                 .build();
 
         // when & then
@@ -182,7 +189,7 @@ class MemberControllerTest {
     public void checkDuplicatedEmail_Fail() throws Exception {
         // when & then
         mockMvc.perform(
-                RestDocumentationRequestBuilders.get("/api/members/{email}/exists", email))
+                RestDocumentationRequestBuilders.get("/api/members/{email}/exists", member1Email))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -191,7 +198,7 @@ class MemberControllerTest {
     @DisplayName("로그인")
     public void login_Success() throws Exception {
         // given
-        LoginMemberDto loginMemberDto = new LoginMemberDto(email, password);
+        LoginMemberDto loginMemberDto = new LoginMemberDto(member1Email, member1Password);
         // when
         mockMvc.perform(post("/api/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -222,14 +229,9 @@ class MemberControllerTest {
     void getCurrentUser_Success() throws Exception {
         // When & Then
         this.mockMvc.perform(get("/api/members/me")
-                .header(HttpHeaders.AUTHORIZATION, getAccessToken(email, password)))
+                .header(HttpHeaders.AUTHORIZATION, getAccessToken(member1Email, member1Password)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id").exists())
-                .andExpect(jsonPath("email").value(email))
-                .andExpect(jsonPath("name").value(name))
-                .andExpect(jsonPath("joinedAt").exists())
-                .andExpect(jsonPath("profileImagePath").exists())
                 .andDo(document("get-members",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 정보")
@@ -254,16 +256,10 @@ class MemberControllerTest {
         UpdateMemberDto requestDto = UpdateMemberDto.builder().name("로프트").build();
         // When & Then
         this.mockMvc.perform(patch("/api/members")
-                .header(HttpHeaders.AUTHORIZATION, getAccessToken(email, password))
+                .header(HttpHeaders.AUTHORIZATION, getAccessToken(member1Email, member1Password))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDto)))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("id").exists())
-                .andExpect(jsonPath("email").value(email))
-                .andExpect(jsonPath("name").value(requestDto.getName()))
-                .andExpect(jsonPath("joinedAt").exists())
-                .andExpect(jsonPath("profileImagePath").exists())
                 .andDo(document("update-members",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 정보"),
@@ -298,13 +294,9 @@ class MemberControllerTest {
         this.mockMvc.perform(
                 multipart("/api/members/profile-image")
                         .file(profileImage)
-                        .header(HttpHeaders.AUTHORIZATION, getAccessToken(email, password)))
+                        .header(HttpHeaders.AUTHORIZATION, getAccessToken(member1Email, member1Password)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id").exists())
-                .andExpect(jsonPath("email").value(email))
-                .andExpect(jsonPath("name").value(name))
-                .andExpect(jsonPath("profileImagePath").exists())
                 .andDo(document("change-profile-image",
                         requestParts(
                                 partWithName("profileImage").description("업로드할 이미지 파일")),
@@ -326,16 +318,9 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("현재 사용자가 가입한 커뮤니티 조회")
+    @DisplayName("현재 사용자가 가입한 모든 커뮤니티 조회")
     void queryCommunitiesOfMember_Success() throws Exception {
         // Given
-        String member1Email = "user@gmail.com";
-        String member1password = "user1234";
-        Long member1Id = createMember(member1Email, member1password);
-        Long member2Id = createMember("user2@gmail.com", "user1234");
-        Member member1 = memberRepository.findById(member1Id).get();
-        Member member2 = memberRepository.findById(member2Id).get();
-
         // Member1 이 만든 커뮤니티
         IntStream.rangeClosed(1, 3).forEach(
                 i -> createCommunity(i, member1));
@@ -351,7 +336,7 @@ class MemberControllerTest {
 
         // When & Then
         this.mockMvc.perform(get("/api/members/communities")
-                .header(HttpHeaders.AUTHORIZATION, getAccessToken(member1Email, member1password))
+                .header(HttpHeaders.AUTHORIZATION, getAccessToken(member1Email, member1Password))
                 .param("page", "0")
                 .param("size", "10")
                 .param("sort", "joinedAt,desc"))
@@ -423,22 +408,19 @@ class MemberControllerTest {
     }
 
     private Long createCommunity(int seq, Member member) {
+
+        MockMultipartFile ImageFile = new MockMultipartFile(
+                "Image",
+                "ImageFile.jpg",
+                "image/jpg",
+                "ProfileImageFile".getBytes());
+
         CreateCommunityDto dto = CreateCommunityDto.builder()
                 .name("Community" + seq)
                 .category("category")
                 .introduction("Hello World")
                 .build();
-        CommunityDto communityDto = communityService.create(member, dto, null, null);
+        CommunityDto communityDto = communityService.create(member, dto, ImageFile, ImageFile);
         return communityDto.getId();
-    }
-
-    private Long createMember(String email, String password) {
-        CreateMemberDto requestDto = CreateMemberDto
-                .builder()
-                .name(name)
-                .email(email)
-                .password(password)
-                .build();
-        return memberService.create(requestDto).getId();
     }
 }
