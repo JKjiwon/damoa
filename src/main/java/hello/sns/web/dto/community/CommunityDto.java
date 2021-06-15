@@ -26,7 +26,7 @@ public class CommunityDto {
 
     private String introduction;
 
-    private CommunityOwnerDto owner;
+    private String owner;
 
     private String category;
 
@@ -44,7 +44,7 @@ public class CommunityDto {
         this.thumbNailImagePath = community.getThumbNailImagePath();
         this.mainImagePath = community.getMainImagePath();
         this.introduction = community.getIntroduction();
-        this.owner = new CommunityOwnerDto(community.getOwner());
+        this.owner = community.getOwner().getName();
         this.category = community.getCategory().getName();
         this.memberCount = community.getMemberCount();
         this.isJoin = joinedCommunities.contains(community);
@@ -57,24 +57,10 @@ public class CommunityDto {
         this.thumbNailImagePath = community.getThumbNailImagePath();
         this.mainImagePath = community.getMainImagePath();
         this.introduction = community.getIntroduction();
-        this.owner = new CommunityOwnerDto(community.getOwner());
+        this.owner = community.getOwner().getName();
         this.category = community.getCategory().getName();
         this.memberCount = community.getMemberCount();
         this.isJoin = true;
         this.createdAt = community.getCreatedAt();
     }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    static class CommunityOwnerDto {
-        private Long id;
-        private String name;
-
-        public CommunityOwnerDto(Member member) {
-            this.id = member.getId();
-            this.name = member.getName();
-        }
-    }
-
 }

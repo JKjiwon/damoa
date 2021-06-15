@@ -126,3 +126,20 @@ operation::update-communities[snippets='http-request,http-response,request-heade
 
 operation::get-communities[snippets='http-request,http-response,request-headers,path-parameters,response-headers,response-fields']
 
+
+[[resources-communities-query]]
+
+=== 모든 커뮤니티 정보 조회(검색)
+
+`GET` 요청으로 모든 커뮤니티를 조회할 수 있다.
+
+operation::query-communities[snippets='http-request,http-response,request-parameters,request-headers,response-headers,response-fields']
+
+
+[[resources-communities-members-query]]
+
+=== 모든 커뮤니티 사용자 조회
+
+`GET` 요청으로 모든 커뮤니티 사용자을 조회할 수 있다.
+
+operation::query-communities-member[snippets='http-request,http-response,request-parameters,request-headers,response-headers,response-fields']
