@@ -30,6 +30,8 @@ public class CommunityDto {
 
     private String category;
 
+    private Long memberCount;
+
     @JsonProperty("isJoin")
     private boolean isJoin;
 
@@ -44,6 +46,7 @@ public class CommunityDto {
         this.introduction = community.getIntroduction();
         this.owner = new CommunityOwnerDto(community.getOwner());
         this.category = community.getCategory().getName();
+        this.memberCount = community.getMemberCount();
         this.isJoin = joinedCommunities.contains(community);
         this.createdAt = community.getCreatedAt();
     }
@@ -56,6 +59,7 @@ public class CommunityDto {
         this.introduction = community.getIntroduction();
         this.owner = new CommunityOwnerDto(community.getOwner());
         this.category = community.getCategory().getName();
+        this.memberCount = community.getMemberCount();
         this.isJoin = true;
         this.createdAt = community.getCreatedAt();
     }

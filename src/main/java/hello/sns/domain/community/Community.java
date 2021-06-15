@@ -43,16 +43,20 @@ public class Community extends BaseTimeEntity {
 	@JoinColumn(name = "category_id")
 	private Category category;
 
+	private Long memberCount = 0L;
+
 	@OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true)
 	private final List<CommunityMember> communityMembers = new ArrayList<>();
 
 	public void join(Member member, MemberGrade memberGrade) {
 		CommunityMember communityMember = new CommunityMember(this, member, memberGrade);
 		getCommunityMembers().add(communityMember);
+		memberCount += 1;
 	}
 
 	public void withdraw(CommunityMember communityMember) {
 		getCommunityMembers().remove(communityMember);
+		memberCount -= 1;
 	}
 
 	public void changeMainImage(FileInfo imageInfo) {

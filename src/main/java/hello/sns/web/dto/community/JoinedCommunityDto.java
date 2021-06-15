@@ -4,13 +4,11 @@ package hello.sns.web.dto.community;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.community.CommunityMember;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -26,6 +24,8 @@ public class JoinedCommunityDto {
     private String introduction;
 
     private String owner;
+
+    private Long memberCount;
 
     private String category;
 
@@ -43,6 +43,7 @@ public class JoinedCommunityDto {
         this.introduction = community.getIntroduction();
         this.owner = community.getOwner().getName();
         this.category = community.getCategory().getName();
+        this.memberCount = community.getMemberCount();
         this.grade = communityMember.getMemberGrade().name();
         this.joinedAt = communityMember.getJoinedAt();
     }

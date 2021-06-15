@@ -364,6 +364,7 @@ class MemberControllerTest {
                                 fieldWithPath("content[].introduction").description("커뮤니티 소개"),
                                 fieldWithPath("content[].owner").description("커뮤니티 대표 관리자 이름"),
                                 fieldWithPath("content[].category").description("커뮤니티 카테고리"),
+                                fieldWithPath("content[].memberCount").description("커뮤니티 회원수"),
                                 fieldWithPath("content[].grade").description("사용자의 커뮤니티 등급"),
                                 fieldWithPath("content[].joinedAt").description("커뮤니티 가입 날짜"),
                                 // 페이징 정보

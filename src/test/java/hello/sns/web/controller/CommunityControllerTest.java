@@ -162,6 +162,7 @@ class CommunityControllerTest {
                                 fieldWithPath("thumbNailImagePath").description("커뮤니티 썸네일 이미지 경로"),
                                 fieldWithPath("mainImagePath").description("커뮤니티 메인 이미지 경로"),
                                 fieldWithPath("introduction").description("커뮤니티 소개글"),
+                                fieldWithPath("memberCount").description("커뮤니티 회원수"),
                                 fieldWithPath("owner").description("커뮤니티 대표 관리자 정보"),
                                 fieldWithPath("owner.id").description("커뮤니티 대표 관리자 식별자"),
                                 fieldWithPath("owner.name").description("커뮤니티 대표 관리자 이름"),
@@ -395,6 +396,7 @@ class CommunityControllerTest {
                                 fieldWithPath("thumbNailImagePath").description("커뮤니티 썸네일 이미지 경로"),
                                 fieldWithPath("mainImagePath").description("커뮤니티 메인 이미지 경로"),
                                 fieldWithPath("introduction").description("커뮤니티 소개글"),
+                                fieldWithPath("memberCount").description("커뮤니티 회원수"),
                                 fieldWithPath("owner").description("커뮤니티 대표 관리자 정보"),
                                 fieldWithPath("owner.id").description("커뮤니티 대표 관리자 식별자"),
                                 fieldWithPath("owner.name").description("커뮤니티 대표 관리자 이름"),
@@ -457,6 +459,7 @@ class CommunityControllerTest {
                                 fieldWithPath("thumbNailImagePath").description("커뮤니티 썸네일 이미지 경로"),
                                 fieldWithPath("mainImagePath").description("커뮤니티 메인 이미지 경로"),
                                 fieldWithPath("introduction").description("커뮤니티 소개글"),
+                                fieldWithPath("memberCount").description("커뮤니티 회원수"),
                                 fieldWithPath("owner").description("커뮤니티 대표 관리자 정보"),
                                 fieldWithPath("owner.id").description("커뮤니티 대표 관리자 식별자"),
                                 fieldWithPath("owner.name").description("커뮤니티 대표 관리자 이름"),
@@ -466,6 +469,7 @@ class CommunityControllerTest {
                         )
                 ));
     }
+
 //    @Test
 //    @DisplayName("모든 커뮤니티 조회")
 //    public void findAll_Success() throws Exception {
