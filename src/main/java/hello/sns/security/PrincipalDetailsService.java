@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+/**
+ * DB에 사용자 확인, 정보 제공
+ */
+
 @Service
 @RequiredArgsConstructor
 public class PrincipalDetailsService implements UserDetailsService {
@@ -23,8 +27,7 @@ public class PrincipalDetailsService implements UserDetailsService {
         // 이메일로 인증 요청
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException(email)
-                );
+                        new UsernameNotFoundException(email));
         return new PrincipalDetails(member);
     }
 

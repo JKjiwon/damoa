@@ -1,6 +1,5 @@
 package hello.sns.security;
 
-import ch.qos.logback.classic.pattern.LineOfCallerConverter;
 import hello.sns.web.dto.member.JwtTokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -11,9 +10,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
-import java.time.LocalDateTime;
 import java.util.Date;
+
+/**
+ * 토큰 생성 및 검증 로직
+ */
 
 @Component
 @Slf4j
@@ -60,18 +63,18 @@ public class JwtTokenProvider {
         return Long.parseLong(claims.getSubject());
     }
 
-    public boolean validateToken(String authToken){
+    public boolean validateToken(String authToken, HttpServletRequest request){
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT token");
+            request.setAttribute("exception", "Invalid JWT token.");
         } catch (ExpiredJwtException e) {
-            log.info("Expired JWT token");
+            request.setAttribute("exception", "Expired JWT token.");
         } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT token");
+            request.setAttribute("exception", "Unsupported JWT token.");
         } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty.");
+            request.setAttribute("exception", "JWT claims string is empty.");
         }
 
         return false;

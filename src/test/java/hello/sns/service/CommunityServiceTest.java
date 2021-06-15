@@ -414,7 +414,7 @@ class CommunityServiceTest {
     public void findCommunityMemberByOwner_Success() {
         // given
         CommunityMember communityMember = new CommunityMember(community, owner, MemberGrade.OWNER);
-        communityMember.setCreatedAt(LocalDateTime.now());
+        communityMember.setJoinedAt(LocalDateTime.now());
 
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any())).thenReturn(Optional.of(communityMember));
         when(communityMemberRepository.findByCommunityId(any(), any())).thenReturn(new PageImpl<>(List.of(communityMember)));
@@ -432,7 +432,7 @@ class CommunityServiceTest {
     public void findCommunityMemberByAdmin_Success() {
         // given
         CommunityMember communityMember = new CommunityMember(community, member, MemberGrade.ADMIN);
-        communityMember.setCreatedAt(LocalDateTime.now());
+        communityMember.setJoinedAt(LocalDateTime.now());
 
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any())).thenReturn(Optional.of(communityMember));
         when(communityMemberRepository.findByCommunityId(any(), any())).thenReturn(new PageImpl<>(List.of(communityMember)));

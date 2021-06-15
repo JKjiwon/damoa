@@ -58,8 +58,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity handlerBindException(BindException e,
-                                               HttpServletRequest req) {
+    public ResponseEntity handlerBindException(BindException e, HttpServletRequest req) {
         log.error("handlerBindException", e);
         return getErrorResponseByBindingResult(req, e.getBindingResult(), HttpStatus.BAD_REQUEST, "Invalid value");
     }

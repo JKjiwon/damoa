@@ -28,7 +28,7 @@ import java.net.URISyntaxException;
 
 @Validated
 @RestController
-@RequestMapping(value = "/api/members", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/members")
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -63,7 +63,7 @@ public class MemberController {
         return ResponseEntity.ok(new MemberDto(currentMember));
     }
 
-    @PutMapping("/profile-image")
+    @PostMapping("/profile-image")
     public ResponseEntity updateProfileImage(
             @RequestPart("profileImage") MultipartFile profileImage,
             @CurrentMember Member currentMember) {

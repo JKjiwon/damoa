@@ -4,6 +4,7 @@ import hello.sns.domain.BaseTimeEntity;
 import hello.sns.domain.community.CommunityMember;
 import hello.sns.web.dto.common.CurrentMember;
 import hello.sns.web.dto.common.FileInfo;
+import hello.sns.web.dto.member.UpdateMemberDto;
 import lombok.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +44,8 @@ public class Member extends BaseTimeEntity {
 		this.profileImagePath = fileInfo.getFilePath();
 	}
 
-	public void update(String name) {
-		this.name = name;
+	public void update(UpdateMemberDto dto) {
+		this.name = dto.getName();
 	}
 }
 

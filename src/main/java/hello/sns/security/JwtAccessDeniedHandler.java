@@ -13,12 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 필요한 권한이 없는 사용자가 리소스를 요청할 경우 403.
+ */
+
 @Component
 @Slf4j
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
-    /**
-     * 필요한 권한이 없는 사용자가 리소스를 요청할 경우 403
-     */
 
     @Autowired
     ObjectMapper objectMapper;

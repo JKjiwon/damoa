@@ -15,8 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * JWT 토큰을 가져 와서 유효성을 검사하고, 토큰과 관련된 사용자를 로드하고, 이를 Spring Security에 전달합니다.
+ * JWT 토큰을 가져 와서 유효성을 검사하고, 토큰과 관련된 사용자를 로드하고, 이를 Spring Security에 전달.
  */
+
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -32,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwt = getJwtFromRequest(request);
 
             // 토큰 검증 후 인증 요청
-            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt, request)) {
                 Long userId = tokenProvider.getMemberIdFromJWT(jwt);
 
                 UserDetails userDetails = principalDetailsService.loadUserById(userId);

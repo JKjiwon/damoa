@@ -5,10 +5,10 @@ endif::[]
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
-:toclevels: 4
+:toclevels: 2
 :sectlinks:
-:operation-http-request-title: Example Request
-:operation-http-response-title: Example Response
+:operation-http-request-title: Request
+:operation-http-response-title: Response
 
 [[resources]]
 = Resources
@@ -19,13 +19,48 @@ endif::[]
 [[resources-members-create]]
 
 === 회원 가입
-operation::create-member[snippets='http-request,http-response,request-fields,request-body']
+operation::create-members[snippets='http-request,http-response,request-headers,request-fields,response-headers,response-fields']
 
 `POST` 요청으로 회원가입을 할 수 있다.
 
+[[resources-members-email-check]]
+
+=== 이메일 중복체크
+operation::check-email[snippets='http-request,http-response,path-parameters']
+
+`GET` 요청으로 이메일 중복체크를 할 수 있다.
+
+[[resources-members-loin]]
+
+=== 로그인
+operation::login-members[snippets='http-request,http-response,request-headers,request-fields,response-headers,response-fields']
+
+`POST` 요청으로 로그인할 수 있다.
+
 [[resources-members-get]]
 
-=== 현재 사용자 조회
-operation::get-member[snippets='http-request,http-response,response-fields,response-body']
+=== 사용자 정보 조회
+operation::get-members[snippets='http-request,http-response,request-headers,response-headers,response-fields']
 
-`GET` 요청으로 현재 사용자 조회를 할 수 있다.
+`GET` 요청으로 사용자 정보 조회를 할 수 있다.
+
+[[resources-members-update]]
+
+=== 사용자 정보 업데이트
+operation::update-members[snippets='http-request,http-response,request-headers,request-fields,response-headers,response-fields']
+
+`PATCH` 요청으로 사용자 정보를 업데이트할 수 있다.
+
+[[resources-members-change-profile]]
+
+=== 사용자 프로필 사진 변경
+operation::change-profile-image[snippets='http-request,http-response,request-headers,request-parts,response-headers,response-fields']
+
+`POST` 요청으로 현재 사용자의 프로필 사진을 바꿀수 있다.
+
+[[resources-members-communities-get]]
+
+=== 사용자가 가입한 커뮤니티 정보 조회
+operation::get-joined-communities[snippets='http-request,http-response,request-parameters,request-headers,response-headers,response-fields']
+
+`GET` 요청으로 사용자가 가입한 커뮤니티 정보를 조회할 수 있다.

@@ -13,13 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 인증되지 않은 사용자가 리소스를 요청할 경우 401
+ */
+
 @Component
 @Slf4j
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
-    /**
-     * 인증되지 않은 사용자가 리소스를 요청할 경우 401
-     */
 
     @Autowired
     ObjectMapper objectMapper;
@@ -28,12 +28,14 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException e) throws IOException {
-        log.error("Responding with unauthenticated error. Message - {}", e.getMessage());
+        log.error("Responding with unauthenticated error. Message - {}",
+                request.getAttribute("exception").toString());
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("Application/json");
         response.setCharacterEncoding("utf-8");
-        ErrorResponse errorResponse = ErrorResponse.of(request, HttpStatus.UNAUTHORIZED, e.getMessage());
+        ErrorResponse errorResponse = ErrorResponse.of(request, HttpStatus.UNAUTHORIZED,
+                request.getAttribute("exception").toString());
         String result = objectMapper.writeValueAsString(errorResponse);
         response.getWriter().write(result);
     }

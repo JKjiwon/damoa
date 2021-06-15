@@ -56,7 +56,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDto updateMember(Member currentMember, UpdateMemberDto updateMemberDto) {
         Member findMember = getMember(currentMember);
-        findMember.update(updateMemberDto.getName());
+        findMember.update(updateMemberDto);
         return new MemberDto(findMember);
     }
 

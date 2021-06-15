@@ -6,16 +6,21 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+
+import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @EqualsAndHashCode(of = "id", callSuper = false)
-public class CommunityMember extends BaseTimeEntity {
+public class CommunityMember{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +37,13 @@ public class CommunityMember extends BaseTimeEntity {
 
 	@Enumerated(EnumType.STRING)
 	private MemberGrade memberGrade;
+
+	@CreatedDate
+	private LocalDateTime joinedAt;
+
+	public void setJoinedAt(LocalDateTime joinedAt) {
+		this.joinedAt = joinedAt;
+	}
 
 	public CommunityMember(Community community, Member member, MemberGrade memberGrade) {
 		this.community = community;

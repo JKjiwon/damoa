@@ -34,6 +34,6 @@ public class CommunityMemberDto {
         this.name = member.getName();
         this.profileImagePath = member.getProfileImagePath();
         this.grade = communityMember.getMemberGrade().name();
-        this.joinedAt = communityMember.getCreatedAt();
+        this.joinedAt = communityMember.getJoinedAt();
     }
 }

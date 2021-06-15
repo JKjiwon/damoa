@@ -33,6 +33,7 @@ public class AppConfig {
 
             @Override
             public void run(ApplicationArguments args) throws Exception {
+                memberRepository.deleteAll();
                 CreateMemberDto createMemberDto = CreateMemberDto.builder()
                         .name(memberProperties.getM1Name())
                         .email(memberProperties.getM1Email())

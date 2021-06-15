@@ -11,8 +11,9 @@ import java.util.Collection;
 import java.util.Objects;
 
 /**
- * Spring Security 는 PrincipalDetails 객체에 저장된 정보를 사용하여 인증 및 권한 부여를 수행합니다.
+ * Spring Security 는 PrincipalDetails 객체에 저장된 정보를 사용하여 인증 및 권한 부여를 수행
  */
+
 @AllArgsConstructor
 @Getter
 public class PrincipalDetails implements UserDetails {
