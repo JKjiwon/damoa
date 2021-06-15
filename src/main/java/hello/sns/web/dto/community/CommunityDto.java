@@ -4,16 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.member.Member;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommunityDto {
@@ -62,7 +60,8 @@ public class CommunityDto {
         this.createdAt = community.getCreatedAt();
     }
 
-    @Data
+    @Getter
+    @Setter
     @NoArgsConstructor
     static class CommunityOwnerDto {
         private Long id;

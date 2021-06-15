@@ -29,7 +29,7 @@ public class CommunityController {
     private final PageableValidator pageableValidator;
 
     @PostMapping
-    public ResponseEntity createCommunity(
+    public ResponseEntity create(
             HttpServletRequest httpServletRequest,
             @Validated CreateCommunityDto createCommunityDto,
             @RequestPart(value = "mainImage", required = false) MultipartFile mainImage,
@@ -43,27 +43,27 @@ public class CommunityController {
         return ResponseEntity.created(uri).body(communityDto);
     }
 
-    @PostMapping("/{communityId}/join")
-    public ResponseEntity joinMember(
-            @PathVariable("communityId") Long communityId,
+    @PostMapping("/{id}/join")
+    public ResponseEntity join(
+            @PathVariable("id") Long communityId,
             @CurrentMember Member currentMember) {
         communityService.join(currentMember, communityId);
 
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{communityId}/withdraw")
-    public ResponseEntity withdrawMember(
-            @PathVariable("communityId") Long communityId,
+    @PostMapping("/{id}/withdraw")
+    public ResponseEntity withdraw(
+            @PathVariable("id") Long communityId,
             @CurrentMember Member currentMember) {
 
         communityService.withdraw(currentMember, communityId);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{communityId}")
+    @PostMapping("/edit/{id}")
     public ResponseEntity update(
-            @PathVariable("communityId") Long communityId,
+            @PathVariable("id") Long communityId,
             @CurrentMember Member currentMember,
             @Validated UpdateCommunityDto updateCommunityDto,
             @RequestPart(value = "mainImage", required = false) MultipartFile mainImage,
@@ -74,18 +74,18 @@ public class CommunityController {
         return ResponseEntity.ok().body(communityDto);
     }
 
-    @GetMapping("/{communityId}")
-    public ResponseEntity findById(
-            @PathVariable("communityId") Long communityId,
-            @CurrentMember Member currentMember) {
-        CommunityDto communityDto = communityService.findById(communityId, currentMember);
-        return ResponseEntity.ok(communityDto);
-    }
-
     @GetMapping("/{name}/exists")
     public ResponseEntity checkDuplicatedName(@PathVariable String name) {
         communityService.checkDuplicatedName(name);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity findById(
+            @PathVariable("id") Long communityId,
+            @CurrentMember Member currentMember) {
+        CommunityDto communityDto = communityService.findById(communityId, currentMember);
+        return ResponseEntity.ok(communityDto);
     }
 
     // 커뮤니티 검색 기능 -> QueryDSL -> 커뮤니티명 or 소개글 or 카테고리명 로 검색
@@ -100,10 +100,10 @@ public class CommunityController {
         return ResponseEntity.ok(communityDtos);
     }
 
-    @GetMapping("/{communityId}/members")
+    @GetMapping("/{id}/members")
     public ResponseEntity findMember(
             @CurrentMember Member currentMember,
-            @PathVariable("communityId") Long communityId,
+            @PathVariable("id") Long communityId,
             Pageable pageable) {
 
         pageableValidator.validate(pageable, 100);

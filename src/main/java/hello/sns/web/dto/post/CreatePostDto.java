@@ -3,15 +3,13 @@ package hello.sns.web.dto.post;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.member.Member;
 import hello.sns.domain.post.Post;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreatePostDto {

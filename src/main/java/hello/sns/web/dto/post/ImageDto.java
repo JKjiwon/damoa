@@ -1,10 +1,12 @@
 package hello.sns.web.dto.post;
 
 import hello.sns.domain.post.Image;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class ImageDto {
     private Long imageId;

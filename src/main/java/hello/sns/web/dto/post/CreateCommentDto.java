@@ -3,14 +3,12 @@ package hello.sns.web.dto.post;
 import hello.sns.domain.member.Member;
 import hello.sns.domain.post.Comment;
 import hello.sns.domain.post.Post;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateCommentDto {

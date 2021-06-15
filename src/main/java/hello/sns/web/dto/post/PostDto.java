@@ -4,15 +4,16 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.member.Member;
 import hello.sns.domain.post.Post;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class PostDto {
     private Long id;
@@ -44,7 +45,8 @@ public class PostDto {
     }
 
     @NoArgsConstructor
-    @Data
+    @Getter
+    @Setter
     public static class PostWriterDto {
         private Long id;
         private String name;
@@ -56,7 +58,8 @@ public class PostDto {
     }
 
     @NoArgsConstructor
-    @Data
+    @Getter
+    @Setter
     public static class PostCommunityDto {
         private Long id;
         private String name;

@@ -5,11 +5,14 @@ import hello.sns.domain.community.CommunityMember;
 import hello.sns.domain.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class CommunityMemberDto {
 

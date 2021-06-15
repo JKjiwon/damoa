@@ -4,8 +4,10 @@ import hello.sns.domain.post.Image;
 import hello.sns.domain.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class PostImageInfo {
 

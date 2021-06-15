@@ -11,56 +11,118 @@ endif::[]
 :operation-http-response-title: Response
 
 [[resources]]
-= Resources
+= DAMOA-API GUIDE
 
 [[resources-members]]
-== 사용자
+== 사용자 API
 
 [[resources-members-create]]
 
 === 회원 가입
-operation::create-members[snippets='http-request,http-response,request-headers,request-fields,response-headers,response-fields']
 
 `POST` 요청으로 회원가입을 할 수 있다.
+
+operation::create-members[snippets='http-request,http-response,request-headers,request-fields,response-headers,response-fields']
 
 [[resources-members-email-check]]
 
 === 이메일 중복체크
-operation::check-email[snippets='http-request,http-response,path-parameters']
 
 `GET` 요청으로 이메일 중복체크를 할 수 있다.
+
+operation::check-email[snippets='http-request,http-response,path-parameters']
 
 [[resources-members-loin]]
 
 === 로그인
-operation::login-members[snippets='http-request,http-response,request-headers,request-fields,response-headers,response-fields']
 
 `POST` 요청으로 로그인할 수 있다.
+
+operation::login-members[snippets='http-request,http-response,request-headers,request-fields,response-headers,response-fields']
 
 [[resources-members-get]]
 
 === 사용자 정보 조회
-operation::get-members[snippets='http-request,http-response,request-headers,response-headers,response-fields']
 
 `GET` 요청으로 사용자 정보 조회를 할 수 있다.
+
+operation::get-members[snippets='http-request,http-response,request-headers,response-headers,response-fields']
 
 [[resources-members-update]]
 
 === 사용자 정보 업데이트
-operation::update-members[snippets='http-request,http-response,request-headers,request-fields,response-headers,response-fields']
 
 `PATCH` 요청으로 사용자 정보를 업데이트할 수 있다.
+
+operation::update-members[snippets='http-request,http-response,request-headers,request-fields,response-headers,response-fields']
 
 [[resources-members-change-profile]]
 
 === 사용자 프로필 사진 변경
-operation::change-profile-image[snippets='http-request,http-response,request-headers,request-parts,response-headers,response-fields']
 
 `POST` 요청으로 현재 사용자의 프로필 사진을 바꿀수 있다.
+
+operation::change-profile-image[snippets='http-request,http-response,request-headers,request-parts,response-headers,response-fields']
 
 [[resources-members-communities-get]]
 
 === 사용자가 가입한 커뮤니티 정보 조회
-operation::get-joined-communities[snippets='http-request,http-response,request-parameters,request-headers,response-headers,response-fields']
 
 `GET` 요청으로 사용자가 가입한 커뮤니티 정보를 조회할 수 있다.
+
+operation::get-joined-communities[snippets='http-request,http-response,request-parameters,request-headers,response-headers,response-fields']
+
+[[resources-members]]
+== 커뮤니티 API
+
+[[resources-communities-create]]
+
+=== 커뮤니티 생성
+
+`POST` 요청으로 커뮤니티를 생성할 수 있다.
+
+operation::create-communities[snippets='http-request,http-response,request-headers,request-parameters,request-parts,response-headers,response-fields']
+
+[[resources-communities-email-check]]
+
+=== 이메일 중복체크
+
+`GET` 요청으로 커뮤니티 중복체크를 할 수 있다.
+
+operation::check-name[snippets='http-request,http-response,request-headers,path-parameters']
+
+[[resources-communities-join]]
+
+=== 커뮤니티 가입
+
+`POST` 요청으로 커뮤니티에 가입할 수 있다.
+
+operation::join-communities[snippets='http-request,http-response,request-headers,path-parameters']
+
+
+[[resources-communities-withdraw]]
+
+=== 커뮤니티 탈퇴
+
+`POST` 요청으로 커뮤니티를 탈퇴할 수 있다.
+
+operation::withdraw-communities[snippets='http-request,http-response,request-headers,path-parameters']
+
+
+[[resources-communities-update]]
+
+=== 커뮤니티 수정
+
+`POST` 요청으로 커뮤니티를 수정할 수 있다.
+
+operation::update-communities[snippets='http-request,http-response,request-headers,request-parameters,request-parts,response-headers,response-fields']
+
+
+[[resources-communities-get]]
+
+=== 커뮤니티 조회
+
+`GET` 요청으로 커뮤니티를 조회할 수 있다.
+
+operation::get-communities[snippets='http-request,http-response,request-headers,path-parameters,response-headers,response-fields']
+

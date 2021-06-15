@@ -10,7 +10,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor

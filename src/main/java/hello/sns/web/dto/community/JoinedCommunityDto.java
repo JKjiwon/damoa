@@ -5,12 +5,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.community.CommunityMember;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class JoinedCommunityDto {
 

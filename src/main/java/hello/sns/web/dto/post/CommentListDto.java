@@ -4,12 +4,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import hello.sns.domain.member.Member;
 import hello.sns.domain.post.Comment;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class CommentListDto {
     private Long id;
@@ -37,7 +40,8 @@ public class CommentListDto {
     }
 
     @NoArgsConstructor
-    @Data
+    @Getter
+    @Setter
     public static class CommentWriterDto {
         private Long id;
         private String name;
