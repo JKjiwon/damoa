@@ -1,13 +1,8 @@
 package hello.sns.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.member.Member;
-import hello.sns.repository.*;
-import hello.sns.service.CategoryService;
-import hello.sns.service.CommunityService;
-import hello.sns.service.MemberServiceImpl;
-import hello.sns.web.common.RestDocsConfiguration;
+import hello.sns.web.common.BaseControllerTest;
 import hello.sns.web.dto.community.CreateCommunityDto;
 import hello.sns.web.dto.community.UpdateCommunityDto;
 import hello.sns.web.dto.member.CreateMemberDto;
@@ -17,17 +12,10 @@ import hello.sns.web.dto.member.MemberDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.stream.IntStream;
@@ -41,42 +29,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-@AutoConfigureRestDocs
-@Import(RestDocsConfiguration.class)
-class CommunityControllerTest {
 
-    @Autowired
-    protected MockMvc mockMvc;
-
-    @Autowired
-    protected ObjectMapper objectMapper;
-
-    @Autowired
-    protected MemberServiceImpl memberService;
-
-    @Autowired
-    protected MemberRepository memberRepository;
-
-    @Autowired
-    protected CommunityService communityService;
-
-    @Autowired
-    protected CommunityRepository communityRepository;
-
-    @Autowired
-    protected CategoryService categoryService;
-
-    @Autowired
-    protected CategoryRepository categoryRepository;
-
-    @Autowired
-    protected CommunityMemberRepository communityMemberRepository;
-
-    @Autowired
-    PostRepository postRepository;
+class CommunityControllerTest extends BaseControllerTest {
 
     private Member member1;
     private String member1Email = "member1@email.com";
@@ -92,6 +46,7 @@ class CommunityControllerTest {
 
     @BeforeEach
     public void setUp() {
+        commentRepository.deleteAll();
         postRepository.deleteAll();
         communityMemberRepository.deleteAll();
         communityRepository.deleteAll();

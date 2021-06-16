@@ -1,10 +1,7 @@
 package hello.sns.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.sns.domain.member.Member;
-import hello.sns.repository.*;
-import hello.sns.service.*;
-import hello.sns.web.common.RestDocsConfiguration;
+import hello.sns.web.common.BaseControllerTest;
 import hello.sns.web.dto.community.CreateCommunityDto;
 import hello.sns.web.dto.member.JwtTokenDto;
 import hello.sns.web.dto.member.LoginMemberDto;
@@ -13,18 +10,11 @@ import hello.sns.web.dto.post.PostDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
@@ -39,45 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-@AutoConfigureRestDocs
-@Import(RestDocsConfiguration.class)
-class PostControllerTest {
-    @Autowired
-    protected MockMvc mockMvc;
-
-    @Autowired
-    protected ObjectMapper objectMapper;
-
-    @Autowired
-    protected MemberService memberService;
-
-    @Autowired
-    protected MemberRepository memberRepository;
-
-    @Autowired
-    protected CategoryRepository categoryRepository;
-
-    @Autowired
-    protected CommunityRepository communityRepository;
-
-    @Autowired
-    protected CategoryService categoryService;
-
-    @Autowired
-    protected CommunityService communityService;
-
-    @Autowired
-    protected PostService postService;
-
-    @Autowired
-    protected PostRepository postRepository;
-
-    @Autowired
-    protected CommunityMemberRepository communityMemberRepository;
+class PostControllerTest extends BaseControllerTest {
 
     private Member member1;
     private String member1Email = "member1@email.com";
@@ -92,6 +44,7 @@ class PostControllerTest {
 
     @BeforeEach
     public void setUp() {
+        commentRepository.deleteAll();
         postRepository.deleteAll();
         communityMemberRepository.deleteAll();
         communityRepository.deleteAll();
