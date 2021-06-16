@@ -14,7 +14,7 @@
 - MYSQL
 
 ## 3. API 문서
-https://github.com/JKjiwon/damoa/blob/master/src/docs/asciidoc/index.adoc
+https://jkjiwon.github.io/damoa-api-guide/
 
 ## 4. 실행 방법
 
