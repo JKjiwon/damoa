@@ -78,7 +78,7 @@ public class MemberController {
         return ResponseEntity.ok(memberDto);
     }
 
-    @GetMapping("/feeds")
+    @GetMapping("/posts")
     public ResponseEntity getMyFeed(@CurrentMember Member currentMember, Pageable pageable) {
         pageableValidator.validate(pageable, 50);
         Page<PostDto> postDtos = postService.findAllByMember(currentMember, pageable);

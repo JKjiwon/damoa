@@ -3,6 +3,7 @@ package hello.sns.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.sns.domain.member.Member;
 import hello.sns.repository.CategoryRepository;
+import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
 import hello.sns.repository.MemberRepository;
 import hello.sns.service.CategoryService;
@@ -67,6 +68,9 @@ class MemberControllerTest {
     protected CommunityRepository communityRepository;
 
     @Autowired
+    protected CommunityMemberRepository communityMemberRepository;
+
+    @Autowired
     protected CategoryService categoryService;
 
     @Autowired
@@ -85,6 +89,7 @@ class MemberControllerTest {
 
     @BeforeEach
     public void setUp() {
+        communityMemberRepository.deleteAll();
         communityRepository.deleteAll();
         categoryRepository.deleteAll();
         memberRepository.deleteAll();
@@ -343,7 +348,7 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document(
-                        "get-joined-communities",
+                        "query-joined-communities",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 정보")
                         ),

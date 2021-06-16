@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.member.Member;
 import hello.sns.repository.CategoryRepository;
+import hello.sns.repository.CommunityMemberRepository;
 import hello.sns.repository.CommunityRepository;
 import hello.sns.repository.MemberRepository;
 import hello.sns.service.CategoryService;
@@ -74,6 +75,9 @@ class CommunityControllerTest {
     @Autowired
     protected CategoryRepository categoryRepository;
 
+    @Autowired
+    protected CommunityMemberRepository communityMemberRepository;
+
     private Member member1;
     private String member1Email = "member1@email.com";
     private String member1Password = "member1234";
@@ -88,6 +92,7 @@ class CommunityControllerTest {
 
     @BeforeEach
     public void setUp() {
+        communityMemberRepository.deleteAll();
         communityRepository.deleteAll();
         categoryRepository.deleteAll();
         memberRepository.deleteAll();
@@ -296,7 +301,7 @@ class CommunityControllerTest {
                         .post("/api/communities/{communityId}/join", communityId)
                         .header(HttpHeaders.AUTHORIZATION, getAccessToken(member1Email, member1Password)))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -350,7 +355,7 @@ class CommunityControllerTest {
                         .post("/api/communities/{communityId}/withdraw", communityId)
                         .header(HttpHeaders.AUTHORIZATION, getAccessToken(member2Email, member2Password)))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isForbidden());
     }
 
     @Test
