@@ -3,10 +3,7 @@ package hello.sns.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.sns.domain.member.Member;
 import hello.sns.repository.*;
-import hello.sns.service.CategoryService;
-import hello.sns.service.CommunityService;
-import hello.sns.service.MemberServiceImpl;
-import hello.sns.service.PostService;
+import hello.sns.service.*;
 import hello.sns.web.common.RestDocsConfiguration;
 import hello.sns.web.dto.community.CreateCommunityDto;
 import hello.sns.web.dto.member.JwtTokenDto;
@@ -56,7 +53,7 @@ class PostControllerTest {
     protected ObjectMapper objectMapper;
 
     @Autowired
-    protected MemberServiceImpl memberService;
+    protected MemberService memberService;
 
     @Autowired
     protected MemberRepository memberRepository;

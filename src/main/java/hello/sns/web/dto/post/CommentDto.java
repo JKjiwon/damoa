@@ -30,13 +30,13 @@ public class CommentDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long parentId;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime createdAt;
+
     private Integer countOfSubComments;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<ChildCommentDto> subComments;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
-    private LocalDateTime createdAt;
 
     public CommentDto(Comment comment) {
         this.id = comment.getId();

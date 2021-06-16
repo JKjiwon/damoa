@@ -17,7 +17,6 @@ endif::[]
 == 사용자(Members) API
 
 [[resources-members-create]]
-
 === 회원 가입
 
 `POST` 요청으로 회원가입을 할 수 있다.
@@ -25,7 +24,6 @@ endif::[]
 operation::create-members[snippets='http-request,http-response,request-headers,request-fields,response-headers,response-fields']
 
 [[resources-members-email-check]]
-
 === 이메일 중복체크
 
 `GET` 요청으로 이메일 중복체크를 할 수 있다.
@@ -33,7 +31,6 @@ operation::create-members[snippets='http-request,http-response,request-headers,r
 operation::check-email[snippets='http-request,http-response,path-parameters']
 
 [[resources-members-loin]]
-
 === 로그인
 
 `POST` 요청으로 로그인할 수 있다.
@@ -41,7 +38,6 @@ operation::check-email[snippets='http-request,http-response,path-parameters']
 operation::login-members[snippets='http-request,http-response,request-headers,request-fields,response-headers,response-fields']
 
 [[resources-members-get]]
-
 === 사용자 정보 조회
 
 `GET` 요청으로 사용자 정보 조회를 할 수 있다.
@@ -49,7 +45,6 @@ operation::login-members[snippets='http-request,http-response,request-headers,re
 operation::get-members[snippets='http-request,http-response,request-headers,response-headers,response-fields']
 
 [[resources-members-update]]
-
 === 사용자 정보 업데이트
 
 `PATCH` 요청으로 사용자 정보를 업데이트할 수 있다.
@@ -57,7 +52,6 @@ operation::get-members[snippets='http-request,http-response,request-headers,resp
 operation::update-members[snippets='http-request,http-response,request-headers,request-fields,response-headers,response-fields']
 
 [[resources-members-change-profile]]
-
 === 사용자 프로필 사진 변경
 
 `POST` 요청으로 현재 사용자의 프로필 사진을 바꿀수 있다.
@@ -65,26 +59,24 @@ operation::update-members[snippets='http-request,http-response,request-headers,r
 operation::change-profile-image[snippets='http-request,http-response,request-headers,request-parts,response-headers,response-fields']
 
 [[resources-members-communities-get]]
-
 === 사용자가 가입한 커뮤니티 정보 조회
 
 `GET` 요청으로 사용자가 가입한 커뮤니티 정보를 조회할 수 있다.
 
-operation::query-joined-communities[snippets='http-request,http-response,request-parameters,request-headers,response-headers,response-fields']
+operation::query-joined-communities[snippets='http-request,http-response,request-headers,request-parameters,response-headers,response-fields']
 
 [[resources-members-posts-get]]
-
 === 사용자가 가입한 모든 커뮤니티의 모든 게시글 조회(Feeds)
 
 `GET` 요청으로 사용자가 가입한 모든 커뮤니티의 모든 게시글을 조회할 수 있다.
 
-operation::query-members-posts[snippets='http-request,http-response,request-parameters,request-headers,response-headers,response-fields']
+operation::query-members-posts[snippets='http-request,http-response,request-headers,request-parameters,response-headers,response-fields']
+
 
 [[resources-communities]]
 == 커뮤니티(Communities) API
 
 [[resources-communities-create]]
-
 === 커뮤니티 생성
 
 `POST` 요청으로 커뮤니티를 생성할 수 있다.
@@ -92,65 +84,54 @@ operation::query-members-posts[snippets='http-request,http-response,request-para
 operation::create-communities[snippets='http-request,http-response,request-headers,request-parameters,request-parts,response-headers,response-fields']
 
 [[resources-communities-email-check]]
-
 === 커뮤니티 이름 중복체크
 
 `GET` 요청으로 커뮤니티 이름 중복체크를 할 수 있다.
 
 operation::check-name[snippets='http-request,http-response,request-headers,path-parameters']
 
-[[resources-communities-join]]
+[[resources-communities-get]]
+=== 커뮤니티 단건 조회
 
-=== 커뮤니티 가입
+`GET` 요청으로 커뮤니티를 단건 조회할 수 있다.
 
-`POST` 요청으로 커뮤니티에 가입할 수 있다.
+operation::get-communities[snippets='http-request,http-response,request-headers,path-parameters,response-headers,response-fields']
 
-operation::join-communities[snippets='http-request,http-response,request-headers,path-parameters']
+[[resources-communities-query]]
+=== 모든 커뮤니티 정보 조회(검색)
 
+`GET` 요청으로 모든 커뮤니티를 조회할 수 있다.
 
-[[resources-communities-withdraw]]
-
-=== 커뮤니티 탈퇴
-
-`POST` 요청으로 커뮤니티를 탈퇴할 수 있다.
-
-operation::withdraw-communities[snippets='http-request,http-response,request-headers,path-parameters']
-
+operation::query-communities[snippets='http-request,http-response,request-headers,request-parameters,response-headers,response-fields']
 
 [[resources-communities-update]]
-
 === 커뮤니티 수정
 
 `POST` 요청으로 커뮤니티를 수정할 수 있다.
 
 operation::update-communities[snippets='http-request,http-response,request-headers,path-parameters,request-parameters,request-parts,response-headers,response-fields']
 
+[[resources-communities-join]]
+=== 커뮤니티 가입
 
-[[resources-communities-get]]
+`POST` 요청으로 커뮤니티에 가입할 수 있다.
 
-=== 커뮤니티 단건 조회
+operation::join-communities[snippets='http-request,http-response,request-headers,path-parameters']
 
-`GET` 요청으로 커뮤니티를 조회할 수 있다.
+[[resources-communities-withdraw]]
+=== 커뮤니티 탈퇴
 
-operation::get-communities[snippets='http-request,http-response,request-headers,path-parameters,response-headers,response-fields']
+`POST` 요청으로 커뮤니티를 탈퇴할 수 있다.
 
-
-[[resources-communities-query]]
-
-=== 모든 커뮤니티 정보 조회(검색)
-
-`GET` 요청으로 모든 커뮤니티를 조회할 수 있다.
-
-operation::query-communities[snippets='http-request,http-response,request-parameters,request-headers,response-headers,response-fields']
-
+operation::withdraw-communities[snippets='http-request,http-response,request-headers,path-parameters']
 
 [[resources-communities-members-query]]
+=== 커뮤니티 모든 사용자 조회
 
-=== 모든 커뮤니티 사용자 조회
+`GET` 요청으로 커뮤니티의 모든 사용자을 조회할 수 있다.
 
-`GET` 요청으로 모든 커뮤니티 사용자을 조회할 수 있다.
+operation::query-communities-member[snippets='http-request,http-response,request-headers,path-parameters,request-parameters,response-headers,response-fields']
 
-operation::query-communities-member[snippets='http-request,http-response,path-parameters,request-parameters,request-headers,response-headers,response-fields']
 
 [[resources-posts]]
 == 게시글(Posts) API
@@ -162,25 +143,64 @@ operation::query-communities-member[snippets='http-request,http-response,path-pa
 
 operation::create-posts[snippets='http-request,http-response,request-headers,path-parameters,request-parameters,request-parts,response-headers,response-fields']
 
-
 [[resources-posts-get]]
-
 === 게시글 단건 조회
 
-`GET` 요청으로 게시글을 조회할 수 있다.
+`GET` 요청으로 게시글을 단건 조회할 수 있다.
 
 operation::get-posts[snippets='http-request,http-response,request-headers,path-parameters,response-headers,response-fields']
 
-[[resources-posts-delete]]
+[[resources-posts-query]]
+=== 커뮤니티의 모든 게시글 조회
 
+`GET` 요청으로 커뮤니티의 모든 게시글을 조회할 수 있다.
+
+operation::query-posts[snippets='http-request,http-response,request-headers,path-parameters,request-parameters,response-headers,response-fields']
+
+[[resources-posts-delete]]
 === 게시글 삭제
 
 `DELETE` 요청으로 게시글을 삭제할 수 있다.
 
 operation::delete-posts[snippets='http-request,http-response,request-headers,path-parameters']
 
-=== 커뮤니티의 모든 게시글 조회
 
-`GET` 요청으로 커뮤니티의 모든 게시글을 조회할 수 있다.
+[[resources-comments]]
+== 댓글(Comments) API
 
-operation::query-posts[snippets='http-request,http-response,path-parameters,request-parameters,request-headers,response-headers,response-fields']
+[[resources-comments-create]]
+=== 댓글 작성
+
+`POST` 요청으로 댓글을 작성할 수 있다.
+
+operation::create-comments[snippets='http-request,http-response,request-headers,path-parameters,request-fields,response-headers,response-fields']
+
+[[resources-comments-get]]
+=== 댓글 단건 조회
+
+`GET` 요청으로 댓글을 단건 조회할 수 있다.
+
+operation::get-comments[snippets='http-request,http-response,request-headers,path-parameters,response-headers,response-fields']
+
+[[resources-comments-query]]
+=== 댓글 복수건 조회
+
+`GET` 요청으로 댓글을 복수건 조회할 수있다. +
+단, 부모 댓글만 조회하고, 부모댓글에 연관된 자식 댓글의 수를 표시한다.
+
+operation::query-parent-comments[snippets='http-request,http-response,request-headers,path-parameters,request-parameters,response-headers,response-fields']
+
+[[resources-comments-delete]]
+=== 댓글 삭제
+
+`DELETE` 요청으로 댓글을 작성할 수 있다. +
+부모 댓글을 삭제하면 자식 댓글까지 삭제 된다.
+
+operation::delete-comments[snippets='http-request,http-response,request-headers,path-parameters']
+
+[[resources-comments-update]]
+=== 댓글 수정
+
+`PATCH` 요청으로 댓글을 수정할 수 있다.
+
+operation::update-comments[snippets='http-request,http-response,request-headers,path-parameters,request-fields,response-headers,response-fields']

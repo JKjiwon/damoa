@@ -3,10 +3,7 @@ package hello.sns.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.member.Member;
-import hello.sns.repository.CategoryRepository;
-import hello.sns.repository.CommunityMemberRepository;
-import hello.sns.repository.CommunityRepository;
-import hello.sns.repository.MemberRepository;
+import hello.sns.repository.*;
 import hello.sns.service.CategoryService;
 import hello.sns.service.CommunityService;
 import hello.sns.service.MemberServiceImpl;
@@ -78,6 +75,9 @@ class CommunityControllerTest {
     @Autowired
     protected CommunityMemberRepository communityMemberRepository;
 
+    @Autowired
+    PostRepository postRepository;
+
     private Member member1;
     private String member1Email = "member1@email.com";
     private String member1Password = "member1234";
@@ -92,6 +92,7 @@ class CommunityControllerTest {
 
     @BeforeEach
     public void setUp() {
+        postRepository.deleteAll();
         communityMemberRepository.deleteAll();
         communityRepository.deleteAll();
         categoryRepository.deleteAll();
