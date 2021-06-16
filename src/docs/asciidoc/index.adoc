@@ -1,17 +1,76 @@
-ifndef::snippets[]
-:snippets: ../../../build/generated-snippets
-endif::[]
+= DAMOA REST API Guide
+김지원;
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
-:toclevels: 2
+:toclevels: 4
 :sectlinks:
-:operation-http-request-title: Request
-:operation-http-response-title: Response
+:operation-curl-request-title: Example request
+:operation-http-response-title: Example response
+
+[[overview]]
+= 개요
+
+[[overview-http-verbs]]
+== HTTP 동사
+
+본 REST API에서 사용하는 HTTP 동사(verbs)는 가능한한 표준 HTTP와 REST 규약을 따릅니다.
+
+|===
+| 동사 | 용례
+
+| `GET`
+| 리소스를 가져올 때 사용
+
+| `POST`
+| 새 리소스를 만들 때 사용
+
+| `PUT`
+| 기존 리소스를 수정할 때 사용
+
+| `PATCH`
+| 기존 리소스의 일부를 수정할 때 사용
+
+| `DELETE`
+| 기존 리소스를 삭제할 떄 사용
+|===
+
+[[overview-http-status-codes]]
+== HTTP 상태 코드
+
+본 REST API에서 사용하는 HTTP 상태 코드는 가능한한 표준 HTTP와 REST 규약을 따릅니다.
+
+|===
+| 상태 코드 | 용례
+
+| `200 OK`
+| 요청을 성공적으로 처리함
+
+| `201 Created`
+| 새 리소스를 성공적으로 생성함. 응답의 `Location` 헤더에 해당 리소스의 URI가 담겨있다.
+
+| `204 No Content`
+| 기존 리소스를 성공적으로 수행하거나 삭제함. 응답 본문이 없다.
+
+| `400 Bad Request`
+| 잘못된 요청을 보낸 경우. 응답 본문에 더 오류에 대한 정보가 담겨있다.
+
+| `401 Unauthorized`
+| 인증을 하지 않고 리소스에 접근한 경우. 주로 로그인과 관련 있다.
+
+| `403 Forbidden`
+| 인증은 하였으나 해당 리소스에 접근 권한이 없을 경우
+
+| `404 Not Found`
+| 요청한 리소스가 없는 경우.
+
+| `405 Method Not Allowed`
+| 허용하지 않는 HTTP Method로 접근한 경우
+|===
 
 [[resources]]
-= DAMOA-API GUIDE
+= 리소스
 
 [[resources-members]]
 == 사용자(Members) API

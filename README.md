@@ -1,22 +1,28 @@
-# Damoa
+# Damoa API
 
 ## 1. 소개
 - Band.us 와 같은 모임형 커뮤니티
 - JPA 성능 최적화
-- API 스펙 준수
+- 지속적인 테스트
+- RestDocs를 통한 API 문서 작성
 
-## 2. 스텍
+## 2. 기술 스택
 - Java
 - Spring Boot
 - Gradle
 - JPA
 - MYSQL
 
-## 3. Git 커밋 메세지
+## 3. API 문서
+https://github.com/JKjiwon/damoa/blob/master/src/docs/asciidoc/index.adoc
+
+## 4. 실행 방법
+
+## 5. Git 커밋 메세지
 
 - **Fix** : 보통 올바르지 않은 동작을 고친 경우에 사용합니다.
 - **Add** : 코드나 테스트, 예제, 문서 등의 추가가 있을 때 사용합니다
-- **Rename** : 코드의 삭제가 있을 때 사용
+- **Remove** : 코드의 삭제가 있을 때 사용
 - **Refactor** : 전면 수정이 있을 때 사용합니다.
 - **Update** : 원래도 정상적으로 동작하고 있었지만, 수정, 추가, 보완을 한다는 개념입니다. 코드보다는 주로 문서나 리소스, 라이브러리등에 사용합니다
 - **Improve** : 향상이 있을 때 사용합니다. 호환성, 테스트 커버리지, 성능, 검증 기능, 접근성 등 다양한 것들이 목적
