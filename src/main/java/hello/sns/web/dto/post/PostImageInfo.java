@@ -17,9 +17,8 @@ public class PostImageInfo {
 
     private int seq;
 
-    public Image toEntity(Post post) {
+    public Image toEntity() {
         return Image.builder()
-                .post(post)
                 .name(name)
                 .path(path)
                 .seq(seq)

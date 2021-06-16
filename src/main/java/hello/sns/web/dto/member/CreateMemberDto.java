@@ -38,8 +38,4 @@ public class CreateMemberDto {
                 .role(MemberRole.USER)
                 .build();
     }
-
-    public void changePassword(String password) {
-        this.password = password;
-    }
 }

@@ -43,27 +43,27 @@ public class CommunityController {
         return ResponseEntity.created(uri).body(communityDto);
     }
 
-    @PostMapping("/{id}/join")
+    @PostMapping("/{communityId}/join")
     public ResponseEntity join(
-            @PathVariable("id") Long communityId,
+            @PathVariable("communityId") Long communityId,
             @CurrentMember Member currentMember) {
         communityService.join(currentMember, communityId);
 
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{id}/withdraw")
+    @PostMapping("/{communityId}/withdraw")
     public ResponseEntity withdraw(
-            @PathVariable("id") Long communityId,
+            @PathVariable("communityId") Long communityId,
             @CurrentMember Member currentMember) {
 
         communityService.withdraw(currentMember, communityId);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/edit/{id}")
+    @PostMapping("/{communityId}/edit")
     public ResponseEntity update(
-            @PathVariable("id") Long communityId,
+            @PathVariable("communityId") Long communityId,
             @CurrentMember Member currentMember,
             @Validated UpdateCommunityDto updateCommunityDto,
             @RequestPart(value = "mainImage", required = false) MultipartFile mainImage,
@@ -80,9 +80,9 @@ public class CommunityController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{communityId}")
     public ResponseEntity findById(
-            @PathVariable("id") Long communityId,
+            @PathVariable("communityId") Long communityId,
             @CurrentMember Member currentMember) {
         CommunityDto communityDto = communityService.findById(communityId, currentMember);
         return ResponseEntity.ok(communityDto);
@@ -100,10 +100,10 @@ public class CommunityController {
         return ResponseEntity.ok(communityDtos);
     }
 
-    @GetMapping("/{id}/members")
+    @GetMapping("/{communityId}/members")
     public ResponseEntity findMember(
             @CurrentMember Member currentMember,
-            @PathVariable("id") Long communityId,
+            @PathVariable("communityId") Long communityId,
             Pageable pageable) {
 
         pageableValidator.validate(pageable, 100);

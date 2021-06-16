@@ -9,12 +9,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ImageDto {
-    private Long imageId;
+    private Long id;
     private String path;
     private int seq;
 
     public ImageDto(Image image) {
-        this.imageId = image.getId();
+        this.id = image.getId();
         this.path = image.getPath();
         this.seq = image.getSeq();
     }

@@ -14,7 +14,7 @@ endif::[]
 = DAMOA-API GUIDE
 
 [[resources-members]]
-== 사용자 API
+== 사용자(Members) API
 
 [[resources-members-create]]
 
@@ -72,8 +72,8 @@ operation::change-profile-image[snippets='http-request,http-response,request-hea
 
 operation::get-joined-communities[snippets='http-request,http-response,request-parameters,request-headers,response-headers,response-fields']
 
-[[resources-members]]
-== 커뮤니티 API
+[[resources-communities]]
+== 커뮤니티(Communities) API
 
 [[resources-communities-create]]
 
@@ -85,9 +85,9 @@ operation::create-communities[snippets='http-request,http-response,request-heade
 
 [[resources-communities-email-check]]
 
-=== 이메일 중복체크
+=== 커뮤니티 이름 중복체크
 
-`GET` 요청으로 커뮤니티 중복체크를 할 수 있다.
+`GET` 요청으로 커뮤니티 이름 중복체크를 할 수 있다.
 
 operation::check-name[snippets='http-request,http-response,request-headers,path-parameters']
 
@@ -115,7 +115,7 @@ operation::withdraw-communities[snippets='http-request,http-response,request-hea
 
 `POST` 요청으로 커뮤니티를 수정할 수 있다.
 
-operation::update-communities[snippets='http-request,http-response,request-headers,request-parameters,request-parts,response-headers,response-fields']
+operation::update-communities[snippets='http-request,http-response,request-headers,path-parameters,request-parameters,request-parts,response-headers,response-fields']
 
 
 [[resources-communities-get]]
@@ -142,4 +142,14 @@ operation::query-communities[snippets='http-request,http-response,request-parame
 
 `GET` 요청으로 모든 커뮤니티 사용자을 조회할 수 있다.
 
-operation::query-communities-member[snippets='http-request,http-response,request-parameters,request-headers,response-headers,response-fields']
+operation::query-communities-member[snippets='http-request,http-response,path-parameters,request-parameters,request-headers,response-headers,response-fields']
+
+[[resources-posts]]
+== 게시글(Posts) API
+
+[[resources-posts-create]]
+=== 게시글 작성
+
+`POST` 요청으로 게시글을 작성할 수 있다.
+
+operation::create-posts[snippets='http-request,http-response,request-headers,path-parameters,request-parameters,request-parts,response-headers,response-fields']

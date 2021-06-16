@@ -32,11 +32,12 @@ public class Post extends BaseTimeEntity {
 	@JoinColumn(name = "community_id")
 	private Community community;
 
-	@OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Image> images = new ArrayList<>();
 
 	public void addImages(Image image) {
 		this.images.add(image);
+		image.setPost(this);
 	}
 
 	@Builder

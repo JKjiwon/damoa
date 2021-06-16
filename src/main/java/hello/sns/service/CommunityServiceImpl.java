@@ -44,18 +44,19 @@ public class CommunityServiceImpl implements CommunityService {
 
         Category category = categoryService.addCategory(createCommunityDto.getCategory());
         Community community = createCommunityDto.toEntity(currentMember, category);
-        Community savedCommunity = communityRepository.save(community);
 
         if (mainImage != null) {
             FileInfo mainImageFile = fileService.uploadImage(mainImage);
-            savedCommunity.changeMainImage(mainImageFile);
+            community.changeMainImage(mainImageFile);
         }
         if (thumbNailImage != null) {
             FileInfo thumbNailImageFile = fileService.uploadImage(thumbNailImage);
-            savedCommunity.changeThumbNailImage(thumbNailImageFile);
+            community.changeThumbNailImage(thumbNailImageFile);
         }
-        savedCommunity.join(currentMember, MemberGrade.OWNER);
-        return new CommunityDto(savedCommunity);
+
+        community.join(currentMember, MemberGrade.OWNER);
+
+        return new CommunityDto(communityRepository.save(community));
     }
 
     @Override
@@ -94,7 +95,6 @@ public class CommunityServiceImpl implements CommunityService {
                                UpdateCommunityDto updateCommunityDto,
                                MultipartFile mainImage, MultipartFile thumbNailImage) {
 
-
         CommunityMember actor = getMembership(currentMember, communityId);
         if (!actor.isOwnerOrAdmin()) {
             throw new AccessDeniedException("Not ADMIN or OWNER");
@@ -114,6 +114,7 @@ public class CommunityServiceImpl implements CommunityService {
             fileService.deleteFile(community.getThumbNailImagePath());
             community.changeThumbNailImage(thumbNailImageFile);
         }
+
         return new CommunityDto(community);
     }
 

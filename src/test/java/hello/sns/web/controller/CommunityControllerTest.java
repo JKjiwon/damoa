@@ -270,13 +270,13 @@ class CommunityControllerTest {
         // when
         mockMvc.perform(
                 RestDocumentationRequestBuilders
-                        .post("/api/communities/{id}/join", communityId)
+                        .post("/api/communities/{communityId}/join", communityId)
                         .header(HttpHeaders.AUTHORIZATION, getAccessToken(member2Email, member2Password)))
                 .andDo(print())
                 .andExpect(status().isNoContent())
                 .andDo(document("join-communities",
                         pathParameters(
-                                parameterWithName("id").description("커뮤니티 식별자")
+                                parameterWithName("communityId").description("커뮤니티 식별자")
                         ),
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 정보")
@@ -293,7 +293,7 @@ class CommunityControllerTest {
         // when
         mockMvc.perform(
                 RestDocumentationRequestBuilders
-                        .post("/api/communities/{id}/join", communityId)
+                        .post("/api/communities/{communityId}/join", communityId)
                         .header(HttpHeaders.AUTHORIZATION, getAccessToken(member1Email, member1Password)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -309,13 +309,13 @@ class CommunityControllerTest {
         // when
         mockMvc.perform(
                 RestDocumentationRequestBuilders
-                        .post("/api/communities/{id}/withdraw", communityId)
+                        .post("/api/communities/{communityId}/withdraw", communityId)
                         .header(HttpHeaders.AUTHORIZATION, getAccessToken(member2Email, member2Password)))
                 .andDo(print())
                 .andExpect(status().isNoContent())
                 .andDo(document("withdraw-communities",
                         pathParameters(
-                                parameterWithName("id").description("커뮤니티 식별자")
+                                parameterWithName("communityId").description("커뮤니티 식별자")
                         ),
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 정보")
@@ -332,7 +332,7 @@ class CommunityControllerTest {
         // when
         mockMvc.perform(
                 RestDocumentationRequestBuilders
-                        .post("/api/communities/{id}/withdraw", communityId)
+                        .post("/api/communities/{communityId}/withdraw", communityId)
                         .header(HttpHeaders.AUTHORIZATION, getAccessToken(member1Email, member1Password)))
                 .andDo(print())
                 .andExpect(status().isForbidden());
@@ -347,7 +347,7 @@ class CommunityControllerTest {
         // when
         mockMvc.perform(
                 RestDocumentationRequestBuilders
-                        .post("/api/communities/{id}/withdraw", communityId)
+                        .post("/api/communities/{communityId}/withdraw", communityId)
                         .header(HttpHeaders.AUTHORIZATION, getAccessToken(member2Email, member2Password)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -379,7 +379,8 @@ class CommunityControllerTest {
 
         // When & Then
         this.mockMvc.perform(
-                multipart("/api/communities/edit/{id}", communityId)
+                RestDocumentationRequestBuilders
+                        .fileUpload("/api/communities/{communityId}/edit", communityId)
                         .file(mainImage)
                         .file(thumbNailImage)
                         .param("category", requestDto.getCategory())
@@ -391,6 +392,9 @@ class CommunityControllerTest {
                         requestParts(
                                 partWithName("thumbNailImage").description("업로드할 커뮤니티 썸네일 이미지 파일"),
                                 partWithName("mainImage").description("업로드할 커뮤니티 메인 이미지 파일")
+                        ),
+                        pathParameters(
+                                parameterWithName("communityId").description("커뮤니티 식별자")
                         ),
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 정보"),
@@ -433,7 +437,7 @@ class CommunityControllerTest {
 
         // When & Then
         this.mockMvc.perform(
-                multipart("/api/communities/edit/{id}", communityId)
+                multipart("/api/communities/{communityId}/edit", communityId)
                         .param("category", requestDto.getCategory())
                         .param("introduction", requestDto.getIntroduction())
                         .header(HttpHeaders.AUTHORIZATION, getAccessToken(member2Email, member2Password)))
@@ -450,7 +454,7 @@ class CommunityControllerTest {
         // When & Then
         this.mockMvc.perform(
                 RestDocumentationRequestBuilders
-                        .get("/api/communities/{id}", communityId)
+                        .get("/api/communities/{communityId}", communityId)
                         .header(HttpHeaders.AUTHORIZATION, getAccessToken(member2Email, member2Password)))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -459,7 +463,7 @@ class CommunityControllerTest {
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 정보")
                         ),
                         pathParameters(
-                                parameterWithName("id").description("커뮤니티 식별자")
+                                parameterWithName("communityId").description("커뮤니티 식별자")
                         ),
                         responseHeaders(
                                 headerWithName(HttpHeaders.CONTENT_TYPE).description("컨텐츠 타입")
@@ -577,7 +581,7 @@ class CommunityControllerTest {
         // When & Then
         this.mockMvc.perform(
                 RestDocumentationRequestBuilders
-                        .get("/api/communities/{id}/members", communityId)
+                        .get("/api/communities/{communityId}/members", communityId)
                         .param("page", "0")
                         .param("size", "10")
                         .param("sort", "joinedAt,desc")
@@ -588,6 +592,9 @@ class CommunityControllerTest {
                         "query-communities-member",
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("인증 정보")
+                        ),
+                        pathParameters(
+                                parameterWithName("communityId").description("커뮤니티 식별자")
                         ),
                         requestParameters(
                                 parameterWithName("page").description("요청할 페이지 번호"),

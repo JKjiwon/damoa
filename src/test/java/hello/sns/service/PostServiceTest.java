@@ -200,14 +200,13 @@ class PostServiceTest {
         verify(postRepository, times(0)).save(any());
     }
 
-    @DisplayName("이미지 업로드 실패 시 FileUploadException을 던지며 회원 프로필 이미지 업데이트 실패")
+    @DisplayName("이미지 업로드 실패 시 FileUploadException을 던지며 게시글 등록 실패")
     @Test
     public void createCommunityWithFileUploadFail_Fail() {
         // given
         List<MultipartFile> imageFiles = List.of(this.image, image);
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
                 .thenReturn(Optional.ofNullable(member1Membership));
-        when(postRepository.save(any())).thenReturn(post);
 
         // when & then
         doThrow(FileUploadException.class).when(fileService).uploadPostImages(imageFiles);
@@ -217,6 +216,7 @@ class PostServiceTest {
 
         // then
         assertThat(post.getImages().size()).isEqualTo(0);
+        verify(postRepository, times(0)).save(any());
     }
 
     @Test

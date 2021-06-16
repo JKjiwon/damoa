@@ -43,8 +43,8 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(CommentNotFoundException::new) : null;
 
         Comment comment = dto.toEntity(post, parent, currentMember);
-        Comment savedComment = commentRepository.save(comment);
-        return new CommentDto(savedComment);
+
+        return new CommentDto(commentRepository.save(comment));
     }
 
     @Override

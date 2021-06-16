@@ -27,4 +27,8 @@ public class Image {
 	private Post post;
 
 	private Integer seq;
+
+	public void setPost(Post post) {
+		this.post = post;
+	}
 }

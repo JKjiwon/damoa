@@ -168,7 +168,6 @@ class CommunityServiceTest {
     public void createCommunityWithNotImageFileTest_Fail() {
         // given
         when(communityRepository.existsByName(any())).thenReturn(false);
-        when(communityRepository.save(any())).thenReturn(community);
         doThrow(FileUploadException.class).when(fileService).uploadImage(imageFile);
 
         // when & then
@@ -176,6 +175,7 @@ class CommunityServiceTest {
                 () -> communityService.create(owner, createCommunityDto, imageFile, imageFile));
 
         verify(communityMemberRepository, times(0)).save(any(CommunityMember.class));
+        verify(communityRepository, times(0)).save(any());
     }
 
     @Test
@@ -208,7 +208,6 @@ class CommunityServiceTest {
                 () -> communityService.join(any(), community.getId()));
 
         // then
-        verify(communityRepository, times(1)).findById(any());
         verify(communityMemberRepository, times(0)).existsByMemberAndCommunityId(any(), any());
     }
 
@@ -224,7 +223,6 @@ class CommunityServiceTest {
                 () -> communityService.join(any(), community.getId()));
 
         // then
-        verify(communityRepository).findById(community.getId());
         verify(communityMemberRepository).existsByMemberAndCommunityId(any(), any());
     }
 

@@ -3,6 +3,7 @@ package hello.sns.web.dto.post;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import hello.sns.domain.community.Community;
 import hello.sns.domain.member.Member;
+import hello.sns.domain.post.Image;
 import hello.sns.domain.post.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,6 +41,7 @@ public class PostDto {
         this.images = post.getImages().stream()
                 .map(ImageDto::new)
                 .collect(Collectors.toList());
+
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
     }
