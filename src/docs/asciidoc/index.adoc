@@ -4,7 +4,7 @@
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
-:toclevels: 4
+:toclevels: 2
 :sectlinks:
 :operation-curl-request-title: Example request
 :operation-http-response-title: Example response
