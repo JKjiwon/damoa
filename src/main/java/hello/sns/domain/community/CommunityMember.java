@@ -1,16 +1,13 @@
 package hello.sns.domain.community;
 
-import hello.sns.domain.BaseTimeEntity;
 import hello.sns.domain.member.Member;
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-
 import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
@@ -19,7 +16,6 @@ import static javax.persistence.FetchType.LAZY;
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@EqualsAndHashCode(of = "id", callSuper = false)
 public class CommunityMember{
 
 	@Id

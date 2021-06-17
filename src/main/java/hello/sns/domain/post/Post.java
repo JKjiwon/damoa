@@ -14,7 +14,6 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@EqualsAndHashCode(of = "id", callSuper = false)
 public class Post extends BaseTimeEntity {
 
 	@Id

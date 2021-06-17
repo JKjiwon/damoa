@@ -3,7 +3,7 @@
 ## 1. 소개
 - Band.us 와 같은 모임형 커뮤니티
 - JPA 성능 최적화
-- 지속적인 테스트
+- 꾸준한 테스트 작성, Jacoco 기준 현재 커버리지 71% 달성
 - RestDocs를 통한 API 문서 작성
 
 ## 2. 기술 스택
@@ -17,6 +17,8 @@
 https://jkjiwon.github.io/damoa-api-guide/
 
 ## 4. 실행 방법
+
+- application.yml 에 로컬 DB를 등록 후 실행
 
 ## 5. Git 커밋 메세지
 

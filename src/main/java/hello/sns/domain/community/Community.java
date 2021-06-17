@@ -12,7 +12,6 @@ import java.util.List;
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
-@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Community extends BaseTimeEntity {
