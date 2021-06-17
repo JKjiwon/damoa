@@ -1,12 +1,12 @@
 # Damoa API
 
-## 1. 소개
+## 소개
 - Band.us 와 같은 모임형 커뮤니티
 - JPA 성능 최적화
 - 꾸준한 테스트 작성, Jacoco 기준 현재 커버리지 71% 달성
 - RestDocs를 통한 API 문서 작성
 
-## 2. 기술 스택
+## 기술 스택
 - Java
 - Spring Boot
 - JPA
@@ -15,19 +15,19 @@
 - Gradle
 - MYSQL
 
-## 3. API 문서
+## API 문서
 https://jkjiwon.github.io/damoa-api-guide/
 
-## 4. Wiki
-### 4-1. 기능정의
-### 4-2. JPA 최적화 전략
-### 4-3. DB ERD 
+## Wiki 
+1. [기능정의](https://github.com/JKjiwon/damoa/wiki/%5B1%5D.-기능-정의)
+2. [JPA 최적화 전략](https://github.com/JKjiwon/damoa/wiki/%5B2%5D.-JPA-성능-최적화-전략)
+3. DB ERD
 
-## 5. 실행 방법
+## 실행 방법
 
 - application.yml 에 로컬 DB를 등록 후 실행
 
-## 5. Git 커밋 메세지
+## Git 커밋 메세지
 
 - **Fix** : 보통 올바르지 않은 동작을 고친 경우에 사용합니다.
 - **Add** : 코드나 테스트, 예제, 문서 등의 추가가 있을 때 사용합니다
