@@ -19,9 +19,9 @@
 https://jkjiwon.github.io/damoa-api-guide/
 
 ## Wiki 
-1. [기능정의](https://github.com/JKjiwon/damoa/wiki/%5B1%5D.-기능-정의)
-2. [JPA 최적화 전략](https://github.com/JKjiwon/damoa/wiki/%5B2%5D.-JPA-성능-최적화-전략)
-3. [DB ERD](https://github.com/JKjiwon/damoa/wiki/%5B3%5D.-DB-ERD)
+1. [기능 정의](https://github.com/JKjiwon/damoa/wiki/%5B1%5D.-기능-정의)
+2. [JPA 성능 최적화 전략](https://github.com/JKjiwon/damoa/wiki/%5B2%5D.-JPA-성능-최적화-전략)
+3. [Database ERD](https://github.com/JKjiwon/damoa/wiki/%5B3%5D.-DB-ERD)
 4. [Git 커밋 메세지](https://github.com/JKjiwon/damoa/wiki/%5B4%5D.-Git-커밋-메세지)
 
 ## 실행 방법
