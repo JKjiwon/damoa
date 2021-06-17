@@ -6,8 +6,8 @@
 :toc: left
 :toclevels: 2
 :sectlinks:
-:operation-curl-request-title: Example request
-:operation-http-response-title: Example response
+:operation-http-request-title: Request
+:operation-http-response-title: Response
 
 [[overview]]
 = 개요
