@@ -9,14 +9,21 @@
 ## 2. 기술 스택
 - Java
 - Spring Boot
-- Gradle
 - JPA
+- Spring Security - JWT Token
+- Spring Rest Docs
+- Gradle
 - MYSQL
 
 ## 3. API 문서
 https://jkjiwon.github.io/damoa-api-guide/
 
-## 4. 실행 방법
+## 4. Wiki
+### 4-1. 기능정의
+### 4-2. JPA 최적화 전략
+### 4-3. DB ERD 
+
+## 5. 실행 방법
 
 - application.yml 에 로컬 DB를 등록 후 실행
 
