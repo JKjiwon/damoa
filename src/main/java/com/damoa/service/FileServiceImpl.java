@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class FileServiceImpl implements FileService {
 
-    @Value("${sns.upload.path}")
+    @Value("${damoa.upload.path}")
     private String baseDir;
 
     @Override

@@ -26,7 +26,9 @@ https://jkjiwon.github.io/damoa-api-guide/
 
 ## 실행 방법
 1. lombok 설치
-2. application.yml 에 로컬 DB를 등록 후 실행
+2. application.yml 에 파일 저장 위치 변경(damoa.upload.path)
+3. application.yml 에 로컬 DB를 등록
+4. 실행
 
 ## JaCoCo Test Report
 branch coverage, instruction coverage 70% 이상 유지

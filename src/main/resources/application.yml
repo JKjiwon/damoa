@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/damoa?serverTimezone=Asia/Seoul
-    username: test
-    password: test1234
+    username: cos
+    password: cos1234
 
   jpa:
     hibernate:
@@ -29,6 +29,6 @@ app:
   jwtSecret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2ImlsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
   jwtExpirationInMs: 604800000
 
-sns:
+damoa:
   upload:
-    path: /Users/kimjiwon/studyProject/sns/uploads
+    path: /Users/kimjiwon/studyProject/damoa/uploads
