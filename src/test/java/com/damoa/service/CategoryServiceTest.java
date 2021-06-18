@@ -33,7 +33,7 @@ class CategoryServiceTest {
         when(categoryRepository.findByName(any())).thenReturn(Optional.ofNullable(category));
 
         // when
-        Category returnCategory = categoryService.addCategory(any());
+        Category returnCategory = categoryService.getCategory(any());
 
         // then
         Assertions.assertThat(returnCategory.getName()).isEqualTo(category.getName());
@@ -48,7 +48,7 @@ class CategoryServiceTest {
         when(categoryRepository.save(any())).thenReturn(category);
 
         // when
-        Category returnCategory = categoryService.addCategory(any());
+        Category returnCategory = categoryService.getCategory(any());
 
         // then
         Assertions.assertThat(returnCategory.getName()).isEqualTo(category.getName());

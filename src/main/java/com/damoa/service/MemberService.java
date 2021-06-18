@@ -8,12 +8,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {
 
-    MemberDto create(CreateMemberDto createMemberDto);
+    MemberDto create(CreateMemberDto dto);
 
     void checkDuplicatedEmail(String email);
 
     MemberDto updateProfileImage(Member currentMember, MultipartFile profileImage);
 
-    MemberDto updateMember(Member currentMember, UpdateMemberDto updateMemberDto);
+    MemberDto updateMember(Member currentMember, UpdateMemberDto dto);
 
 }

@@ -25,17 +25,17 @@ import java.net.URISyntaxException;
 public class CommentController {
 
     private final CommentService commentService;
+
     private final PageableValidator pageableValidator;
 
     @PostMapping
     public ResponseEntity create(HttpServletRequest httpServletRequest,
                                  @PathVariable Long communityId,
                                  @PathVariable Long postId,
-                                 @Validated @RequestBody CreateCommentDto createCommentDto,
+                                 @Validated @RequestBody CreateCommentDto dto,
                                  @CurrentMember Member currentMember) throws URISyntaxException {
 
-        CommentDto commentDto = commentService.create(communityId, postId, createCommentDto, currentMember);
-
+        CommentDto commentDto = commentService.create(communityId, postId, dto, currentMember);
         URI uri = new URI(httpServletRequest.getRequestURL().toString() + commentDto.getId());
         return ResponseEntity.created(uri).body(commentDto);
     }
@@ -47,7 +47,6 @@ public class CommentController {
                                  @CurrentMember Member currentMember) {
 
         commentService.delete(communityId, postId, commentId, currentMember);
-
         return ResponseEntity.noContent().build();
     }
 
@@ -55,6 +54,7 @@ public class CommentController {
     public ResponseEntity findAllByPostId(@PathVariable Long communityId,
                                           @PathVariable Long postId,
                                           Pageable pageable) {
+
         pageableValidator.validate(pageable, 100);
         Page<CommentListDto> comments = commentService.findAllByPostId(postId, pageable);
         return ResponseEntity.ok(comments);
@@ -73,9 +73,10 @@ public class CommentController {
     public ResponseEntity update(@PathVariable Long communityId,
                                  @PathVariable Long postId,
                                  @PathVariable Long commentId,
-                                 @Validated @RequestBody UpdateCommentDto updateCommentDto,
+                                 @Validated @RequestBody UpdateCommentDto dto,
                                  @CurrentMember Member currentMember) {
-        CommentDto commentDto = commentService.update(communityId, postId, commentId, updateCommentDto, currentMember);
+
+        CommentDto commentDto = commentService.update(communityId, postId, commentId, dto, currentMember);
         return ResponseEntity.ok().body(commentDto);
     }
 }

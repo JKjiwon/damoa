@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface CommunityService {
 
     CommunityDto create(Member currentMember,
-                        CreateCommunityDto createCommunityDto,
+                        CreateCommunityDto dto,
                         MultipartFile mainImage,
                         MultipartFile thumbNailImage);
 
@@ -21,7 +21,7 @@ public interface CommunityService {
 
     CommunityDto update(Long communityId,
                         Member currentMember,
-                        UpdateCommunityDto updateCommunityDto,
+                        UpdateCommunityDto dto,
                         MultipartFile mainImage, MultipartFile thumbNailImage);
 
     CommunityDto findById(Long communityId, Member currentMember);

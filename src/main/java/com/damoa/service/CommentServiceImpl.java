@@ -27,14 +27,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
+
     private final PostRepository postRepository;
+
     private final CommunityMemberRepository communityMemberRepository;
 
 
     @Override
     @Transactional
     public CommentDto create(Long communityId, Long postId, CreateCommentDto dto, Member currentMember) {
-
         checkJoinedMember(currentMember, communityId);
 
         Post post = postRepository.findById(postId)
@@ -51,37 +52,30 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void delete(Long communityId, Long postId, Long commentId, Member currentMember){
-
-        // 커뮤니티에 가입된 회원인지 확인
         CommunityMember actor = getMembership(currentMember.getId(), communityId);
 
         Comment comment = commentRepository.findOneWithWriter(commentId, postId)
                 .orElseThrow(CommentNotFoundException::new);
 
-        // 삭제 가능한 회원인지 확인
         if (!comment.writtenBy(currentMember) && !actor.isOwnerOrAdmin()) {
             throw new AccessDeniedException("Not allowed member");
         }
 
-        // 자식댓글이 있으면 자식 댓글까지 삭제
         commentRepository.deleteByParentId(commentId);
         commentRepository.deleteById(commentId);
     }
 
     @Transactional
     @Override
-    public CommentDto update(Long communityId, Long postId, Long commentId, UpdateCommentDto updateCommentDto, Member currentMember) {
-        // 커뮤니티에 가입된 회원인지 확인
+    public CommentDto update(Long communityId, Long postId, Long commentId, UpdateCommentDto dto, Member currentMember) {
         CommunityMember actor = getMembership(currentMember.getId(), communityId);
-
         Comment comment = commentRepository.findOneWithWriter(commentId, postId)
                 .orElseThrow(CommentNotFoundException::new);
 
-        // 삭제 가능한 회원인지 확인
         if (!comment.writtenBy(currentMember) && !actor.isOwnerOrAdmin()) {
             throw new AccessDeniedException("Not allowed member");
         }
-        comment.update(updateCommentDto.getContent());
+        comment.update(dto.getContent());
         return new CommentDto(comment);
     }
 

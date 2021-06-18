@@ -45,42 +45,37 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Override
     public PostDto create(Long communityId, Member currentMember,
-                          CreatePostDto createPostDto, List<MultipartFile> postImageFiles) {
-
+                          CreatePostDto dto, List<MultipartFile> postImageFiles) {
         CommunityMember writer = getMembership(currentMember, communityId);
+        Post post = dto.toEntity(currentMember, writer.getCommunity());
 
-        Post post = createPostDto.toEntity(currentMember, writer.getCommunity());
-
-        // 사진 업로드 - 게시글과 사진은 생명주가기 같다. -> Cascade.All 로 설정
         if (postImageFiles != null && !postImageFiles.isEmpty()) {
             List<PostImageInfo> postImageInfos = fileService.uploadPostImages(postImageFiles);
             postImageInfos.stream()
                     .map(PostImageInfo::toEntity)
                     .forEach(post::addImages);
         }
+
         return new PostDto(postRepository.save(post));
     }
 
     @Transactional
     @Override
     public void delete(Long communityId, Long postId, Member currentMember) {
-
         CommunityMember actor = getMembership(currentMember, communityId);
-
         Post post = postRepository.findByIdWithAll(postId)
                 .orElseThrow(PostNotFoundException::new);
 
         if (!post.writtenBy(currentMember) && !actor.isOwnerOrAdmin()) {
             throw new AccessDeniedException("Not allowed member");
         }
-        // 게시글과 관련된 사진을 모두 삭제하고 게시글 삭제.
+
+        // 게시글과 관련된 사진을 모두 삭제
         post.getImages()
                 .stream()
                 .map(Image::getPath)
                 .forEach(fileService::deleteFile);
 
-        // Cascade.ALL로 설정할 시 Post 1개에 여러개의 Image이 있을 때 Post를 삭제하면 Image 개수 만큼 삭제 쿼리가 나간다.
-        // Image 삭제를 벌크 연산으로 쿼리 1번에 해결.
         imageRepository.deleteByPostId(postId);
 
         // 게시글과 관련된 댓글 모두 삭제
@@ -92,6 +87,7 @@ public class PostServiceImpl implements PostService {
                     commentRepository.deleteById(id);
                 }
         );
+
         postRepository.deleteById(postId);
     }
 

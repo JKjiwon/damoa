@@ -30,31 +30,32 @@ import java.util.stream.Collectors;
 public class CommunityServiceImpl implements CommunityService {
 
     private final CommunityRepository communityRepository;
+
     private final FileService fileService;
+
     private final CommunityMemberRepository communityMemberRepository;
+
     private final CategoryService categoryService;
 
     @Transactional
     @Override
     public CommunityDto create(Member currentMember,
-                       CreateCommunityDto createCommunityDto,
-                       MultipartFile mainImage, MultipartFile thumbNailImage) {
+                               CreateCommunityDto dto,
+                               MultipartFile mainImage, MultipartFile thumbNailImage) {
 
-        checkDuplicatedName(createCommunityDto.getName());
-
-        Category category = categoryService.addCategory(createCommunityDto.getCategory());
-        Community community = createCommunityDto.toEntity(currentMember, category);
+        checkDuplicatedName(dto.getName());
+        Category category = categoryService.getCategory(dto.getCategory());
+        Community community = dto.toEntity(currentMember, category);
 
         if (mainImage != null) {
             FileInfo mainImageFile = fileService.uploadImage(mainImage);
             community.changeMainImage(mainImageFile);
         }
+
         if (thumbNailImage != null) {
             FileInfo thumbNailImageFile = fileService.uploadImage(thumbNailImage);
             community.changeThumbNailImage(thumbNailImageFile);
         }
-
-        community.join(currentMember, MemberGrade.OWNER);
 
         return new CommunityDto(communityRepository.save(community));
     }
@@ -92,7 +93,7 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public CommunityDto update(Long communityId,
                                Member currentMember,
-                               UpdateCommunityDto updateCommunityDto,
+                               UpdateCommunityDto dto,
                                MultipartFile mainImage, MultipartFile thumbNailImage) {
 
         CommunityMember actor = getMembership(currentMember, communityId);
@@ -101,8 +102,8 @@ public class CommunityServiceImpl implements CommunityService {
         }
 
         Community community = actor.getCommunity();
-        Category category = categoryService.addCategory(updateCommunityDto.getCategory());
-        community.update(updateCommunityDto.getIntroduction(), category);
+        Category category = categoryService.getCategory(dto.getCategory());
+        community.update(dto.getIntroduction(), category);
 
         if (mainImage != null) {
             FileInfo mainImageFile = fileService.uploadImage(mainImage);
@@ -129,11 +130,9 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public Page<CommunityMemberDto> findCommunityMember(Long communityId, Member currentMember, Pageable pageable) {
         CommunityMember actor = getMembership(currentMember, communityId);
-
         if (!actor.isOwnerOrAdmin()) {
             throw new AccessDeniedException("Not ADMIN or OWNER");
         }
-
         Page<CommunityMember> communityMembers = communityMemberRepository.findByCommunityId(communityId, pageable);
 
         return communityMembers.map(CommunityMemberDto::new);

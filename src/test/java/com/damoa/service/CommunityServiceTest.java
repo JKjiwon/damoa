@@ -120,14 +120,14 @@ class CommunityServiceTest {
 
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
-        when(categoryService.addCategory(any())).thenReturn(category);
+        when(categoryService.getCategory(any())).thenReturn(category);
 
         // when
         communityService.create(owner, createCommunityDto, null, null);
 
         // then
         verify(communityRepository).save(any(Community.class));
-        verify(categoryService).addCategory(any(String.class));
+        verify(categoryService).getCategory(any(String.class));
         verify(fileService, times(0)).uploadImage(any(MultipartFile.class));
     }
 
@@ -139,7 +139,7 @@ class CommunityServiceTest {
 
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
-        when(categoryService.addCategory(any())).thenReturn(category);
+        when(categoryService.getCategory(any())).thenReturn(category);
         when(fileService.uploadImage(any(MultipartFile.class))).thenReturn(imageFileInfo);
 
         // when
@@ -287,7 +287,7 @@ class CommunityServiceTest {
 
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
                 .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(0)));
-        when(categoryService.addCategory(any()))
+        when(categoryService.getCategory(any()))
                 .thenReturn(new Category(updateCommunityDto.getCategory()));
 
         // when
@@ -300,7 +300,7 @@ class CommunityServiceTest {
         verify(fileService, times(0)).deleteFile(any());
         verify(fileService, times(0)).uploadImage(any());
         verify(communityMemberRepository).findByMemberAndCommunityId(owner, community.getId());
-        verify(categoryService).addCategory(updateCommunityDto.getCategory());
+        verify(categoryService).getCategory(updateCommunityDto.getCategory());
     }
 
     @Test
@@ -312,7 +312,7 @@ class CommunityServiceTest {
         when(fileService.uploadImage(any())).thenReturn(imageFileInfo);
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
                 .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(0)));
-        when(categoryService.addCategory(any()))
+        when(categoryService.getCategory(any()))
                 .thenReturn(new Category(updateCommunityDto.getCategory()));
 
         // when
@@ -331,7 +331,7 @@ class CommunityServiceTest {
 
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
                 .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(0)));
-        when(categoryService.addCategory(any()))
+        when(categoryService.getCategory(any()))
                 .thenReturn(new Category(updateCommunityDto.getCategory()));
 
         doThrow(FileUploadException.class).when(fileService).uploadImage(imageFile);

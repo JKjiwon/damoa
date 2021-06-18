@@ -12,7 +12,7 @@ import java.util.List;
 public interface PostService {
 
     PostDto create(Long communityId, Member currentMember,
-                   CreatePostDto createPostDto, List<MultipartFile> postImageFiles);
+                   CreatePostDto dto, List<MultipartFile> postImageFiles);
 
     void delete(Long communityId, Long postId, Member currentMember);
 

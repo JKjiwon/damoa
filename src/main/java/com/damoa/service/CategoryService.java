@@ -11,7 +11,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public Category addCategory(String name) {
+    public Category getCategory(String name) {
         return categoryRepository.findByName(name).orElseGet(
                 ()-> categoryRepository.save(new Category(name))
         );

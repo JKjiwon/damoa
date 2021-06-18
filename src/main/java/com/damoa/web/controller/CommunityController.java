@@ -26,19 +26,19 @@ import java.net.URISyntaxException;
 public class CommunityController {
 
     private final CommunityServiceImpl communityService;
+
     private final PageableValidator pageableValidator;
 
     @PostMapping
     public ResponseEntity create(
             HttpServletRequest httpServletRequest,
-            @Validated CreateCommunityDto createCommunityDto,
+            @Validated CreateCommunityDto dto,
             @RequestPart(value = "mainImage", required = false) MultipartFile mainImage,
             @RequestPart(value = "thumbNailImage", required = false) MultipartFile thumbNailImage,
             @CurrentMember Member currentMember) throws URISyntaxException {
 
-        CommunityDto communityDto = communityService.create(currentMember, createCommunityDto,
+        CommunityDto communityDto = communityService.create(currentMember, dto,
                 mainImage, thumbNailImage);
-
         URI uri = new URI(httpServletRequest.getRequestURL().toString() + communityDto.getId());
         return ResponseEntity.created(uri).body(communityDto);
     }
@@ -47,8 +47,8 @@ public class CommunityController {
     public ResponseEntity join(
             @PathVariable("communityId") Long communityId,
             @CurrentMember Member currentMember) {
-        communityService.join(currentMember, communityId);
 
+        communityService.join(currentMember, communityId);
         return ResponseEntity.noContent().build();
     }
 
@@ -65,12 +65,12 @@ public class CommunityController {
     public ResponseEntity update(
             @PathVariable("communityId") Long communityId,
             @CurrentMember Member currentMember,
-            @Validated UpdateCommunityDto updateCommunityDto,
+            @Validated UpdateCommunityDto dto,
             @RequestPart(value = "mainImage", required = false) MultipartFile mainImage,
             @RequestPart(value = "thumbNailImage", required = false) MultipartFile thumbNailImage) {
 
         CommunityDto communityDto = communityService
-                .update(communityId, currentMember, updateCommunityDto, mainImage, thumbNailImage);
+                .update(communityId, currentMember, dto, mainImage, thumbNailImage);
         return ResponseEntity.ok().body(communityDto);
     }
 
@@ -84,6 +84,7 @@ public class CommunityController {
     public ResponseEntity findById(
             @PathVariable("communityId") Long communityId,
             @CurrentMember Member currentMember) {
+
         CommunityDto communityDto = communityService.findById(communityId, currentMember);
         return ResponseEntity.ok(communityDto);
     }

@@ -25,16 +25,17 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+
     private final PageableValidator pageableValidator;
 
     @PostMapping
     public ResponseEntity create(HttpServletRequest httpServletRequest,
                                  @PathVariable("communityId") Long communityId,
                                  @CurrentMember Member currentMember,
-                                 CreatePostDto createPostDto,
+                                 CreatePostDto dto,
                                  @RequestPart(value = "image", required = false) List<MultipartFile> images) throws URISyntaxException {
 
-        PostDto postDto = postService.create(communityId, currentMember, createPostDto, images);
+        PostDto postDto = postService.create(communityId, currentMember, dto, images);
         URI uri = new URI(httpServletRequest.getRequestURL().toString() + postDto.getId());
         return ResponseEntity.created(uri).body(postDto);
     }
@@ -43,6 +44,7 @@ public class PostController {
     public ResponseEntity findById(@PathVariable("communityId") Long communityId,
                                    @PathVariable("postId") Long postId,
                                    @CurrentMember Member currentMember) {
+
         PostDto postDto = postService.findById(communityId, postId, currentMember);
         return ResponseEntity.ok(postDto);
     }
@@ -51,6 +53,7 @@ public class PostController {
     public ResponseEntity findAll(@PathVariable("communityId") Long communityId,
                                   @CurrentMember Member currentMember,
                                   Pageable pageable) {
+
         pageableValidator.validate(pageable, 100);
         Page<PostDto> postDtos = postService.findAllByCommunityId(communityId, currentMember, pageable);
         return ResponseEntity.ok(postDtos);
@@ -61,6 +64,7 @@ public class PostController {
     public ResponseEntity delete(@PathVariable("communityId") Long communityId,
                                  @PathVariable("postId") Long postId,
                                  @CurrentMember Member currentMember) {
+
         postService.delete(communityId, postId, currentMember);
         return ResponseEntity.noContent().build();
     }

@@ -30,15 +30,20 @@ import java.net.URISyntaxException;
 public class MemberController {
 
     private final MemberService memberService;
+
     private final AuthService authService;
+
     private final PostService postService;
+
     private final CommunityService communityService;
+
     private final PageableValidator pageableValidator;
 
     @PostMapping
     public ResponseEntity create(HttpServletRequest httpServletRequest,
-                                 @RequestBody @Validated CreateMemberDto createMemberDto) throws URISyntaxException {
-        MemberDto memberDto = memberService.create(createMemberDto);
+                                 @RequestBody @Validated CreateMemberDto dto) throws URISyntaxException {
+
+        MemberDto memberDto = memberService.create(dto);
         URI uri = new URI(httpServletRequest.getRequestURL() + "/me");
         return ResponseEntity.created(uri).body(memberDto);
     }
@@ -50,8 +55,8 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Validated LoginMemberDto loginMemberDto) {
-        JwtTokenDto jwtToken = authService.login(loginMemberDto);
+    public ResponseEntity login(@RequestBody @Validated LoginMemberDto dto) {
+        JwtTokenDto jwtToken = authService.login(dto);
         return ResponseEntity.ok(jwtToken);
     }
 
@@ -70,8 +75,9 @@ public class MemberController {
 
     @PatchMapping
     public ResponseEntity updateMember(@CurrentMember Member currentMember,
-                                       @RequestBody UpdateMemberDto updateMemberDto) {
-        MemberDto memberDto = memberService.updateMember(currentMember, updateMemberDto);
+                                       @RequestBody UpdateMemberDto dto) {
+
+        MemberDto memberDto = memberService.updateMember(currentMember, dto);
         return ResponseEntity.ok(memberDto);
     }
 
