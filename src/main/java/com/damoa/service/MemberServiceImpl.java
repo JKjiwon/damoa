@@ -2,7 +2,7 @@ package com.damoa.service;
 
 import com.damoa.domain.member.Member;
 import com.damoa.repository.MemberRepository;
-import com.damoa.web.dto.common.FileInfo;
+import com.damoa.web.dto.common.UploadFile;
 import com.damoa.web.dto.member.CreateMemberDto;
 import com.damoa.web.dto.member.MemberDto;
 import com.damoa.web.dto.member.UpdateMemberDto;
@@ -44,9 +44,9 @@ public class MemberServiceImpl implements MemberService {
                                         MultipartFile profileImage) {
 
         Member findMember = getMember(currentMember);
-        FileInfo fileInfo = fileService.uploadImage(profileImage);
+        UploadFile uploadFile = fileService.storeImage(profileImage);
         fileService.deleteFile(findMember.getProfileImagePath());
-        findMember.updateProfileImage(fileInfo);
+        findMember.updateProfileImage(uploadFile);
 
         return new MemberDto(findMember);
     }

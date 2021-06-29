@@ -1,7 +1,7 @@
 package com.damoa.domain.member;
 
 import com.damoa.domain.BaseTimeEntity;
-import com.damoa.web.dto.common.FileInfo;
+import com.damoa.web.dto.common.UploadFile;
 import com.damoa.web.dto.member.UpdateMemberDto;
 import lombok.*;
 
@@ -32,9 +32,9 @@ public class Member extends BaseTimeEntity {
 	private String profileImageName;
 	private String profileImagePath;
 
-	public void updateProfileImage(FileInfo fileInfo) {
-		this.profileImageName = fileInfo.getFileName();
-		this.profileImagePath = fileInfo.getFilePath();
+	public void updateProfileImage(UploadFile uploadFile) {
+		this.profileImageName = uploadFile.getFileName();
+		this.profileImagePath = uploadFile.getFilePath();
 	}
 
 	public void update(UpdateMemberDto dto) {

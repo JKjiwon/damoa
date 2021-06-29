@@ -7,7 +7,7 @@ import com.damoa.domain.community.MemberGrade;
 import com.damoa.domain.member.Member;
 import com.damoa.repository.CommunityMemberRepository;
 import com.damoa.repository.CommunityRepository;
-import com.damoa.web.dto.common.FileInfo;
+import com.damoa.web.dto.common.UploadFile;
 import com.damoa.web.dto.community.*;
 import com.damoa.web.exception.AccessDeniedException;
 import com.damoa.web.exception.business.CommunityAlreadyJoinedException;
@@ -48,12 +48,12 @@ public class CommunityServiceImpl implements CommunityService {
         Community community = dto.toEntity(currentMember, category);
 
         if (mainImage != null) {
-            FileInfo mainImageFile = fileService.uploadImage(mainImage);
+            UploadFile mainImageFile = fileService.storeImage(mainImage);
             community.changeMainImage(mainImageFile);
         }
 
         if (thumbNailImage != null) {
-            FileInfo thumbNailImageFile = fileService.uploadImage(thumbNailImage);
+            UploadFile thumbNailImageFile = fileService.storeImage(thumbNailImage);
             community.changeThumbNailImage(thumbNailImageFile);
         }
 
@@ -106,12 +106,12 @@ public class CommunityServiceImpl implements CommunityService {
         community.update(dto.getIntroduction(), category);
 
         if (mainImage != null) {
-            FileInfo mainImageFile = fileService.uploadImage(mainImage);
+            UploadFile mainImageFile = fileService.storeImage(mainImage);
             fileService.deleteFile(community.getMainImagePath());
             community.changeMainImage(mainImageFile);
         }
         if (thumbNailImage != null) {
-            FileInfo thumbNailImageFile = fileService.uploadImage(thumbNailImage);
+            UploadFile thumbNailImageFile = fileService.storeImage(thumbNailImage);
             fileService.deleteFile(community.getThumbNailImagePath());
             community.changeThumbNailImage(thumbNailImageFile);
         }

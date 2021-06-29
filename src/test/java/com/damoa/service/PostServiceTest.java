@@ -13,7 +13,7 @@ import com.damoa.repository.ImageRepository;
 import com.damoa.repository.PostRepository;
 import com.damoa.web.dto.post.CreatePostDto;
 import com.damoa.web.dto.post.PostDto;
-import com.damoa.web.dto.post.PostImageInfo;
+import com.damoa.web.dto.post.PostUploadImage;
 import com.damoa.web.exception.AccessDeniedException;
 import com.damoa.web.exception.business.CommunityNotJoinedException;
 import com.damoa.web.exception.business.FileUploadException;
@@ -71,7 +71,7 @@ class PostServiceTest {
     CommunityMember member2Membership;
     CreatePostDto createPostDto;
     MockMultipartFile image;
-    PostImageInfo postImageInfo;
+    PostUploadImage postUploadImage;
     Post post;
 
     @BeforeEach
@@ -127,7 +127,7 @@ class PostServiceTest {
 
         post = createPostDto.toEntity(member1, community);
 
-        postImageInfo = new PostImageInfo("hello", "2021/06/07/hello", 1);
+        postUploadImage = new PostUploadImage("hello", "2021/06/07/hello", 1);
     }
 
     @Test
@@ -144,7 +144,7 @@ class PostServiceTest {
         // then
         verify(postRepository).save(any());
         verify(communityMemberRepository).findByMemberAndCommunityId(member1, community.getId());
-        verify(fileService, times(0)).uploadPostImages(any());
+        verify(fileService, times(0)).storePostImages(any());
     }
 
     @Test
@@ -161,7 +161,7 @@ class PostServiceTest {
         // then
         verify(postRepository).save(any());
         verify(communityMemberRepository).findByMemberAndCommunityId(member1, community.getId());
-        verify(fileService, times(0)).uploadPostImages(any());
+        verify(fileService, times(0)).storePostImages(any());
     }
 
     @Test
@@ -169,12 +169,12 @@ class PostServiceTest {
     public void createPostWithTwoImages_Success() {
         // given
         List<MultipartFile> imageFiles = List.of(image, image);
-        List<PostImageInfo> postImageInfos = List.of(postImageInfo, postImageInfo);
+        List<PostUploadImage> postUploadImages = List.of(postUploadImage, postUploadImage);
 
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
                 .thenReturn(Optional.ofNullable(member1Membership));
         when(postRepository.save(any())).thenReturn(post);
-        when(fileService.uploadPostImages(imageFiles)).thenReturn(postImageInfos);
+        when(fileService.storePostImages(imageFiles)).thenReturn(postUploadImages);
 
         // when
         postService.create(community.getId(), member1, createPostDto, imageFiles);
@@ -182,7 +182,7 @@ class PostServiceTest {
         // then
         verify(postRepository).save(any());
         verify(communityMemberRepository).findByMemberAndCommunityId(member1, community.getId());
-        verify(fileService, times(1)).uploadPostImages(imageFiles);
+        verify(fileService, times(1)).storePostImages(imageFiles);
     }
 
     @Test
@@ -209,7 +209,7 @@ class PostServiceTest {
                 .thenReturn(Optional.ofNullable(member1Membership));
 
         // when & then
-        doThrow(FileUploadException.class).when(fileService).uploadPostImages(imageFiles);
+        doThrow(FileUploadException.class).when(fileService).storePostImages(imageFiles);
 
         assertThrows(FileUploadException.class,
                 () -> postService.create(community.getId(), member1, createPostDto, imageFiles));

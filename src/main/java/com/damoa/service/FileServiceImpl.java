@@ -1,8 +1,8 @@
 package com.damoa.service;
 
 import com.damoa.util.FileUtil;
-import com.damoa.web.dto.common.FileInfo;
-import com.damoa.web.dto.post.PostImageInfo;
+import com.damoa.web.dto.common.UploadFile;
+import com.damoa.web.dto.post.PostUploadImage;
 import com.damoa.web.exception.business.FileUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,45 +13,45 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class FileServiceImpl implements FileService {
 
     @Value("${damoa.upload.path}")
-    private String baseDir;
+    private String fileDir;
+
+    public String getFullPath(String fileName) {
+        return fileDir + fileName;
+    }
 
     @Override
-    public FileInfo uploadImage(MultipartFile file) throws FileUploadException {
+    public UploadFile storeImage(MultipartFile file) throws FileUploadException {
         checkImageFile(file);
-        return uploadFile(file);
+        return storeFile(file);
     }
 
     @Override
-    public List<PostImageInfo> uploadPostImages(List<MultipartFile> files) throws FileUploadException{
+    public List<PostUploadImage> storePostImages(List<MultipartFile> files) throws FileUploadException {
         files.forEach(this::checkImageFile);
-        List<FileInfo> fileInfos = uploadFiles(files);
+        List<UploadFile> uploadFiles = storeFiles(files);
 
-        return fileInfos.stream()
-                .map(fileInfo -> FileUtil.toPostImageInfo(fileInfo, fileInfos.indexOf(fileInfo) + 1))
+        return uploadFiles.stream()
+                .map(fileInfo -> FileUtil.toPostUploadImage(fileInfo, uploadFiles.indexOf(fileInfo) + 1))
                 .collect(Collectors.toList());
     }
 
-    private List<FileInfo> uploadFiles(List<MultipartFile> files) {
-        Map<String, String> newFileNames = FileUtil.changeFileNames(files);
-        createDirectory();
-
+    private List<UploadFile> storeFiles(List<MultipartFile> files) {
         return files.stream()
-                .map(file ->
-                        createFileInfo(file, newFileNames.get(file.getOriginalFilename())))
+                .map(this::storeFile)
                 .collect(Collectors.toList());
     }
 
-    private FileInfo uploadFile(MultipartFile file) throws FileUploadException {
-        String newFileName = FileUtil.changeFileName(file);
-        createDirectory();
-        return createFileInfo(file, newFileName);
+    private UploadFile storeFile(MultipartFile file) throws FileUploadException {
+        if (file.isEmpty()) {
+            throw new FileUploadException(("Not exists a file"));
+        }
+        return createUploadFile(file);
     }
 
     @Override
@@ -61,27 +61,30 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private void createDirectory() {
-        StringBuilder dirPath = getDirectory();
-        File directory = new File(String.valueOf(dirPath));
+    private String getDirectoryPath() {
+        String dirPath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
+                .replace("/", File.separator);
+
+        String dirFullPath = getFullPath(dirPath);
+        File directory = new File(dirFullPath);
 
         if (!directory.exists()) {
             directory.mkdirs();
         }
+
+        return dirPath;
     }
 
-    private StringBuilder getDirectory() {
-        String dirPath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
-                .replace("/", File.separator);
+    private UploadFile createUploadFile(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        String newFileName = FileUtil.changeFileName(originalFilename);
 
-        return new StringBuilder(baseDir).append(File.separator).append(dirPath);
-    }
+        String filePath = getDirectoryPath() + File.separator + newFileName;
+        String storeFileName = getFullPath(filePath);
 
-    private FileInfo createFileInfo(MultipartFile file, String newFileName) {
-        StringBuilder filePath = getDirectory().append(File.separator).append(newFileName);
         try {
-            file.transferTo(new File(String.valueOf(filePath)));
-            return new FileInfo(newFileName, String.valueOf(filePath));
+            file.transferTo(new File(storeFileName));
+            return new UploadFile(originalFilename, filePath);
         } catch (IOException e) {
             throw new FileUploadException("Fail to create file");
         }
@@ -98,5 +101,4 @@ public class FileServiceImpl implements FileService {
             throw new FileUploadException(("Not an image file"));
         }
     }
-
 }

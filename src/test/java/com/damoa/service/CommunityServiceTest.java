@@ -7,7 +7,7 @@ import com.damoa.domain.community.MemberGrade;
 import com.damoa.domain.member.Member;
 import com.damoa.repository.CommunityMemberRepository;
 import com.damoa.repository.CommunityRepository;
-import com.damoa.web.dto.common.FileInfo;
+import com.damoa.web.dto.common.UploadFile;
 import com.damoa.web.dto.community.CommunityMemberDto;
 import com.damoa.web.dto.community.CreateCommunityDto;
 import com.damoa.web.dto.community.UpdateCommunityDto;
@@ -59,7 +59,7 @@ class CommunityServiceTest {
     CreateCommunityDto createCommunityDto;
     UpdateCommunityDto updateCommunityDto;
     MockMultipartFile imageFile;
-    FileInfo imageFileInfo;
+    UploadFile imageUploadFile;
 
     @BeforeEach
     public void init() {
@@ -108,7 +108,7 @@ class CommunityServiceTest {
                 "image/jpg",
                 "newImage".getBytes());
 
-        imageFileInfo = new FileInfo("newImage",
+        imageUploadFile = new UploadFile("newImage",
                 "/Users/kimjiwon/studyProject/sns/uploads/communities/1/newImage");
     }
 
@@ -128,7 +128,7 @@ class CommunityServiceTest {
         // then
         verify(communityRepository).save(any(Community.class));
         verify(categoryService).getCategory(any(String.class));
-        verify(fileService, times(0)).uploadImage(any(MultipartFile.class));
+        verify(fileService, times(0)).storeImage(any(MultipartFile.class));
     }
 
     @Test
@@ -140,13 +140,13 @@ class CommunityServiceTest {
         when(communityRepository.existsByName(any())).thenReturn(false);
         when(communityRepository.save(any())).thenReturn(community);
         when(categoryService.getCategory(any())).thenReturn(category);
-        when(fileService.uploadImage(any(MultipartFile.class))).thenReturn(imageFileInfo);
+        when(fileService.storeImage(any(MultipartFile.class))).thenReturn(imageUploadFile);
 
         // when
         communityService.create(owner, createCommunityDto, imageFile, imageFile);
 
         // then
-        verify(fileService, times(2)).uploadImage(any(MultipartFile.class));
+        verify(fileService, times(2)).storeImage(any(MultipartFile.class));
     }
 
     @Test
@@ -168,7 +168,7 @@ class CommunityServiceTest {
     public void createCommunityWithNotImageFileTest_Fail() {
         // given
         when(communityRepository.existsByName(any())).thenReturn(false);
-        doThrow(FileUploadException.class).when(fileService).uploadImage(imageFile);
+        doThrow(FileUploadException.class).when(fileService).storeImage(imageFile);
 
         // when & then
         assertThrows(FileUploadException.class,
@@ -298,7 +298,7 @@ class CommunityServiceTest {
         assertThat(community.getCategory().getName()).isEqualTo(updateCommunityDto.getCategory());
 
         verify(fileService, times(0)).deleteFile(any());
-        verify(fileService, times(0)).uploadImage(any());
+        verify(fileService, times(0)).storeImage(any());
         verify(communityMemberRepository).findByMemberAndCommunityId(owner, community.getId());
         verify(categoryService).getCategory(updateCommunityDto.getCategory());
     }
@@ -309,7 +309,7 @@ class CommunityServiceTest {
         // given
         community.join(owner, MemberGrade.OWNER);
 
-        when(fileService.uploadImage(any())).thenReturn(imageFileInfo);
+        when(fileService.storeImage(any())).thenReturn(imageUploadFile);
         when(communityMemberRepository.findByMemberAndCommunityId(any(), any()))
                 .thenReturn(Optional.ofNullable(community.getCommunityMembers().get(0)));
         when(categoryService.getCategory(any()))
@@ -320,7 +320,7 @@ class CommunityServiceTest {
 
         // then
         verify(fileService, times(2)).deleteFile(any());
-        verify(fileService, times(2)).uploadImage(any());
+        verify(fileService, times(2)).storeImage(any());
     }
 
     @Test
@@ -334,7 +334,7 @@ class CommunityServiceTest {
         when(categoryService.getCategory(any()))
                 .thenReturn(new Category(updateCommunityDto.getCategory()));
 
-        doThrow(FileUploadException.class).when(fileService).uploadImage(imageFile);
+        doThrow(FileUploadException.class).when(fileService).storeImage(imageFile);
 
         // when & then
         assertThrows(FileUploadException.class,

@@ -2,7 +2,7 @@ package com.damoa.domain.community;
 
 import com.damoa.domain.BaseTimeEntity;
 import com.damoa.domain.member.Member;
-import com.damoa.web.dto.common.FileInfo;
+import com.damoa.web.dto.common.UploadFile;
 import lombok.*;
 
 import javax.persistence.*;
@@ -58,12 +58,12 @@ public class Community extends BaseTimeEntity {
 		memberCount -= 1;
 	}
 
-	public void changeMainImage(FileInfo imageInfo) {
+	public void changeMainImage(UploadFile imageInfo) {
 		mainImageName = imageInfo.getFileName();
 		mainImagePath = imageInfo.getFilePath();
 	}
 
-	public void changeThumbNailImage(FileInfo imageInfo) {
+	public void changeThumbNailImage(UploadFile imageInfo) {
 		thumbNailImageName = imageInfo.getFileName();
 		thumbNailImagePath = imageInfo.getFilePath();
 	}

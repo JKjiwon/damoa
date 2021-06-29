@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostImageInfo {
+public class PostUploadImage {
 
     private String name;
 

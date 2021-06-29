@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class FileInfo {
+public class UploadFile {
 
     private final String fileName;
 

@@ -12,7 +12,7 @@ import com.damoa.repository.ImageRepository;
 import com.damoa.repository.PostRepository;
 import com.damoa.web.dto.post.CreatePostDto;
 import com.damoa.web.dto.post.PostDto;
-import com.damoa.web.dto.post.PostImageInfo;
+import com.damoa.web.dto.post.PostUploadImage;
 import com.damoa.web.exception.AccessDeniedException;
 import com.damoa.web.exception.business.CommunityNotJoinedException;
 import com.damoa.web.exception.business.PostNotFoundException;
@@ -50,9 +50,9 @@ public class PostServiceImpl implements PostService {
         Post post = dto.toEntity(currentMember, writer.getCommunity());
 
         if (postImageFiles != null && !postImageFiles.isEmpty()) {
-            List<PostImageInfo> postImageInfos = fileService.uploadPostImages(postImageFiles);
-            postImageInfos.stream()
-                    .map(PostImageInfo::toEntity)
+            List<PostUploadImage> postUploadImages = fileService.storePostImages(postImageFiles);
+            postUploadImages.stream()
+                    .map(PostUploadImage::toEntity)
                     .forEach(post::addImages);
         }
 

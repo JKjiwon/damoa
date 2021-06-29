@@ -2,7 +2,7 @@ package com.damoa.service;
 
 import com.damoa.domain.member.Member;
 import com.damoa.repository.MemberRepository;
-import com.damoa.web.dto.common.FileInfo;
+import com.damoa.web.dto.common.UploadFile;
 import com.damoa.web.dto.member.CreateMemberDto;
 import com.damoa.web.dto.member.MemberDto;
 import com.damoa.web.dto.member.UpdateMemberDto;
@@ -45,7 +45,7 @@ class MemberServiceTest {
 
     MockMultipartFile imageFile;
 
-    FileInfo imageFileInfo;
+    UploadFile imageUploadFile;
 
     @BeforeEach
     public void init() {
@@ -74,7 +74,7 @@ class MemberServiceTest {
                 "image/jpg",
                 "imageFile".getBytes());
 
-        imageFileInfo = new FileInfo("imageFile", "/Users/kimjiwon/studyProject/sns/uploads/1/imageFile");
+        imageUploadFile = new UploadFile("imageFile", "/Users/kimjiwon/studyProject/sns/uploads/1/imageFile");
     }
 
     @Test
@@ -127,16 +127,16 @@ class MemberServiceTest {
         // given
         String originalProfileImagePath = member.getProfileImagePath();
         when(memberRepository.findById(any())).thenReturn(Optional.ofNullable(member));
-        when(fileService.uploadImage(imageFile)).thenReturn(imageFileInfo);
+        when(fileService.storeImage(imageFile)).thenReturn(imageUploadFile);
 
         // when
         memberService.updateProfileImage(member, imageFile);
 
         // then
         verify(fileService).deleteFile(originalProfileImagePath);
-        verify(fileService).uploadImage(imageFile);
-        assertThat(member.getProfileImageName()).isEqualTo(imageFileInfo.getFileName());
-        assertThat(member.getProfileImagePath()).isEqualTo(imageFileInfo.getFilePath());
+        verify(fileService).storeImage(imageFile);
+        assertThat(member.getProfileImageName()).isEqualTo(imageUploadFile.getFileName());
+        assertThat(member.getProfileImagePath()).isEqualTo(imageUploadFile.getFilePath());
     }
 
     @DisplayName("이미지 업로드 실패 시 FileUploadException을 던지며 회원 프로필 이미지 업데이트 실패")
@@ -150,7 +150,7 @@ class MemberServiceTest {
                 "newImage".getBytes());
 
         when(memberRepository.findById(any())).thenReturn(Optional.ofNullable(member));
-        doThrow(FileUploadException.class).when(fileService).uploadImage(invalidImage);
+        doThrow(FileUploadException.class).when(fileService).storeImage(invalidImage);
 
         // when & then
         assertThrows(FileUploadException.class,
