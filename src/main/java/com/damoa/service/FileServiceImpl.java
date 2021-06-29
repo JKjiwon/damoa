@@ -72,7 +72,7 @@ public class FileServiceImpl implements FileService {
             directory.mkdirs();
         }
 
-        return dirPath;
+        return File.separator + dirPath;
     }
 
     private UploadFile createUploadFile(MultipartFile file) {

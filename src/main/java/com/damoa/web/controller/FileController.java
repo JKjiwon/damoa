@@ -1,7 +1,6 @@
 package com.damoa.web.controller;
 
 import com.damoa.service.FileService;
-import com.damoa.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -21,8 +20,8 @@ public class FileController {
 
     @GetMapping("/api/images/**")
     public Resource downloadImage(HttpServletRequest request) throws MalformedURLException {
-        String filename = extractFilePath(request);
-        return new UrlResource("file:" + fileService.getFullPath(filename));
+        String filePath = "/" + extractFilePath(request);
+        return new UrlResource("file:" + fileService.getFullPath(filePath));
     }
 
     private String extractFilePath(HttpServletRequest request) {
