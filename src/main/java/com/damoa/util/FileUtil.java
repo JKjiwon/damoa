@@ -10,7 +10,6 @@ public class FileUtil {
     public static String changeFileName(String originalFilename) {
         String uuid = UUID.randomUUID().toString();
         String extension = getExtension(originalFilename);
-
         return uuid + "." + extension;
     }
 
