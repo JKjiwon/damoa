@@ -24,11 +24,17 @@ https://jkjiwon.github.io/damoa-api-guide/
 3. [Database ERD](https://github.com/JKjiwon/damoa/wiki/%5B3%5D.-DB-ERD)
 4. [Git 커밋 메세지](https://github.com/JKjiwon/damoa/wiki/%5B4%5D.-Git-커밋-메세지)
 
-## 실행 방법
+## 실행 환경
 1. lombok 설치
-2. application.yml 에 파일 저장 위치 변경(damoa.upload.path)
+2. application.yml 에 파일 저장 위치 변경(damoa.file.dir)
 3. application.yml 에 로컬 DB를 등록
-4. 실행
+
+## 빌드 후 실행
+1. 콘솔로 이동
+2. ./gradlew build
+3. cd build/libs
+4. java -jar damoa-0.0.1-SNAPSHOT.jar
+5. 확인
 
 ## JaCoCo Test Report
 branch coverage, instruction coverage 70% 이상 유지
