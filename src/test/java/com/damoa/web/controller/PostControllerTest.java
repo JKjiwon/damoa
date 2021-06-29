@@ -62,11 +62,17 @@ class PostControllerTest extends BaseControllerTest {
     @DisplayName("게시글 생성")
     public void createPost_Success() throws Exception {
         // Given
-        MockMultipartFile image = new MockMultipartFile(
+        MockMultipartFile image1 = new MockMultipartFile(
                 "image",
-                "image.jpg",
+                "image1.jpg",
                 "image/jpg",
-                "image".getBytes());
+                "image1".getBytes());
+
+        MockMultipartFile image2 = new MockMultipartFile(
+                "image",
+                "image2.jpg",
+                "image/jpg",
+                "image2".getBytes());
 
         CreatePostDto dto = new CreatePostDto("Post1");
 
@@ -74,8 +80,8 @@ class PostControllerTest extends BaseControllerTest {
         this.mockMvc.perform(
                 RestDocumentationRequestBuilders
                         .fileUpload("/api/communities/{communityId}/posts", community1)
-                        .file(image)
-                        .file(image)
+                        .file(image1)
+                        .file(image2)
                         .param("content", dto.getContent())
                         .header(HttpHeaders.AUTHORIZATION, getAccessToken(member1Email, member1Password)))
                 .andDo(print())
@@ -359,14 +365,21 @@ class PostControllerTest extends BaseControllerTest {
     }
 
     private Long createPost(Long communityId, Member member, int postSeq) {
-        MockMultipartFile image = new MockMultipartFile(
+
+        MockMultipartFile image1 = new MockMultipartFile(
                 "image",
-                "image.jpg",
+                "image1.jpg",
                 "image/jpg",
-                "image".getBytes());
+                "image1".getBytes());
+
+        MockMultipartFile image2 = new MockMultipartFile(
+                "image",
+                "image2.jpg",
+                "image/jpg",
+                "image2".getBytes());
 
         CreatePostDto dto = new CreatePostDto("Post" + postSeq);
-        PostDto postDto = postService.create(communityId, member, dto, List.of(image, image));
+        PostDto postDto = postService.create(communityId, member, dto, List.of(image1, image2));
         return postDto.getId();
     }
 
