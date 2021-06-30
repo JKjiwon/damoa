@@ -4,6 +4,7 @@ package com.damoa.web.dto.community;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.damoa.domain.community.Community;
 import com.damoa.domain.community.CommunityMember;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,6 +32,9 @@ public class JoinedCommunityDto {
 
     private String grade;
 
+    @JsonIgnore
+    private String downloadPath = "/api/images";
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime joinedAt;
 
@@ -39,7 +43,8 @@ public class JoinedCommunityDto {
         Community community = communityMember.getCommunity();
         this.id = community.getId();
         this.name = community.getName();
-        this.thumbNailImagePath = community.getThumbNailImagePath();
+        this.thumbNailImagePath =
+                community.getThumbNailImagePath() != null ? downloadPath + community.getThumbNailImagePath() : null;
         this.introduction = community.getIntroduction();
         this.owner = community.getOwner().getName();
         this.category = community.getCategory().getName();

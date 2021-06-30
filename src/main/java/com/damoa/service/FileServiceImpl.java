@@ -17,8 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class FileServiceImpl implements FileService {
-
-    @Value("${damoa.file.dir}")
+    @Value("${damoa.file.image.upload.path}")
     private String fileDir;
 
     public String getFullPath(String fileName) {

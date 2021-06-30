@@ -31,4 +31,8 @@ app:
 
 damoa:
   file:
-    dir: /Users/kimjiwon/study/damoa/uploads
+    image:
+      upload:
+        path: /Users/kimjiwon/study/damoa/uploads
+      download:
+        path: /api/images
