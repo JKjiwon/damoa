@@ -62,7 +62,7 @@ public class FileServiceImpl implements FileService {
     }
 
     private String getDirectoryPath() {
-        String dirPath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
+        String dirPath = File.separator + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
                 .replace("/", File.separator);
 
         String dirFullPath = getFullPath(dirPath);
@@ -72,7 +72,7 @@ public class FileServiceImpl implements FileService {
             directory.mkdirs();
         }
 
-        return File.separator + dirPath;
+        return dirPath;
     }
 
     private UploadFile createUploadFile(MultipartFile file) {
