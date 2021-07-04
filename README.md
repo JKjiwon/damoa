@@ -26,7 +26,7 @@ https://jkjiwon.github.io/damoa-api-guide/
 
 ## 실행 환경
 1. lombok 설치
-2. application.yml 에 파일 저장 위치 변경(damoa.file.dir)
+2. application.yml 에 파일 저장 위치 변경(damoa.file.image.upload.path)
 3. application.yml 에 로컬 DB를 등록
 
 ## 빌드 후 실행
