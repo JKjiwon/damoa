@@ -38,4 +38,4 @@ https://jkjiwon.github.io/damoa-api-guide/
 
 ## JaCoCo Test Report
 branch coverage, instruction coverage 80% 이상 유지
-![JacocoTestResult](github-images/jacoco_test_result.png)
+![JacocoTestResult](github-images/jacoco_test.png)
