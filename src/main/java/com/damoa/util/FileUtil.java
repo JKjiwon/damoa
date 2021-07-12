@@ -2,10 +2,7 @@ package com.damoa.util;
 
 import com.damoa.web.dto.common.UploadFile;
 import com.damoa.web.dto.post.PostUploadImage;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.web.servlet.HandlerMapping;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 public class FileUtil {

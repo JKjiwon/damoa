@@ -21,7 +21,8 @@ public class FileController {
     @GetMapping("/api/images/**")
     public Resource downloadImage(HttpServletRequest request) throws MalformedURLException {
         String filePath = "/" + extractFilePath(request);
-        return new UrlResource("file:" + fileService.getFullPath(filePath));
+        UrlResource urlResource = new UrlResource("file:" + fileService.getFullPath(filePath));
+        return urlResource;
     }
 
     private String extractFilePath(HttpServletRequest request) {

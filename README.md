@@ -3,7 +3,7 @@
 ## 소개
 - Band.us 와 같은 모임형 커뮤니티
 - JPA 성능 최적화
-- 꾸준한 테스트 작성 (Jacoco 기준: branch coverage, instruction coverage 70% 이상 유지)
+- 꾸준한 테스트 작성 (Jacoco 기준: branch coverage, instruction coverage 80% 이상 유지)
 - RestDocs를 통한 API 문서 작성
 
 ## 기술 스택
@@ -37,6 +37,5 @@ https://jkjiwon.github.io/damoa-api-guide/
 5. 확인
 
 ## JaCoCo Test Report
-branch coverage, instruction coverage 70% 이상 유지
+branch coverage, instruction coverage 80% 이상 유지
 ![JacocoTestResult](github-images/jacoco_test_result.png)
-
