@@ -87,7 +87,6 @@ public class PostServiceImpl implements PostService {
                     commentRepository.deleteById(id);
                 }
         );
-
         postRepository.deleteById(postId);
     }
 

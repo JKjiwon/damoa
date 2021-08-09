@@ -63,5 +63,4 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findById(currentMember.getId()).orElseThrow(
                 MemberNotFoundException::new);
     }
-
 }
