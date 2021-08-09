@@ -22,7 +22,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             " where c.parent.id = :id")
     void deleteByParentId(@Param("id") Long id);
 
-
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("delete" +
             " from Comment c" +

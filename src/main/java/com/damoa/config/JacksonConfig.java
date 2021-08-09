@@ -12,6 +12,9 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.io.IOException;
 
+/**
+ * 값이 null 일 경우 빈 문자열로 처리
+ */
 @Configuration
 public class JacksonConfig {
 
