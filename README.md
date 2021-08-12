@@ -6,6 +6,8 @@
 - 꾸준한 테스트 작성 (Jacoco 기준: branch coverage, instruction coverage 80% 이상 유지)
 - RestDocs를 통한 API 문서 작성
 
+## 
+
 ## 기술 스택
 - Java
 - Spring Boot
@@ -14,6 +16,7 @@
 - Spring Rest Docs
 - Gradle
 - MYSQL
+- AWS
 
 ## API 문서
 https://jkjiwon.github.io/damoa-api-guide/
