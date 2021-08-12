@@ -4,6 +4,7 @@ import com.damoa.util.FileUtil;
 import com.damoa.web.dto.common.UploadFile;
 import com.damoa.web.dto.post.PostUploadImage;
 import com.damoa.web.exception.business.FileUploadException;
+import com.damoa.web.exception.business.NotImageFileException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,11 +17,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class FileServiceImpl implements FileService {
+public class LocalFileService implements FileService {
+
     @Value("${damoa.file.image.upload.path}")
     private String fileDir;
 
-    public String getFullPath(String fileName) {
+    private String getFullPath(String fileName) {
         return fileDir + fileName;
     }
 
@@ -36,7 +38,7 @@ public class FileServiceImpl implements FileService {
         List<UploadFile> uploadFiles = storeFiles(files);
 
         return uploadFiles.stream()
-                .map(fileInfo -> FileUtil.toPostUploadImage(fileInfo, uploadFiles.indexOf(fileInfo) + 1))
+                .map(uploadFile -> FileUtil.toPostUploadImage(uploadFile, uploadFiles.indexOf(uploadFile) + 1))
                 .collect(Collectors.toList());
     }
 
@@ -47,9 +49,6 @@ public class FileServiceImpl implements FileService {
     }
 
     private UploadFile storeFile(MultipartFile file) throws FileUploadException {
-        if (file.isEmpty()) {
-            throw new FileUploadException(("Not exists a file"));
-        }
         return createUploadFile(file);
     }
 
@@ -85,19 +84,15 @@ public class FileServiceImpl implements FileService {
             file.transferTo(new File(storeFileName));
             return new UploadFile(originalFilename, filePath);
         } catch (IOException e) {
-            throw new FileUploadException("Fail to create file");
+            throw new FileUploadException("Could not store file. Please try again.");
         }
     }
 
     private void checkImageFile(MultipartFile file) {
-        boolean isImage = false;
-        try {
-            isImage = file.getContentType().startsWith("image");
-        } catch (NullPointerException e) {
-            throw new FileUploadException(("Not exists an image"));
-        }
+        boolean isImage = file.getContentType().startsWith("image");
+
         if (!isImage) {
-            throw new FileUploadException(("Not an image file"));
+            throw new NotImageFileException(("Not an image file. Please change file."));
         }
     }
 }

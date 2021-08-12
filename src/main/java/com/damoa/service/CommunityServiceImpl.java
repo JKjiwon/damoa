@@ -110,12 +110,12 @@ public class CommunityServiceImpl implements CommunityService {
             fileService.deleteFile(community.getMainImagePath());
             community.changeMainImage(mainImageFile);
         }
+
         if (thumbNailImage != null) {
             UploadFile thumbNailImageFile = fileService.storeImage(thumbNailImage);
             fileService.deleteFile(community.getThumbNailImagePath());
             community.changeThumbNailImage(thumbNailImageFile);
         }
-
         return new CommunityDto(community);
     }
 

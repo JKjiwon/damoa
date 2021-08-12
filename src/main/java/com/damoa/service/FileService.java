@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface FileService {
 
-    String getFullPath(String fileName);
-
     UploadFile storeImage(MultipartFile file) throws FileUploadException;
 
     List<PostUploadImage> storePostImages(List<MultipartFile> files) throws FileUploadException;
