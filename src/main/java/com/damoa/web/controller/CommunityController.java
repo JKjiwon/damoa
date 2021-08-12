@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -32,7 +33,7 @@ public class CommunityController {
     @PostMapping
     public ResponseEntity create(
             HttpServletRequest httpServletRequest,
-            @Validated CreateCommunityDto dto,
+            @Valid CreateCommunityDto dto,
             @RequestPart(value = "mainImage", required = false) MultipartFile mainImage,
             @RequestPart(value = "thumbNailImage", required = false) MultipartFile thumbNailImage,
             @CurrentMember Member currentMember) throws URISyntaxException {
@@ -65,7 +66,7 @@ public class CommunityController {
     public ResponseEntity update(
             @PathVariable("communityId") Long communityId,
             @CurrentMember Member currentMember,
-            @Validated UpdateCommunityDto dto,
+            @Valid UpdateCommunityDto dto,
             @RequestPart(value = "mainImage", required = false) MultipartFile mainImage,
             @RequestPart(value = "thumbNailImage", required = false) MultipartFile thumbNailImage) {
 

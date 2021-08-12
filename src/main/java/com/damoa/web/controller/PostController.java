@@ -7,6 +7,7 @@ import com.damoa.web.dto.common.CurrentMember;
 import com.damoa.web.dto.post.CreatePostDto;
 import com.damoa.web.dto.post.PostDto;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -32,7 +34,7 @@ public class PostController {
     public ResponseEntity create(HttpServletRequest httpServletRequest,
                                  @PathVariable("communityId") Long communityId,
                                  @CurrentMember Member currentMember,
-                                 CreatePostDto dto,
+                                 @Valid CreatePostDto dto,
                                  @RequestPart(value = "image", required = false) List<MultipartFile> images) throws URISyntaxException {
 
         PostDto postDto = postService.create(communityId, currentMember, dto, images);

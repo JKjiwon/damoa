@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -41,7 +42,7 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity create(HttpServletRequest httpServletRequest,
-                                 @RequestBody @Validated CreateMemberDto dto) throws URISyntaxException {
+                                 @RequestBody @Valid CreateMemberDto dto) throws URISyntaxException {
 
         MemberDto memberDto = memberService.create(dto);
         URI uri = new URI(httpServletRequest.getRequestURL() + "/me");
@@ -75,7 +76,7 @@ public class MemberController {
 
     @PatchMapping
     public ResponseEntity updateMember(@CurrentMember Member currentMember,
-                                       @RequestBody UpdateMemberDto dto) {
+                                       @RequestBody @Valid UpdateMemberDto dto) {
 
         MemberDto memberDto = memberService.updateMember(currentMember, dto);
         return ResponseEntity.ok(memberDto);

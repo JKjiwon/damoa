@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -32,7 +33,7 @@ public class CommentController {
     public ResponseEntity create(HttpServletRequest httpServletRequest,
                                  @PathVariable Long communityId,
                                  @PathVariable Long postId,
-                                 @Validated @RequestBody CreateCommentDto dto,
+                                 @RequestBody @Valid CreateCommentDto dto,
                                  @CurrentMember Member currentMember) throws URISyntaxException {
 
         CommentDto commentDto = commentService.create(communityId, postId, dto, currentMember);
