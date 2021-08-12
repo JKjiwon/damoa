@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+//@Service
 public class LocalFileService implements FileService {
 
     @Value("${damoa.file.image.upload.path}")

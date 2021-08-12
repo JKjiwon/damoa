@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    include: aws
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/damoa?serverTimezone=Asia/Seoul
@@ -34,5 +36,3 @@ damoa:
     image:
       upload:
         path: /Users/kimjiwon/study/damoa/uploads
-      download:
-        path: /api/images
