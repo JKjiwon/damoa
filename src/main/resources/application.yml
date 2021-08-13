@@ -1,38 +1,12 @@
 spring:
   profiles:
-    include: aws
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/damoa?serverTimezone=Asia/Seoul
-    username: cos
-    password: cos1234
-
+    defalut: dev
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: true
-        format_sql: true
+        format_sql: ture
         default_batch_fetch_size: 100
     open-in-view: false
-
-  servlet:
-    multipart:
-      enabled: true
-      max-request-size: 30MB
-      max-file-size: 5MB
-
-logging.level:
-  org.hibernate.SQL: debug
-#  org.hibernate.type: trace
-
-app:
-  jwtSecret: SFRUUCBpcyBzdGF0ZWxlc3MuIEFsbCB0aGUgcmVxdWVzdHMgYXJlIHN0YXRlbGVzcy4SFRUUCBpcyBzdGF0ZWxlc3MuIEFsbCB0aGUgcmVxdWVzdHMgYXJlIHN0YXRlbGVzcy4
-  jwtExpirationInMs: 604800000
-
-damoa:
-  file:
-    image:
-      upload:
-        path: /Users/kimjiwon/study/damoa/uploads

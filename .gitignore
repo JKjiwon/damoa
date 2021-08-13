@@ -37,5 +37,5 @@ out/
 .vscode/
 uploads/
 
-### AWS setting ###
-src/main/resources/application-aws.yml
+### hide prod setting ###
+src/main/resources/application-prod.yml

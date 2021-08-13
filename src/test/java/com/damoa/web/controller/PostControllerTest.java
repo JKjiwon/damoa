@@ -74,7 +74,7 @@ class PostControllerTest extends BaseControllerTest {
                 "image/jpg",
                 "image2".getBytes());
 
-        CreatePostDto dto = new CreatePostDto("Post1");
+        CreatePostDto dto = new CreatePostDto("Post1-hello-world");
 
         // When & Then
         this.mockMvc.perform(

@@ -6,6 +6,8 @@ import com.damoa.web.dto.post.PostUploadImage;
 import com.damoa.web.exception.business.FileUploadException;
 import com.damoa.web.exception.business.NotImageFileException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +18,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@Service
+@Component
+@Profile("dev")
 public class LocalFileService implements FileService {
 
     @Value("${damoa.file.image.upload.path}")
