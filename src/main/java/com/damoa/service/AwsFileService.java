@@ -1,6 +1,6 @@
 package com.damoa.service;
 
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.damoa.config.YamlPropertySourceFactory;
@@ -29,11 +29,11 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @Profile("prod")
-@PropertySource(value = "classpath:/s3-info.yml", factory = YamlPropertySourceFactory.class)
+@PropertySource(value = "classpath:/s3-iam.yml", factory = YamlPropertySourceFactory.class)
 @RequiredArgsConstructor
 public class AwsFileService implements FileService {
 
-    private final AmazonS3Client amazonS3Client;
+    private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
@@ -72,8 +72,8 @@ public class AwsFileService implements FileService {
         if (filePath == null) return;
 
         String key = filePath.substring(bucketUri.length());
-        if (amazonS3Client.doesObjectExist(bucketName, key)) {
-            amazonS3Client.deleteObject(bucketName, key);
+        if (amazonS3.doesObjectExist(bucketName, key)) {
+            amazonS3.deleteObject(bucketName, key);
         }
     }
 
@@ -109,9 +109,9 @@ public class AwsFileService implements FileService {
     }
 
     private String putS3(File uploadFile, String fileName) {
-        amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, uploadFile)
+        amazonS3.putObject(new PutObjectRequest(bucketName, fileName, uploadFile)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        return amazonS3Client.getUrl(bucketName, fileName).toString();
+        return amazonS3.getUrl(bucketName, fileName).toString();
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
