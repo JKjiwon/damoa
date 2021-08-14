@@ -3,6 +3,7 @@ package com.damoa.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.damoa.config.YamlPropertySourceFactory;
 import com.damoa.util.FileUtil;
 import com.damoa.web.dto.common.UploadFile;
 import com.damoa.web.dto.post.PostUploadImage;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @Profile("prod")
+@PropertySource(value = "classpath:/s3-info.yml", factory = YamlPropertySourceFactory.class)
 @RequiredArgsConstructor
 public class AwsFileService implements FileService {
 
