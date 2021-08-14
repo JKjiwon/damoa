@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/damoa?serverTimezone=Asia/Seoul
+    username: cos
+    password: cos1234
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+        default_batch_fetch_size: 100
+    open-in-view: false
+
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 30MB
+      max-file-size: 5MB
+
+cloud:
+  aws:
+    s3:
+      bucket: damoabucket
+      baseuri: https://damoabucket.s3.ap-northeast-2.amazonaws.com/
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

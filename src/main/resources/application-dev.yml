@@ -8,6 +8,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: ture
+        default_batch_fetch_size: 100
+    open-in-view: false
 
   servlet:
     multipart:

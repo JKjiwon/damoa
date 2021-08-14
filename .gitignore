@@ -38,4 +38,5 @@ out/
 uploads/
 
 ### hide prod setting ###
-src/main/resources/application-prod.yml
+src/main/resources/jwt-info.yml
+src/main/resources/s3-iam.yml
