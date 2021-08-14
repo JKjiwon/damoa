@@ -1,0 +1,3 @@
+app:
+  jwtSecret: SFRUUCBpcyBzdGF0ZWxlc3MuIEFsbCB0aGUgcmVxdWVzdHMgYXJlIHN0YXRlbGVzcy4SFRUUCBpcyBzdGF0ZWxlc3MuIEFsbCB0aGUgcmVxdWVzdHMgYXJlIHN0YXRlbGVzcy4
+  jwtExpirationInMs: 604800000

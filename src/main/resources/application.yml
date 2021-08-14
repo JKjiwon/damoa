@@ -1,6 +1,6 @@
 spring:
   profiles:
-    defalut: dev
+    active: dev
   jpa:
     hibernate:
       ddl-auto: create

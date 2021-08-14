@@ -1,11 +1,13 @@
 package com.damoa.security;
 
+import com.damoa.config.YamlPropertySourceFactory;
 import com.damoa.web.dto.member.JwtTokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +22,7 @@ import java.util.Date;
 
 @Component
 @Slf4j
+@PropertySource(value = "classpath:/jwt-info.yml", factory = YamlPropertySourceFactory.class)
 public class JwtTokenProvider {
 
     public static final String INVALID_TOKEN_EXCEPTION = "INVALID_TOKEN_EXCEPTION";
