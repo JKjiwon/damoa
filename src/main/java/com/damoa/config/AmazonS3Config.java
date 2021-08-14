@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @Profile("prod")
+@PropertySource(value = "classpath:/s3-iam.yml", factory = YamlPropertySourceFactory.class)
 public class AmazonS3Config {
 
     @Value("${cloud.aws.credentials.access-key}")
