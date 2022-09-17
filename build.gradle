@@ -2,7 +2,6 @@ plugins {
     id 'org.springframework.boot' version '2.4.5'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
-    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
     id 'jacoco'
     id "org.asciidoctor.convert" version "1.5.9.2"
 }
@@ -24,7 +23,8 @@ repositories {
 dependencies {
     asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.5.RELEASE'
     testCompile 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.5.RELEASE'
-    implementation 'com.querydsl:querydsl-jpa'
+    implementation("com.querydsl:querydsl-core")
+    implementation("com.querydsl:querydsl-jpa")
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas', version: '2.5.0'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -35,6 +35,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa")
+    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     compile group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
@@ -119,26 +123,6 @@ task testCoverage(type: Test) {
 
     tasks['jacocoTestReport'].mustRunAfter(tasks['test'])
     tasks['jacocoTestCoverageVerification'].mustRunAfter(tasks['jacocoTestReport'])
-}
-
-// Querydsl
-def querydslDir = "$buildDir/generated/querydsl"
-
-querydsl {
-    jpa = true
-    querydslSourcesDir = querydslDir
-}
-
-sourceSets {
-    main.java.srcDir querydslDir
-}
-
-configurations {
-    querydsl.extendsFrom compileClasspath
-}
-
-compileQuerydsl{
-    options.annotationProcessorPath = configurations.querydsl
 }
 
 // Spring REST Docs
