@@ -11,25 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
-
-    @Query("select distinct p" +
-            " from Post p" +
-            " join fetch p.writer" +
-            " join fetch p.community c" +
-            " left outer join fetch p.images" +
-            " where p.id = :postId")
-    Optional<Post> findByIdWithAll(@Param("postId") Long postId);
-
-    @Query("select distinct p" +
-            " from Post p" +
-            " join fetch p.writer" +
-            " join fetch p.community c" +
-            " left outer join fetch p.images" +
-            " where p.id = :postId and c.id = :communityId")
-    Optional<Post> findByIdAndCommunityId(@Param("postId") Long postId, @Param("communityId") Long communityId);
+public interface PostRepository extends JpaRepository<Post, Long>, PostCustomRepository {
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("delete" +
