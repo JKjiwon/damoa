@@ -2,7 +2,7 @@ package com.damoa.domain.post;
 
 import com.damoa.domain.BaseTimeEntity;
 import com.damoa.domain.community.entity.Community;
-import com.damoa.domain.member.Member;
+import com.damoa.domain.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,6 +1,6 @@
 package com.damoa.domain.community.entity;
 
-import com.damoa.domain.member.Member;
+import com.damoa.domain.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

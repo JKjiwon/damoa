@@ -1,6 +1,6 @@
 package com.damoa.service;
 
-import com.damoa.domain.member.Member;
+import com.damoa.domain.member.entity.Member;
 import com.damoa.web.dto.post.CreatePostDto;
 import com.damoa.web.dto.post.PostDto;
 import org.springframework.data.domain.Page;

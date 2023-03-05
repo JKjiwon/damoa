@@ -1,6 +1,6 @@
 package com.damoa.security;
 
-import com.damoa.domain.member.Member;
+import com.damoa.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

@@ -3,7 +3,7 @@ package com.damoa.domain.community.dto;
 import com.damoa.domain.community.entity.Category;
 import com.damoa.domain.community.entity.Community;
 import com.damoa.domain.community.entity.MemberGrade;
-import com.damoa.domain.member.Member;
+import com.damoa.domain.member.entity.Member;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 

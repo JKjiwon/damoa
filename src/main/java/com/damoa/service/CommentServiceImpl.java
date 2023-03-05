@@ -1,7 +1,7 @@
 package com.damoa.service;
 
 import com.damoa.domain.community.entity.CommunityMember;
-import com.damoa.domain.member.Member;
+import com.damoa.domain.member.entity.Member;
 import com.damoa.domain.post.Comment;
 import com.damoa.domain.post.Post;
 import com.damoa.repository.CommentRepository;

@@ -5,7 +5,7 @@ import com.damoa.domain.community.entity.Category;
 import com.damoa.domain.community.entity.Community;
 import com.damoa.domain.community.entity.CommunityMember;
 import com.damoa.domain.community.entity.MemberGrade;
-import com.damoa.domain.member.Member;
+import com.damoa.domain.member.entity.Member;
 import com.damoa.domain.community.repository.CommunityMemberRepository;
 import com.damoa.domain.community.repository.CommunityRepository;
 import com.damoa.service.FileService;

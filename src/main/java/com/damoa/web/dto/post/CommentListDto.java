@@ -1,7 +1,7 @@
 package com.damoa.web.dto.post;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.damoa.domain.member.Member;
+import com.damoa.domain.member.entity.Member;
 import com.damoa.domain.post.Comment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

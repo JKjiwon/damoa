@@ -1,8 +1,8 @@
 package com.damoa.service;
 
 import com.damoa.security.JwtTokenProvider;
-import com.damoa.web.dto.member.JwtTokenDto;
-import com.damoa.web.dto.member.LoginMemberDto;
+import com.damoa.domain.member.dto.JwtTokenDto;
+import com.damoa.domain.member.dto.LoginMemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

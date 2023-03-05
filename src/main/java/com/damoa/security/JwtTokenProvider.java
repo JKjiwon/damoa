@@ -1,7 +1,7 @@
 package com.damoa.security;
 
 import com.damoa.config.YamlPropertySourceFactory;
-import com.damoa.web.dto.member.JwtTokenDto;
+import com.damoa.domain.member.dto.JwtTokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

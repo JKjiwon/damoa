@@ -1,7 +1,7 @@
 package com.damoa.domain.community.dto;
 
 import com.damoa.domain.community.entity.CommunityMember;
-import com.damoa.domain.member.Member;
+import com.damoa.domain.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

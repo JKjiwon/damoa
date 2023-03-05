@@ -1,6 +1,6 @@
 package com.damoa.service;
 
-import com.damoa.domain.member.Member;
+import com.damoa.domain.member.entity.Member;
 import com.damoa.web.dto.post.CommentDto;
 import com.damoa.web.dto.post.CommentListDto;
 import com.damoa.web.dto.post.CreateCommentDto;

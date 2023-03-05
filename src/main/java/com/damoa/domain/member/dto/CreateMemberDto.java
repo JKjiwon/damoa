@@ -1,7 +1,7 @@
-package com.damoa.web.dto.member;
+package com.damoa.domain.member.dto;
 
-import com.damoa.domain.member.Member;
-import com.damoa.domain.member.MemberRole;
+import com.damoa.domain.member.entity.Member;
+import com.damoa.domain.member.entity.MemberRole;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

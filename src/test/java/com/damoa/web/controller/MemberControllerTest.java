@@ -1,10 +1,10 @@
 package com.damoa.web.controller;
 
-import com.damoa.domain.member.Member;
+import com.damoa.domain.member.dto.*;
+import com.damoa.domain.member.entity.Member;
 import com.damoa.web.common.BaseControllerTest;
 import com.damoa.domain.community.dto.CommunityDto;
 import com.damoa.domain.community.dto.CreateCommunityDto;
-import com.damoa.web.dto.member.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

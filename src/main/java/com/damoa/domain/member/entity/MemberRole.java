@@ -1,4 +1,4 @@
-package com.damoa.domain.member;
+package com.damoa.domain.member.entity;
 
 
 public enum MemberRole {

@@ -1,7 +1,7 @@
 package com.damoa.security;
 
-import com.damoa.domain.member.Member;
-import com.damoa.repository.MemberRepository;
+import com.damoa.domain.member.entity.Member;
+import com.damoa.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,11 +1,12 @@
 package com.damoa.service;
 
-import com.damoa.domain.member.Member;
-import com.damoa.repository.MemberRepository;
+import com.damoa.domain.member.entity.Member;
+import com.damoa.domain.member.repository.MemberRepository;
+import com.damoa.domain.member.service.MemberServiceImpl;
 import com.damoa.web.dto.common.UploadFile;
-import com.damoa.web.dto.member.CreateMemberDto;
-import com.damoa.web.dto.member.MemberDto;
-import com.damoa.web.dto.member.UpdateMemberDto;
+import com.damoa.domain.member.dto.CreateMemberDto;
+import com.damoa.domain.member.dto.MemberDto;
+import com.damoa.domain.member.dto.UpdateMemberDto;
 import com.damoa.web.exception.business.EmailDuplicatedException;
 import com.damoa.web.exception.business.FileUploadException;
 import org.junit.jupiter.api.BeforeEach;

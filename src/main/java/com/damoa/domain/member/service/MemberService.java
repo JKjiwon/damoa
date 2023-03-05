@@ -1,9 +1,9 @@
-package com.damoa.service;
+package com.damoa.domain.member.service;
 
-import com.damoa.domain.member.Member;
-import com.damoa.web.dto.member.CreateMemberDto;
-import com.damoa.web.dto.member.MemberDto;
-import com.damoa.web.dto.member.UpdateMemberDto;
+import com.damoa.domain.member.entity.Member;
+import com.damoa.domain.member.dto.CreateMemberDto;
+import com.damoa.domain.member.dto.MemberDto;
+import com.damoa.domain.member.dto.UpdateMemberDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {

@@ -5,6 +5,8 @@ import com.damoa.domain.community.repository.CommunityMemberRepository;
 import com.damoa.domain.community.repository.CommunityRepository;
 import com.damoa.domain.community.service.CategoryService;
 import com.damoa.domain.community.service.CommunityService;
+import com.damoa.domain.member.repository.MemberRepository;
+import com.damoa.domain.member.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.damoa.repository.*;
 import com.damoa.service.*;

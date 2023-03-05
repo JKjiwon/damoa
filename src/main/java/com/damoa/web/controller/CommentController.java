@@ -1,7 +1,7 @@
 package com.damoa.web.controller;
 
 import com.damoa.common.PageableValidator;
-import com.damoa.domain.member.Member;
+import com.damoa.domain.member.entity.Member;
 import com.damoa.service.CommentService;
 import com.damoa.web.dto.common.CurrentMember;
 import com.damoa.web.dto.post.CommentDto;
