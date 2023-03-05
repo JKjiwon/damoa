@@ -1,8 +1,7 @@
-package com.damoa.web.dto.community;
+package com.damoa.domain.community.dto;
 
-import com.damoa.domain.community.Community;
+import com.damoa.domain.community.entity.Community;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 

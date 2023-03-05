@@ -1,6 +1,6 @@
 package com.damoa.web.dto.post;
 
-import com.damoa.domain.community.Community;
+import com.damoa.domain.community.entity.Community;
 import com.damoa.domain.member.Member;
 import com.damoa.domain.post.Post;
 import lombok.*;

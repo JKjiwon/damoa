@@ -1,10 +1,9 @@
-package com.damoa.web.dto.community;
+package com.damoa.domain.community.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.damoa.domain.community.Community;
-import com.damoa.domain.community.CommunityMember;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.damoa.domain.community.entity.Community;
+import com.damoa.domain.community.entity.CommunityMember;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

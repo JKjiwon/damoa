@@ -1,4 +1,4 @@
-package com.damoa.domain.community;
+package com.damoa.domain.community.entity;
 
 import lombok.AccessLevel;
 import lombok.Getter;

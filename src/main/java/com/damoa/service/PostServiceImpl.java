@@ -1,13 +1,13 @@
 package com.damoa.service;
 
-import com.damoa.domain.community.Community;
-import com.damoa.domain.community.CommunityMember;
+import com.damoa.domain.community.entity.Community;
+import com.damoa.domain.community.entity.CommunityMember;
 import com.damoa.domain.member.Member;
 import com.damoa.domain.post.Comment;
 import com.damoa.domain.post.Image;
 import com.damoa.domain.post.Post;
 import com.damoa.repository.CommentRepository;
-import com.damoa.repository.CommunityMemberRepository;
+import com.damoa.domain.community.repository.CommunityMemberRepository;
 import com.damoa.repository.ImageRepository;
 import com.damoa.repository.PostRepository;
 import com.damoa.web.dto.post.CreatePostDto;

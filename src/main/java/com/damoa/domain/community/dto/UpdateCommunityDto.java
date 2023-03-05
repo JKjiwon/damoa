@@ -1,4 +1,4 @@
-package com.damoa.web.dto.community;
+package com.damoa.domain.community.dto;
 
 import lombok.*;
 import org.hibernate.validator.constraints.Length;

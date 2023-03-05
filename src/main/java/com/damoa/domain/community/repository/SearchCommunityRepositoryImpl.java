@@ -1,4 +1,4 @@
-package com.damoa.repository;
+package com.damoa.domain.community.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
@@ -7,7 +7,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.JPQLQuery;
-import com.damoa.domain.community.Community;
+import com.damoa.domain.community.entity.Community;
 import com.damoa.domain.community.QCommunity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

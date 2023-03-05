@@ -1,14 +1,15 @@
-package com.damoa.service;
+package com.damoa.domain.community.service;
 
-import com.damoa.domain.community.Category;
-import com.damoa.domain.community.Community;
-import com.damoa.domain.community.CommunityMember;
-import com.damoa.domain.community.MemberGrade;
+import com.damoa.domain.community.dto.*;
+import com.damoa.domain.community.entity.Category;
+import com.damoa.domain.community.entity.Community;
+import com.damoa.domain.community.entity.CommunityMember;
+import com.damoa.domain.community.entity.MemberGrade;
 import com.damoa.domain.member.Member;
-import com.damoa.repository.CommunityMemberRepository;
-import com.damoa.repository.CommunityRepository;
+import com.damoa.domain.community.repository.CommunityMemberRepository;
+import com.damoa.domain.community.repository.CommunityRepository;
+import com.damoa.service.FileService;
 import com.damoa.web.dto.common.UploadFile;
-import com.damoa.web.dto.community.*;
 import com.damoa.web.exception.AccessDeniedException;
 import com.damoa.web.exception.business.CommunityAlreadyJoinedException;
 import com.damoa.web.exception.business.CommunityNameDuplicatedException;

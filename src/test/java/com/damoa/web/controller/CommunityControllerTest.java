@@ -1,10 +1,10 @@
 package com.damoa.web.controller;
 
-import com.damoa.domain.community.Community;
+import com.damoa.domain.community.entity.Community;
 import com.damoa.domain.member.Member;
 import com.damoa.web.common.BaseControllerTest;
-import com.damoa.web.dto.community.CreateCommunityDto;
-import com.damoa.web.dto.community.UpdateCommunityDto;
+import com.damoa.domain.community.dto.CreateCommunityDto;
+import com.damoa.domain.community.dto.UpdateCommunityDto;
 import com.damoa.web.dto.member.CreateMemberDto;
 import com.damoa.web.dto.member.JwtTokenDto;
 import com.damoa.web.dto.member.LoginMemberDto;

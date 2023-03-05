@@ -1,16 +1,18 @@
 package com.damoa.service;
 
-import com.damoa.domain.community.Category;
-import com.damoa.domain.community.Community;
-import com.damoa.domain.community.CommunityMember;
-import com.damoa.domain.community.MemberGrade;
+import com.damoa.domain.community.entity.Category;
+import com.damoa.domain.community.entity.Community;
+import com.damoa.domain.community.entity.CommunityMember;
+import com.damoa.domain.community.entity.MemberGrade;
+import com.damoa.domain.community.service.CategoryService;
+import com.damoa.domain.community.service.CommunityServiceImpl;
 import com.damoa.domain.member.Member;
-import com.damoa.repository.CommunityMemberRepository;
-import com.damoa.repository.CommunityRepository;
+import com.damoa.domain.community.repository.CommunityMemberRepository;
+import com.damoa.domain.community.repository.CommunityRepository;
 import com.damoa.web.dto.common.UploadFile;
-import com.damoa.web.dto.community.CommunityMemberDto;
-import com.damoa.web.dto.community.CreateCommunityDto;
-import com.damoa.web.dto.community.UpdateCommunityDto;
+import com.damoa.domain.community.dto.CommunityMemberDto;
+import com.damoa.domain.community.dto.CreateCommunityDto;
+import com.damoa.domain.community.dto.UpdateCommunityDto;
 import com.damoa.web.exception.AccessDeniedException;
 import com.damoa.web.exception.business.*;
 import org.junit.jupiter.api.BeforeEach;

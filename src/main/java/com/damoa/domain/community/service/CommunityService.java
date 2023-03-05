@@ -1,7 +1,7 @@
-package com.damoa.service;
+package com.damoa.domain.community.service;
 
+import com.damoa.domain.community.dto.*;
 import com.damoa.domain.member.Member;
-import com.damoa.web.dto.community.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;

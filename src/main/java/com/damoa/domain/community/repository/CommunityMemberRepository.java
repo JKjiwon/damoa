@@ -1,6 +1,6 @@
-package com.damoa.repository;
+package com.damoa.domain.community.repository;
 
-import com.damoa.domain.community.CommunityMember;
+import com.damoa.domain.community.entity.CommunityMember;
 import com.damoa.domain.member.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

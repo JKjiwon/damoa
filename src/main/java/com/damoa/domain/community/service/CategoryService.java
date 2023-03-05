@@ -1,7 +1,7 @@
-package com.damoa.service;
+package com.damoa.domain.community.service;
 
-import com.damoa.domain.community.Category;
-import com.damoa.repository.CategoryRepository;
+import com.damoa.domain.community.entity.Category;
+import com.damoa.domain.community.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,5 +1,10 @@
 package com.damoa.web.common;
 
+import com.damoa.domain.community.repository.CategoryRepository;
+import com.damoa.domain.community.repository.CommunityMemberRepository;
+import com.damoa.domain.community.repository.CommunityRepository;
+import com.damoa.domain.community.service.CategoryService;
+import com.damoa.domain.community.service.CommunityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.damoa.repository.*;
 import com.damoa.service.*;
