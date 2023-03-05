@@ -1,5 +1,6 @@
 package com.damoa.service;
 
+import com.damoa.domain.common.service.FileService;
 import com.damoa.domain.member.entity.Member;
 import com.damoa.domain.member.repository.MemberRepository;
 import com.damoa.domain.member.service.MemberServiceImpl;

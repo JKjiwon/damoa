@@ -2,7 +2,7 @@ package com.damoa.domain.member.service;
 
 import com.damoa.domain.member.entity.Member;
 import com.damoa.domain.member.repository.MemberRepository;
-import com.damoa.service.FileService;
+import com.damoa.domain.common.service.FileService;
 import com.damoa.web.dto.common.UploadFile;
 import com.damoa.domain.member.dto.CreateMemberDto;
 import com.damoa.domain.member.dto.MemberDto;

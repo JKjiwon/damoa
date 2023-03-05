@@ -8,7 +8,7 @@ import com.damoa.domain.community.entity.MemberGrade;
 import com.damoa.domain.member.entity.Member;
 import com.damoa.domain.community.repository.CommunityMemberRepository;
 import com.damoa.domain.community.repository.CommunityRepository;
-import com.damoa.service.FileService;
+import com.damoa.domain.common.service.FileService;
 import com.damoa.web.dto.common.UploadFile;
 import com.damoa.web.exception.AccessDeniedException;
 import com.damoa.web.exception.business.CommunityAlreadyJoinedException;

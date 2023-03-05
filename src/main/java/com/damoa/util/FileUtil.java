@@ -1,7 +1,7 @@
 package com.damoa.util;
 
 import com.damoa.web.dto.common.UploadFile;
-import com.damoa.web.dto.post.PostUploadImage;
+import com.damoa.domain.post.dto.PostUploadImage;
 
 import java.util.UUID;
 

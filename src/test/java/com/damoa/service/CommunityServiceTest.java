@@ -1,5 +1,6 @@
 package com.damoa.service;
 
+import com.damoa.domain.common.service.FileService;
 import com.damoa.domain.community.entity.Category;
 import com.damoa.domain.community.entity.Community;
 import com.damoa.domain.community.entity.CommunityMember;
