@@ -1,9 +1,9 @@
 package com.damoa.web.controller;
 
-import com.damoa.common.PageableValidator;
+import com.damoa.domain.common.validator.PageableValidator;
 import com.damoa.domain.member.entity.Member;
 import com.damoa.domain.post.sevice.PostService;
-import com.damoa.web.dto.common.CurrentMember;
+import com.damoa.domain.member.dto.CurrentMember;
 import com.damoa.domain.post.dto.CreatePostDto;
 import com.damoa.domain.post.dto.PostDto;
 import lombok.RequiredArgsConstructor;

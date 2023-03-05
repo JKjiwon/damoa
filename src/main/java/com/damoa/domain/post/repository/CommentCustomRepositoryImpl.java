@@ -1,7 +1,7 @@
 package com.damoa.domain.post.repository;
 
 import com.damoa.domain.post.entity.Comment;
-import com.damoa.domain.post.QComment;
+import com.damoa.domain.post.entity.QComment;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.Optional;

@@ -1,8 +1,8 @@
 package com.damoa.domain.post.repository;
 
-import com.damoa.domain.community.QCommunity;
+import com.damoa.domain.community.entity.QCommunity;
 import com.damoa.domain.post.entity.Post;
-import com.damoa.domain.post.QPost;
+import com.damoa.domain.post.entity.QPost;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.Optional;

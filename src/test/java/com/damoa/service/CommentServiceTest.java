@@ -1,5 +1,6 @@
 package com.damoa.service;
 
+import com.damoa.domain.common.exception.AccessDeniedException;
 import com.damoa.domain.community.entity.Category;
 import com.damoa.domain.community.entity.Community;
 import com.damoa.domain.community.entity.CommunityMember;
@@ -15,10 +16,9 @@ import com.damoa.domain.post.dto.CommentListDto;
 import com.damoa.domain.post.dto.CreateCommentDto;
 import com.damoa.domain.post.dto.UpdateCommentDto;
 import com.damoa.domain.post.sevice.CommentServiceImpl;
-import com.damoa.web.exception.AccessDeniedException;
-import com.damoa.web.exception.business.CommentNotFoundException;
-import com.damoa.web.exception.business.CommunityNotJoinedException;
-import com.damoa.web.exception.business.PostNotFoundException;
+import com.damoa.domain.post.exception.CommentNotFoundException;
+import com.damoa.domain.community.exception.CommunityNotJoinedException;
+import com.damoa.domain.post.exception.PostNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,10 +1,10 @@
 package com.damoa.domain.common.service;
 
-import com.damoa.util.FileUtil;
-import com.damoa.web.dto.common.UploadFile;
+import com.damoa.domain.common.util.FileUtil;
+import com.damoa.domain.common.dto.UploadFile;
 import com.damoa.domain.post.dto.PostUploadImage;
-import com.damoa.web.exception.business.FileUploadException;
-import com.damoa.web.exception.business.NotImageFileException;
+import com.damoa.domain.common.exception.FileUploadException;
+import com.damoa.domain.common.exception.NotImageFileException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

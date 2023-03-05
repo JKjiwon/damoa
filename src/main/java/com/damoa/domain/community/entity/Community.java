@@ -2,7 +2,7 @@ package com.damoa.domain.community.entity;
 
 import com.damoa.domain.common.entity.BaseTimeEntity;
 import com.damoa.domain.member.entity.Member;
-import com.damoa.web.dto.common.UploadFile;
+import com.damoa.domain.common.dto.UploadFile;
 import lombok.*;
 
 import javax.persistence.*;

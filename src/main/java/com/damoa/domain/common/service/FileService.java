@@ -1,8 +1,8 @@
 package com.damoa.domain.common.service;
 
-import com.damoa.web.dto.common.UploadFile;
+import com.damoa.domain.common.dto.UploadFile;
 import com.damoa.domain.post.dto.PostUploadImage;
-import com.damoa.web.exception.business.FileUploadException;
+import com.damoa.domain.common.exception.FileUploadException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

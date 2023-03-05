@@ -1,9 +1,9 @@
 package com.damoa.web.controller;
 
-import com.damoa.common.PageableValidator;
+import com.damoa.domain.common.validator.PageableValidator;
 import com.damoa.domain.member.entity.Member;
 import com.damoa.domain.community.service.CommunityServiceImpl;
-import com.damoa.web.dto.common.CurrentMember;
+import com.damoa.domain.member.dto.CurrentMember;
 import com.damoa.domain.community.dto.CommunityDto;
 import com.damoa.domain.community.dto.CommunityMemberDto;
 import com.damoa.domain.community.dto.CreateCommunityDto;

@@ -1,5 +1,6 @@
 package com.damoa.service;
 
+import com.damoa.domain.common.exception.AccessDeniedException;
 import com.damoa.domain.common.service.FileService;
 import com.damoa.domain.community.entity.Category;
 import com.damoa.domain.community.entity.Community;
@@ -16,10 +17,9 @@ import com.damoa.domain.post.dto.CreatePostDto;
 import com.damoa.domain.post.dto.PostDto;
 import com.damoa.domain.post.dto.PostUploadImage;
 import com.damoa.domain.post.sevice.PostServiceImpl;
-import com.damoa.web.exception.AccessDeniedException;
-import com.damoa.web.exception.business.CommunityNotJoinedException;
-import com.damoa.web.exception.business.FileUploadException;
-import com.damoa.web.exception.business.PostNotFoundException;
+import com.damoa.domain.community.exception.CommunityNotJoinedException;
+import com.damoa.domain.common.exception.FileUploadException;
+import com.damoa.domain.post.exception.PostNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

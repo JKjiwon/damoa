@@ -1,5 +1,6 @@
 package com.damoa.domain.post.sevice;
 
+import com.damoa.domain.common.exception.AccessDeniedException;
 import com.damoa.domain.community.entity.Community;
 import com.damoa.domain.community.entity.CommunityMember;
 import com.damoa.domain.member.entity.Member;
@@ -14,9 +15,8 @@ import com.damoa.domain.post.dto.CreatePostDto;
 import com.damoa.domain.post.dto.PostDto;
 import com.damoa.domain.post.dto.PostUploadImage;
 import com.damoa.domain.common.service.FileService;
-import com.damoa.web.exception.AccessDeniedException;
-import com.damoa.web.exception.business.CommunityNotJoinedException;
-import com.damoa.web.exception.business.PostNotFoundException;
+import com.damoa.domain.community.exception.CommunityNotJoinedException;
+import com.damoa.domain.post.exception.PostNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

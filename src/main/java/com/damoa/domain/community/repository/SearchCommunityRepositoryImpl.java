@@ -1,5 +1,6 @@
 package com.damoa.domain.community.repository;
 
+import com.damoa.domain.community.entity.QCommunity;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -8,7 +9,6 @@ import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.JPQLQuery;
 import com.damoa.domain.community.entity.Community;
-import com.damoa.domain.community.QCommunity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

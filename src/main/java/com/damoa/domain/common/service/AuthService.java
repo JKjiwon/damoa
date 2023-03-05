@@ -1,6 +1,6 @@
 package com.damoa.domain.common.service;
 
-import com.damoa.security.JwtTokenProvider;
+import com.damoa.web.security.JwtTokenProvider;
 import com.damoa.domain.member.dto.JwtTokenDto;
 import com.damoa.domain.member.dto.LoginMemberDto;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.damoa.domain.member.entity;
 
 import com.damoa.domain.common.entity.BaseTimeEntity;
-import com.damoa.web.dto.common.UploadFile;
+import com.damoa.domain.common.dto.UploadFile;
 import com.damoa.domain.member.dto.UpdateMemberDto;
 import lombok.*;
 

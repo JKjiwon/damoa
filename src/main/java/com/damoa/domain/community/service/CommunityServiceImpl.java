@@ -1,5 +1,6 @@
 package com.damoa.domain.community.service;
 
+import com.damoa.domain.common.exception.AccessDeniedException;
 import com.damoa.domain.community.dto.*;
 import com.damoa.domain.community.entity.Category;
 import com.damoa.domain.community.entity.Community;
@@ -9,12 +10,11 @@ import com.damoa.domain.member.entity.Member;
 import com.damoa.domain.community.repository.CommunityMemberRepository;
 import com.damoa.domain.community.repository.CommunityRepository;
 import com.damoa.domain.common.service.FileService;
-import com.damoa.web.dto.common.UploadFile;
-import com.damoa.web.exception.AccessDeniedException;
-import com.damoa.web.exception.business.CommunityAlreadyJoinedException;
-import com.damoa.web.exception.business.CommunityNameDuplicatedException;
-import com.damoa.web.exception.business.CommunityNotFoundException;
-import com.damoa.web.exception.business.CommunityNotJoinedException;
+import com.damoa.domain.common.dto.UploadFile;
+import com.damoa.domain.community.exception.CommunityAlreadyJoinedException;
+import com.damoa.domain.community.exception.CommunityNameDuplicatedException;
+import com.damoa.domain.community.exception.CommunityNotFoundException;
+import com.damoa.domain.community.exception.CommunityNotJoinedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
