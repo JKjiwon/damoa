@@ -1,16 +1,11 @@
 package com.damoa.web.controller;
 
-import com.damoa.service.FileService;
+import com.damoa.domain.common.service.FileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.MalformedURLException;
 
 //@RestController
 @RequiredArgsConstructor

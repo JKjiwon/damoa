@@ -1,7 +1,8 @@
 package com.damoa.service;
 
-import com.damoa.domain.community.Category;
-import com.damoa.repository.CategoryRepository;
+import com.damoa.domain.community.entity.Category;
+import com.damoa.domain.community.service.CategoryService;
+import com.damoa.domain.community.repository.CategoryRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

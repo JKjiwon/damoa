@@ -1,0 +1,34 @@
+package com.damoa.domain.community.service;
+
+import com.damoa.domain.community.dto.*;
+import com.damoa.domain.member.entity.Member;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
+public interface CommunityService {
+
+    CommunityDto create(Member currentMember,
+                        CreateCommunityDto dto,
+                        MultipartFile mainImage,
+                        MultipartFile thumbNailImage);
+
+    void checkDuplicatedName(String name);
+
+    void join(Member currentMember, Long communityId);
+
+    void withdraw(Member currentMember, Long communityId);
+
+    CommunityDto update(Long communityId,
+                        Member currentMember,
+                        UpdateCommunityDto dto,
+                        MultipartFile mainImage, MultipartFile thumbNailImage);
+
+    CommunityDto findById(Long communityId, Member currentMember);
+
+    Page<CommunityMemberDto> findCommunityMember(Long communityId, Member currentMember, Pageable pageable);
+
+    Page<CommunityDto> findAllSearch(Member currentMember, Pageable pageable, String keyword);
+
+    Page<JoinedCommunityDto> findByCurrentMember(Member currentMember, Pageable pageable);
+}

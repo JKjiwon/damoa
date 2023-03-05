@@ -1,8 +1,8 @@
 package com.damoa.config;
 
-import com.damoa.security.JwtAccessDeniedHandler;
-import com.damoa.security.JwtAuthenticationEntryPoint;
-import com.damoa.security.JwtAuthenticationFilter;
+import com.damoa.web.security.JwtAccessDeniedHandler;
+import com.damoa.web.security.JwtAuthenticationEntryPoint;
+import com.damoa.web.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

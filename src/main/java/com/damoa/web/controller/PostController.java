@@ -1,13 +1,12 @@
 package com.damoa.web.controller;
 
-import com.damoa.common.PageableValidator;
-import com.damoa.domain.member.Member;
-import com.damoa.service.PostService;
-import com.damoa.web.dto.common.CurrentMember;
-import com.damoa.web.dto.post.CreatePostDto;
-import com.damoa.web.dto.post.PostDto;
+import com.damoa.domain.common.validator.PageableValidator;
+import com.damoa.domain.member.entity.Member;
+import com.damoa.domain.post.sevice.PostService;
+import com.damoa.domain.member.dto.CurrentMember;
+import com.damoa.domain.post.dto.CreatePostDto;
+import com.damoa.domain.post.dto.PostDto;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

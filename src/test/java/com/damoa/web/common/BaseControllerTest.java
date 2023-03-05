@@ -1,8 +1,17 @@
 package com.damoa.web.common;
 
+import com.damoa.domain.community.repository.CategoryRepository;
+import com.damoa.domain.community.repository.CommunityMemberRepository;
+import com.damoa.domain.community.repository.CommunityRepository;
+import com.damoa.domain.community.service.CategoryService;
+import com.damoa.domain.community.service.CommunityService;
+import com.damoa.domain.member.repository.MemberRepository;
+import com.damoa.domain.member.service.MemberService;
+import com.damoa.domain.post.repository.CommentRepository;
+import com.damoa.domain.post.repository.PostRepository;
+import com.damoa.domain.post.sevice.CommentService;
+import com.damoa.domain.post.sevice.PostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.damoa.repository.*;
-import com.damoa.service.*;
 import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;

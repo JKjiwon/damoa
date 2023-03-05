@@ -1,18 +1,17 @@
 package com.damoa.web.controller;
 
-import com.damoa.common.PageableValidator;
-import com.damoa.domain.member.Member;
-import com.damoa.service.CommunityServiceImpl;
-import com.damoa.web.dto.common.CurrentMember;
-import com.damoa.web.dto.community.CommunityDto;
-import com.damoa.web.dto.community.CommunityMemberDto;
-import com.damoa.web.dto.community.CreateCommunityDto;
-import com.damoa.web.dto.community.UpdateCommunityDto;
+import com.damoa.domain.common.validator.PageableValidator;
+import com.damoa.domain.member.entity.Member;
+import com.damoa.domain.community.service.CommunityServiceImpl;
+import com.damoa.domain.member.dto.CurrentMember;
+import com.damoa.domain.community.dto.CommunityDto;
+import com.damoa.domain.community.dto.CommunityMemberDto;
+import com.damoa.domain.community.dto.CreateCommunityDto;
+import com.damoa.domain.community.dto.UpdateCommunityDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
